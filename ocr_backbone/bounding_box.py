@@ -42,3 +42,23 @@ class BoundingBox:
                 f"top_left {top_left} must be above and to the left of "
                 f"bottom_right {bottom_right}."
             )
+
+    def _remap_bounding_box(self, x_offset: int, y_offset: int):
+        """Remap a bounding box from sub-image coordinates to original image coordinates.
+
+        Args:
+            bbox: A BoundingBox with coordinates relative to a sub-image.
+            x_offset: Horizontal pixel offset of the sub-image in the original image.
+            y_offset: Vertical pixel offset of the sub-image in the original image.
+
+        Returns:
+            A new BoundingBox with coordinates shifted by the offsets.
+        """
+        top_left, bottom_right = self.coordinates
+        new_coords = (
+            (top_left[0] + x_offset, top_left[1] + y_offset),
+            (bottom_right[0] + x_offset, bottom_right[1] + y_offset),
+        )
+
+        self.coordinates = new_coords
+
