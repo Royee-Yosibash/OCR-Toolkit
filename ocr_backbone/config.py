@@ -1,6 +1,9 @@
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from ocr_backbone.bounding_box import BoundingBox
 
 
 @dataclass
@@ -12,12 +15,16 @@ class OCRConfig:
         model_params: Model-specific runtime parameters.
         grid_rows: Number of rows to split the image into.
         grid_cols: Number of columns to split the image into.
+        bb_validator: Optional function that takes a BoundingBox and returns
+            True if the bounding box is valid. Invalid bounding boxes are
+            discarded after OCR inference.
     """
 
     model_name: str
     model_params: dict = field(default_factory=dict)
     grid_rows: int = 1
     grid_cols: int = 1
+    bb_validator: Callable[[BoundingBox], bool] | None = None
 
 
 def load_config(path: str | Path) -> OCRConfig:

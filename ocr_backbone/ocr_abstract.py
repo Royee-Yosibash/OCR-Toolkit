@@ -4,6 +4,7 @@ import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.config import OCRConfig
+from ocr_backbone.ocr_result import OCRResult
 
 
 class OCRAbstact(ABC):
@@ -15,22 +16,55 @@ class OCRAbstact(ABC):
 
     Subclasses must implement ``__init__`` to set up the underlying engine
     and ``_run_single`` to perform inference on a single sub-image.
+
+    Subclasses are auto-registered by class name for lookup via ``from_config``.
     """
+
+    _registry: dict = {}
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Auto-register concrete subclasses by class name."""
+        super().__init_subclass__(**kwargs)
+        OCRAbstact._registry[cls.__name__] = cls
+
+    @classmethod
+    def from_config(cls, config: OCRConfig):
+        """Create an OCR instance from a config.
+
+        Looks up the registered subclass matching ``config.model_name``
+        and instantiates it.
+
+        Args:
+            config: The OCR run configuration.
+
+        Returns:
+            An instance of the matching OCR subclass.
+
+        Raises:
+            ValueError: If no subclass is registered for the model name.
+        """
+        ocr_cls = cls._registry.get(config.model_name)
+        if ocr_cls is None:
+            raise ValueError(
+                f"Unknown model {config.model_name!r}. "
+                f"Available: {list(cls._registry.keys())}"
+            )
+        return ocr_cls()
 
     @abstractmethod
     def __init__(self) -> None:
         """Initialize the OCR engine."""
 
     @abstractmethod
-    def _run_single(self, image: np.ndarray, config: OCRConfig) -> list[BoundingBox]:
+    def _run_single(self, image: np.ndarray, module_config: OCRConfig) -> OCRResult:
         """Run OCR on a single image.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            config: The OCR run configuration.
+            module_config: The OCR run configuration.
 
         Returns:
-            A list of BoundingBox instances for each detected text region.
+            An OCRResult containing detected text regions.
         """
 
     def _split_image(
@@ -58,8 +92,7 @@ class OCRAbstact(ABC):
             grid.append(row_cells)
         return grid
 
-
-    def get_text_bb(self, image: np.ndarray, config: OCRConfig) -> list[BoundingBox]:
+    def get_text_bb(self, image: np.ndarray, config: OCRConfig) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
 
         Splits the image into a grid defined by ``config.grid_rows`` and
@@ -71,7 +104,7 @@ class OCRAbstact(ABC):
             config: The OCR run configuration.
 
         Returns:
-            A list of BoundingBox instances in original image coordinates.
+            An OCRResult with bounding boxes in original image coordinates.
         """
         rows, cols = config.grid_rows, config.grid_cols
         h, w = image.shape[:2]
@@ -84,11 +117,14 @@ class OCRAbstact(ABC):
         for r in range(rows):
             for c in range(cols):
                 cell = grid[r][c]
-                cell_bboxes = self._run_single(cell, config.model_params)
+                cell_result = self._run_single(cell, config.model_params)
                 x_offset = int(col_edges[c])
                 y_offset = int(row_edges[r])
-                [bb._remap_bounding_box(x_offset, y_offset) for bb in cell_bboxes]
-                
-                all_bboxes += cell_bboxes
+                for bb in cell_result.bounding_boxes:
+                    bb._remap_bounding_box(x_offset, y_offset)
+                all_bboxes += cell_result.bounding_boxes
 
-        return all_bboxes
+        if config.bb_validator is not None:
+            all_bboxes = [bb for bb in all_bboxes if config.bb_validator(bb)]
+
+        return OCRResult(bounding_boxes=all_bboxes)
