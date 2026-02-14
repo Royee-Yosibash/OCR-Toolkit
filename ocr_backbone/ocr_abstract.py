@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+import copy
 from abc import ABC, abstractmethod
 
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.config import OCRConfig
+from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 
 
@@ -28,11 +31,11 @@ class OCRAbstact(ABC):
         OCRAbstact._registry[cls.__name__] = cls
 
     @classmethod
-    def from_config(cls, config: OCRConfig):
+    def from_config(cls, config: OCRConfig) -> OCRAbstact:
         """Create an OCR instance from a config.
 
         Looks up the registered subclass matching ``config.model_name``
-        and instantiates it.
+        and instantiates it, storing the config for later use.
 
         Args:
             config: The OCR run configuration.
@@ -49,19 +52,26 @@ class OCRAbstact(ABC):
                 f"Unknown model {config.model_name!r}. "
                 f"Available: {list(cls._registry.keys())}"
             )
-        return ocr_cls()
+        instance = ocr_cls()
+        instance.config = config
+        return instance
 
     @abstractmethod
     def __init__(self) -> None:
-        """Initialize the OCR engine."""
+        """Initialize the OCR engine.
+
+        Subclasses must call ``super().__init__()`` or set ``self.config``
+        to an ``OCRConfig`` instance.
+        """
+        self.config = OCRConfig(model_name="")
 
     @abstractmethod
-    def _run_single(self, image: np.ndarray, module_config: OCRConfig) -> OCRResult:
+    def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:
         """Run OCR on a single image.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            module_config: The OCR run configuration.
+            model_params: Model-specific runtime parameters for this run.
 
         Returns:
             An OCRResult containing detected text regions.
@@ -92,20 +102,30 @@ class OCRAbstact(ABC):
             grid.append(row_cells)
         return grid
 
-    def get_text_bb(self, image: np.ndarray, config: OCRConfig) -> OCRResult:
+    def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
 
-        Splits the image into a grid defined by ``config.grid_rows`` and
-        ``config.grid_cols``, runs ``_run_single`` on each cell, and remaps
-        the bounding boxes back to the original image coordinate space.
+        Splits the image into a grid defined by the stored config, runs
+        ``_run_single`` on each cell, and remaps the bounding boxes back to
+        the original image coordinate space.
+
+        Any keys in ``config_overrides`` are merged into ``model_params``
+        for this run only; the stored config is not modified.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            config: The OCR run configuration.
+            config_overrides: Optional dict of model_params overrides
+                applied only for this run.
 
         Returns:
             An OCRResult with bounding boxes in original image coordinates.
         """
+        if config_overrides:
+            config = copy.deepcopy(self.config)
+            config.update(config_overrides)
+        else:
+            config = self.config
+
         rows, cols = config.grid_rows, config.grid_cols
         h, w = image.shape[:2]
         row_edges = np.linspace(0, h, rows + 1, dtype=int)

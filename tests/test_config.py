@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from ocr_backbone.config import OCRConfig, load_config
+from ocr_backbone.ocr_config import OCRConfig, load_config
 
 
 def test_ocr_config_defaults():

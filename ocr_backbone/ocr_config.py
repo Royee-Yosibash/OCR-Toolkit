@@ -1,6 +1,6 @@
 import json
 from collections.abc import Callable
-from dataclasses import dataclass, field
+from dataclasses import dataclass, fields, field
 from pathlib import Path
 
 from ocr_backbone.bounding_box import BoundingBox
@@ -25,6 +25,22 @@ class OCRConfig:
     grid_rows: int = 1
     grid_cols: int = 1
     bb_validator: Callable[[BoundingBox], bool] | None = None
+
+    def update(self, overrides: dict) -> None:
+        """Update config attributes from a dict.
+
+        Only keys that correspond to existing dataclass fields are applied.
+        Unknown keys are ignored.
+
+        Args:
+            overrides: A dict mapping field names to new values.
+        """
+        valid_names = {f.name for f in fields(self)}
+        for key, value in overrides.items():
+            if key in valid_names:
+                setattr(self, key, value)
+            else:
+                self.model_params[key] = value
 
 
 def load_config(path: str | Path) -> OCRConfig:
