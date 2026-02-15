@@ -1,5 +1,6 @@
+import unittest
+
 import numpy as np
-import pytest
 
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_config import OCRConfig
@@ -25,69 +26,66 @@ class DummyOCR(OCRAbstact):
         ])
 
 
-def test_single_cell_grid():
-    ocr = DummyOCR()
-    ocr.config = OCRConfig(model_name="dummy", grid_rows=1, grid_cols=1)
-    image = np.zeros((100, 200, 3), dtype=np.uint8)
-    result = ocr.get_text_bb(image)
-    assert len(result.bounding_boxes) == 1
-    assert result.bounding_boxes[0].coordinates == ((0, 0), (200, 100))
+class TestOCR(unittest.TestCase):
+    """Tests for OCR abstract class functionality."""
 
+    def test_single_cell_grid(self):
+        ocr = DummyOCR()
+        ocr.config = OCRConfig(model_name="dummy", grid_rows=1, grid_cols=1)
+        image = np.zeros((100, 200, 3), dtype=np.uint8)
+        result = ocr.get_text_bb(image)
+        self.assertEqual(len(result.bounding_boxes), 1)
+        self.assertEqual(result.bounding_boxes[0].coordinates, ((0, 0), (200, 100)))
 
-def test_grid_splits_and_remaps():
-    ocr = DummyOCR()
-    ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2)
-    image = np.zeros((100, 200, 3), dtype=np.uint8)
-    result = ocr.get_text_bb(image)
-    bbs = result.bounding_boxes
-    assert len(bbs) == 4
-    assert bbs[0].coordinates == ((0, 0), (100, 50))
-    assert bbs[1].coordinates == ((100, 0), (200, 50))
-    assert bbs[2].coordinates == ((0, 50), (100, 100))
-    assert bbs[3].coordinates == ((100, 50), (200, 100))
+    def test_grid_splits_and_remaps(self):
+        ocr = DummyOCR()
+        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2)
+        image = np.zeros((100, 200, 3), dtype=np.uint8)
+        result = ocr.get_text_bb(image)
+        bbs = result.bounding_boxes
+        self.assertEqual(len(bbs), 4)
+        self.assertEqual(bbs[0].coordinates, ((0, 0), (100, 50)))
+        self.assertEqual(bbs[1].coordinates, ((100, 0), (200, 50)))
+        self.assertEqual(bbs[2].coordinates, ((0, 50), (100, 100)))
+        self.assertEqual(bbs[3].coordinates, ((100, 50), (200, 100)))
 
+    def test_bb_validator_filters(self):
+        ocr = DummyOCR()
+        ocr.config = OCRConfig(
+            model_name="dummy",
+            grid_rows=2,
+            grid_cols=2,
+            bb_validator=lambda bb: bb.coordinates[0][0] == 0,
+        )
+        image = np.zeros((100, 200, 3), dtype=np.uint8)
+        result = ocr.get_text_bb(image)
+        self.assertEqual(len(result.bounding_boxes), 2)
+        self.assertTrue(all(bb.coordinates[0][0] == 0 for bb in result.bounding_boxes))
 
-def test_bb_validator_filters():
-    ocr = DummyOCR()
-    ocr.config = OCRConfig(
-        model_name="dummy",
-        grid_rows=2,
-        grid_cols=2,
-        bb_validator=lambda bb: bb.coordinates[0][0] == 0,
-    )
-    image = np.zeros((100, 200, 3), dtype=np.uint8)
-    result = ocr.get_text_bb(image)
-    assert len(result.bounding_boxes) == 2
-    assert all(bb.coordinates[0][0] == 0 for bb in result.bounding_boxes)
+    def test_bb_validator_none_keeps_all(self):
+        ocr = DummyOCR()
+        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2, bb_validator=None)
+        image = np.zeros((100, 200, 3), dtype=np.uint8)
+        result = ocr.get_text_bb(image)
+        self.assertEqual(len(result.bounding_boxes), 4)
 
+    def test_split_image_dimensions(self):
+        ocr = DummyOCR()
+        image = np.zeros((90, 120, 3), dtype=np.uint8)
+        grid = ocr._split_image(image, rows=3, cols=3)
+        self.assertEqual(len(grid), 3)
+        self.assertEqual(len(grid[0]), 3)
+        for row in grid:
+            for cell in row:
+                self.assertEqual(cell.shape[0], 30)
+                self.assertEqual(cell.shape[1], 40)
 
-def test_bb_validator_none_keeps_all():
-    ocr = DummyOCR()
-    ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2, bb_validator=None)
-    image = np.zeros((100, 200, 3), dtype=np.uint8)
-    result = ocr.get_text_bb(image)
-    assert len(result.bounding_boxes) == 4
+    def test_from_config_returns_registered_class(self):
+        config = OCRConfig(model_name="DummyOCR")
+        ocr = OCRAbstact.from_config(config)
+        self.assertIsInstance(ocr, DummyOCR)
 
-
-def test_split_image_dimensions():
-    ocr = DummyOCR()
-    image = np.zeros((90, 120, 3), dtype=np.uint8)
-    grid = ocr._split_image(image, rows=3, cols=3)
-    assert len(grid) == 3
-    assert len(grid[0]) == 3
-    for row in grid:
-        for cell in row:
-            assert cell.shape[0] == 30
-            assert cell.shape[1] == 40
-
-
-def test_from_config_returns_registered_class():
-    config = OCRConfig(model_name="DummyOCR")
-    ocr = OCRAbstact.from_config(config)
-    assert isinstance(ocr, DummyOCR)
-
-
-def test_from_config_unknown_model():
-    config = OCRConfig(model_name="nonexistent")
-    with pytest.raises(ValueError, match="Unknown model"):
-        OCRAbstact.from_config(config)
+    def test_from_config_unknown_model(self):
+        config = OCRConfig(model_name="nonexistent")
+        with self.assertRaises(ValueError, msg="Unknown model"):
+            OCRAbstact.from_config(config)
