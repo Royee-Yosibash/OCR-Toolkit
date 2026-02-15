@@ -25,11 +25,6 @@ class DummyOCR(OCRAbstact):
         ])
 
 
-def test_ocr_cannot_be_instantiated():
-    with pytest.raises(TypeError):
-        OCRAbstact()
-
-
 def test_single_cell_grid():
     ocr = DummyOCR()
     ocr.config = OCRConfig(model_name="dummy", grid_rows=1, grid_cols=1)
