@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 import copy
 from abc import ABC, abstractmethod
+from typing import Union
 
 import numpy as np
 
@@ -31,7 +30,7 @@ class OCRAbstact(ABC):
         OCRAbstact._registry[cls.__name__] = cls
 
     @classmethod
-    def from_config(cls, config: OCRConfig) -> OCRAbstact:
+    def from_config(cls, config: dict):
         """Create an OCR instance from a config.
 
         Looks up the registered subclass matching ``config.model_name``
@@ -46,24 +45,18 @@ class OCRAbstact(ABC):
         Raises:
             ValueError: If no subclass is registered for the model name.
         """
-        ocr_cls = cls._registry.get(config.model_name)
-        if ocr_cls is None:
-            raise ValueError(
-                f"Unknown model {config.model_name!r}. "
-                f"Available: {list(cls._registry.keys())}"
-            )
-        instance = ocr_cls()
-        instance.config = config
+    
+        model_name = config.model_name if isinstance(config, OCRConfig) else config["model_name"]
+        if model_name not in cls._registry:
+            raise ValueError(f"Unknown model: {model_name}")
+        instance = cls._registry[model_name](config=config)
         return instance
 
     @abstractmethod
-    def __init__(self) -> None:
+    def __init__(self, config: Union[OCRConfig, dict]) -> None:
         """Initialize the OCR engine.
-
-        Subclasses must call ``super().__init__()`` or set ``self.config``
-        to an ``OCRConfig`` instance.
         """
-        self.config = OCRConfig(model_name="")
+        self.config = config
 
     @abstractmethod
     def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:

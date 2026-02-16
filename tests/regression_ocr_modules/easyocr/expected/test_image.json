@@ -3,6 +3,34 @@
     {
       "coordinates": [
         [
+          535,
+          51
+        ],
+        [
+          628,
+          75
+        ]
+      ],
+      "text": "Washington;'",
+      "confidence": 0.619871
+    },
+    {
+      "coordinates": [
+        [
+          364,
+          52
+        ],
+        [
+          402,
+          74
+        ]
+      ],
+      "text": "King",
+      "confidence": 0.999883
+    },
+    {
+      "coordinates": [
+        [
           15,
           55
         ],
@@ -59,20 +87,6 @@
     {
       "coordinates": [
         [
-          535,
-          51
-        ],
-        [
-          628,
-          75
-        ]
-      ],
-      "text": "Washington;'",
-      "confidence": 0.619871
-    },
-    {
-      "coordinates": [
-        [
           13,
           75
         ],
@@ -87,16 +101,16 @@
     {
       "coordinates": [
         [
-          13,
-          116
+          178,
+          115
         ],
         [
-          179,
-          134
+          216,
+          133
         ]
       ],
-      "text": "Iam happy to join with you",
-      "confidence": 0.903442
+      "text": "today",
+      "confidence": 0.992171
     },
     {
       "coordinates": [
@@ -116,6 +130,20 @@
       "coordinates": [
         [
           13,
+          116
+        ],
+        [
+          179,
+          134
+        ]
+      ],
+      "text": "Iam happy to join with you",
+      "confidence": 0.903442
+    },
+    {
+      "coordinates": [
+        [
+          13,
           137
         ],
         [
@@ -125,20 +153,6 @@
       ],
       "text": "freedom in the history of our nation:",
       "confidence": 0.670571
-    },
-    {
-      "coordinates": [
-        [
-          13,
-          165
-        ],
-        [
-          137,
-          183
-        ]
-      ],
-      "text": "Five score years ago",
-      "confidence": 0.852929
     },
     {
       "coordinates": [
@@ -153,6 +167,20 @@
       ],
       "text": "great American in whose symbolic shadow we stand today signed the",
       "confidence": 0.87582
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          165
+        ],
+        [
+          137,
+          183
+        ]
+      ],
+      "text": "Five score years ago",
+      "confidence": 0.852929
     },
     {
       "coordinates": [
@@ -311,20 +339,6 @@
     {
       "coordinates": [
         [
-          13,
-          289
-        ],
-        [
-          63,
-          305
-        ]
-      ],
-      "text": "material",
-      "confidence": 0.752368
-    },
-    {
-      "coordinates": [
-        [
           67,
           287
         ],
@@ -335,6 +349,20 @@
       ],
       "text": "prosperity: One hundred years later the Negro is still languished in the corners of American",
       "confidence": 0.819198
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          289
+        ],
+        [
+          63,
+          305
+        ]
+      ],
+      "text": "material",
+      "confidence": 0.752368
     },
     {
       "coordinates": [
@@ -409,20 +437,6 @@
     {
       "coordinates": [
         [
-          13,
-          381
-        ],
-        [
-          37,
-          395
-        ]
-      ],
-      "text": "the",
-      "confidence": 0.999997
-    },
-    {
-      "coordinates": [
-        [
           36,
           377
         ],
@@ -433,6 +447,20 @@
       ],
       "text": "magnificent words of the Constitution and the Declaration of Independence_",
       "confidence": 0.803333
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          381
+        ],
+        [
+          37,
+          395
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.999997
     },
     {
       "coordinates": [
@@ -479,20 +507,6 @@
     {
       "coordinates": [
         [
-          13,
-          421
-        ],
-        [
-          205,
-          435
-        ]
-      ],
-      "text": "black men as well as white men-",
-      "confidence": 0.789685
-    },
-    {
-      "coordinates": [
-        [
           215,
           419
         ],
@@ -507,6 +521,20 @@
     {
       "coordinates": [
         [
+          13,
+          421
+        ],
+        [
+          205,
+          435
+        ]
+      ],
+      "text": "black men as well as white men-",
+      "confidence": 0.789685
+    },
+    {
+      "coordinates": [
+        [
           12,
           441
         ],
@@ -517,6 +545,20 @@
       ],
       "text": "pursuit of happiness.",
       "confidence": 0.861356
+    },
+    {
+      "coordinates": [
+        [
+          282,
+          467
+        ],
+        [
+          316,
+          488
+        ]
+      ],
+      "text": "high",
+      "confidence": 0.998697
     },
     {
       "coordinates": [
@@ -577,20 +619,6 @@
     {
       "coordinates": [
         [
-          283,
-          491
-        ],
-        [
-          335,
-          505
-        ]
-      ],
-      "text": "violence_",
-      "confidence": 0.996198
-    },
-    {
-      "coordinates": [
-        [
           361,
           489
         ],
@@ -601,6 +629,20 @@
       ],
       "text": "The marvelous new militancy which has",
       "confidence": 0.845851
+    },
+    {
+      "coordinates": [
+        [
+          283,
+          491
+        ],
+        [
+          335,
+          505
+        ]
+      ],
+      "text": "violence_",
+      "confidence": 0.996198
     },
     {
       "coordinates": [
@@ -745,20 +787,6 @@
     {
       "coordinates": [
         [
-          13,
-          721
-        ],
-        [
-          99,
-          735
-        ]
-      ],
-      "text": "We cannot be",
-      "confidence": 0.692241
-    },
-    {
-      "coordinates": [
-        [
           96,
           716
         ],
@@ -769,6 +797,34 @@
       ],
       "text": "satisfied",
       "confidence": 0.999966
+    },
+    {
+      "coordinates": [
+        [
+          165,
+          719
+        ],
+        [
+          199,
+          737
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.550229
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          721
+        ],
+        [
+          99,
+          735
+        ]
+      ],
+      "text": "We cannot be",
+      "confidence": 0.692241
     },
     {
       "coordinates": [
@@ -843,20 +899,6 @@
     {
       "coordinates": [
         [
-          13,
-          763
-        ],
-        [
-          107,
-          779
-        ]
-      ],
-      "text": "by signs stating",
-      "confidence": 0.987269
-    },
-    {
-      "coordinates": [
-        [
           113,
           761
         ],
@@ -867,6 +909,20 @@
       ],
       "text": "For Whites Only",
       "confidence": 0.997541
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          763
+        ],
+        [
+          107,
+          779
+        ]
+      ],
+      "text": "by signs stating",
+      "confidence": 0.987269
     },
     {
       "coordinates": [
@@ -941,6 +997,20 @@
     {
       "coordinates": [
         [
+          511,
+          888
+        ],
+        [
+          539,
+          904
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.999939
+    },
+    {
+      "coordinates": [
+        [
           19,
           889
         ],
@@ -951,20 +1021,6 @@
       ],
       "text": "say to you today; my friends; though, even though we face the difficulties of today",
       "confidence": 0.647
-    },
-    {
-      "coordinates": [
-        [
-          539,
-          891
-        ],
-        [
-          607,
-          905
-        ]
-      ],
-      "text": "tomorrow;",
-      "confidence": 0.998034
     },
     {
       "coordinates": [
@@ -983,72 +1039,16 @@
     {
       "coordinates": [
         [
-          364,
-          52
-        ],
-        [
-          402,
-          74
-        ]
-      ],
-      "text": "King",
-      "confidence": 0.999883
-    },
-    {
-      "coordinates": [
-        [
-          178,
-          115
-        ],
-        [
-          216,
-          133
-        ]
-      ],
-      "text": "today",
-      "confidence": 0.992171
-    },
-    {
-      "coordinates": [
-        [
-          282,
-          467
-        ],
-        [
-          316,
-          488
-        ]
-      ],
-      "text": "high",
-      "confidence": 0.998697
-    },
-    {
-      "coordinates": [
-        [
-          165,
-          719
-        ],
-        [
-          199,
-          737
-        ]
-      ],
-      "text": "long",
-      "confidence": 0.550229
-    },
-    {
-      "coordinates": [
-        [
-          511,
-          888
-        ],
-        [
           539,
-          904
+          891
+        ],
+        [
+          607,
+          905
         ]
       ],
-      "text": "and",
-      "confidence": 0.999939
+      "text": "tomorrow;",
+      "confidence": 0.998034
     }
   ]
 }
