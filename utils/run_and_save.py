@@ -30,7 +30,6 @@ def run_and_save(image: np.ndarray, ocr: OCRAbstact, save_path: str) -> OCRResul
     return result
 
 
-
 def run_ocr_on_dataset(
     dataset_name: str,
     config: OCRConfig,
