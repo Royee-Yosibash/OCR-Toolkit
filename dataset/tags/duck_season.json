@@ -1,0 +1,32 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          185,
+          33
+        ],
+        [
+          291,
+          93
+        ]
+      ],
+      "text": "DUCK",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          172,
+          89
+        ],
+        [
+          301,
+          155
+        ]
+      ],
+      "text": "SEASON ",
+      "confidence": 1
+    }
+  ]
+}

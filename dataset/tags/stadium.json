@@ -1,0 +1,298 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          965,
+          251
+        ],
+        [
+          1022,
+          282
+        ]
+      ],
+      "text": "STAND",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          893,
+          258
+        ],
+        [
+          961,
+          297
+        ]
+      ],
+      "text": "FERGUSON",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          859,
+          273
+        ],
+        [
+          888,
+          302
+        ]
+      ],
+      "text": "ALEX",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          831,
+          278
+        ],
+        [
+          857,
+          305
+        ]
+      ],
+      "text": "SIR",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          360,
+          290
+        ],
+        [
+          454,
+          322
+        ]
+      ],
+      "text": "STRETFORD END",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1085,
+          354
+        ],
+        [
+          1156,
+          379
+        ]
+      ],
+      "text": "MADE POSSIBLE",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          988,
+          366
+        ],
+        [
+          1063,
+          380
+        ]
+      ],
+      "text": "SIR EALX 26 YEARS",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          58,
+          367
+        ],
+        [
+          93,
+          385
+        ]
+      ],
+      "text": "ONE LOVE",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          97,
+          369
+        ],
+        [
+          152,
+          385
+        ]
+      ],
+      "text": "STRETFORD END",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          156,
+          373
+        ],
+        [
+          176,
+          386
+        ]
+      ],
+      "text": "MUFC",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          870,
+          388
+        ],
+        [
+          1194,
+          440
+        ]
+      ],
+      "text": "CHES",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          38,
+          393
+        ],
+        [
+          91,
+          436
+        ]
+      ],
+      "text": "S",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          126,
+          400
+        ],
+        [
+          172,
+          438
+        ]
+      ],
+      "text": "T",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          216,
+          403
+        ],
+        [
+          269,
+          442
+        ]
+      ],
+      "text": "R",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          282,
+          403
+        ],
+        [
+          367,
+          443
+        ]
+      ],
+      "text": "ET",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          386,
+          408
+        ],
+        [
+          550,
+          444
+        ]
+      ],
+      "text": "FORD",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          671,
+          409
+        ],
+        [
+          863,
+          439
+        ]
+      ],
+      "text": "MAN",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          745,
+          441
+        ],
+        [
+          1151,
+          479
+        ]
+      ],
+      "text": "UNITE",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          271,
+          449
+        ],
+        [
+          479,
+          482
+        ]
+      ],
+      "text": "END",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1003,
+          477
+        ],
+        [
+          1052,
+          488
+        ]
+      ],
+      "text": "FA CUP",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          273,
+          661
+        ],
+        [
+          294,
+          701
+        ]
+      ],
+      "text": "7",
+      "confidence": 1
+    }
+  ]
+}
