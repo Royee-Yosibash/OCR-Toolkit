@@ -30,7 +30,7 @@ class OCRAbstact(ABC):
         OCRAbstact._registry[cls.__name__] = cls
 
     @classmethod
-    def from_config(cls, config: dict):
+    def from_config(cls, config: Union[OCRConfig, dict]):
         """Create an OCR instance from a config.
 
         Looks up the registered subclass matching ``config.model_name``

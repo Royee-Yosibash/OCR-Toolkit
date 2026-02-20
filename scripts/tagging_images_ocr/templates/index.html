@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Bounding Box Tagger</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            height: 100vh;
+        }
+
+        .main-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #16213e;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #canvas {
+            cursor: crosshair;
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .toolbar {
+            width: 25%;
+            min-width: 300px;
+            max-width: 420px;
+            background: #1a1a2e;
+            border-left: 1px solid #2a2a4a;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .toolbar-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #2a2a4a;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a9eff;
+        }
+
+        .toolbar-section {
+            padding: 14px 20px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+
+        .toolbar-section label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #8888aa;
+            margin-bottom: 8px;
+        }
+
+        .filename-display {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 6px;
+            word-break: break-all;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            font-size: 13px;
+            color: #e0e0e0;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #4a9eff;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #3a8eef;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px 10px;
+            background: #0f3460;
+            border: 1px solid #2a2a4a;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 13px;
+            outline: none;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #4a9eff;
+        }
+
+        input[type="text"]::placeholder {
+            color: #556;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .bb-list-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 14px 20px 0;
+        }
+
+        .bb-list-section > label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #8888aa;
+            margin-bottom: 8px;
+        }
+
+        .bb-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .bb-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .bb-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .bb-list::-webkit-scrollbar-thumb {
+            background: #2a2a4a;
+            border-radius: 3px;
+        }
+
+        .bb-entry {
+            background: #0f3460;
+            border: 1px solid #2a2a4a;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 8px;
+            transition: border-color 0.15s;
+        }
+
+        .bb-entry:hover {
+            border-color: #4a9eff;
+        }
+
+        .bb-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .bb-coords {
+            font-size: 12px;
+            font-weight: 600;
+            color: #4a9eff;
+        }
+
+        .bb-entry-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .bb-text-input {
+            width: 100%;
+            padding: 6px 8px;
+            background: #16213e;
+            border: 1px solid #2a2a4a;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 13px;
+            outline: none;
+            margin-bottom: 8px;
+        }
+
+        .bb-text-input:focus {
+            border-color: #4a9eff;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: background 0.15s;
+        }
+
+        .btn-primary {
+            background: #4a9eff;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #3a8eef;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #2a2a4a;
+            color: #ccc;
+        }
+
+        .btn-secondary:hover {
+            background: #3a3a5a;
+        }
+
+        .toolbar-footer {
+            padding: 14px 20px;
+            border-top: 1px solid #2a2a4a;
+            display: flex;
+            gap: 10px;
+        }
+
+        .toolbar-footer .btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-msg {
+            padding: 0 20px;
+            font-size: 12px;
+            color: #4a9eff;
+            min-height: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #556;
+            font-size: 13px;
+            padding: 30px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="main-area">
+            <canvas id="canvas"></canvas>
+        </div>
+        <div class="toolbar">
+            <div class="toolbar-header">OCR Tagger</div>
+
+            <div class="toolbar-section">
+                <label>Image Upload</label>
+                <input type="file" id="imageInput" accept="image/*">
+                <div class="filename-display" id="filenameDisplay">No image loaded</div>
+            </div>
+
+            <div class="toolbar-section">
+                <label>Load Tags (JSON)</label>
+                <input type="file" id="jsonInput" accept=".json,application/json">
+            </div>
+
+            <div class="toolbar-section">
+                <label>Output Path</label>
+                <input type="text" id="outputPath" placeholder="~/Downloads/ocr_tags/{filename}.json">
+            </div>
+
+            <div class="toolbar-section">
+                <label>OCR Model</label>
+                <select id="ocrModelSelect">
+                    <option value="">Loading models...</option>
+                </select>
+            </div>
+
+            <div class="toolbar-section">
+                <label>OCR Actions</label>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-primary" style="flex:1; font-size:12px;" onclick="runOCROnEmpty()">OCR Empty BBs</button>
+                    <button class="btn btn-secondary" style="flex:1; font-size:12px;" onclick="runOCRWholeImage()">OCR Whole Image</button>
+                </div>
+            </div>
+
+            <div class="bb-list-section">
+                <label>Bounding Boxes</label>
+                <div class="bb-list" id="bbList">
+                    <div class="empty-state" id="emptyState">
+                        Draw rectangles on the image to create bounding boxes
+                    </div>
+                </div>
+            </div>
+
+            <div class="status-msg" id="statusMsg"></div>
+
+            <div class="toolbar-footer">
+                <button class="btn btn-primary" id="saveBtn" onclick="saveAll()">Save</button>
+                <button class="btn btn-danger" id="clearBtn" onclick="clearAll()">Clear All</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const imageInput = document.getElementById("imageInput");
+        const filenameDisplay = document.getElementById("filenameDisplay");
+        const outputPathInput = document.getElementById("outputPath");
+        const jsonInput = document.getElementById("jsonInput");
+        const ocrModelSelect = document.getElementById("ocrModelSelect");
+        const bbListEl = document.getElementById("bbList");
+        const emptyState = document.getElementById("emptyState");
+        const statusMsg = document.getElementById("statusMsg");
+
+        let originalImage = null;
+        let currentFilename = "";
+        let scaleFactor = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        let boundingBoxes = [];
+        let isDrawing = false;
+        let drawStart = null;
+        let currentMouse = null;
+        let hoveredBBIndex = -1;
+
+        const BB_COLORS = [
+            "rgba(74, 158, 255, 0.25)",
+            "rgba(46, 204, 113, 0.25)",
+            "rgba(231, 76, 60, 0.25)",
+            "rgba(241, 196, 15, 0.25)",
+            "rgba(155, 89, 182, 0.25)",
+            "rgba(230, 126, 34, 0.25)",
+            "rgba(26, 188, 156, 0.25)",
+            "rgba(236, 100, 165, 0.25)",
+        ];
+
+        const BB_BORDER_COLORS = [
+            "#4a9eff",
+            "#2ecc71",
+            "#e74c3c",
+            "#f1c40f",
+            "#9b59b6",
+            "#e67e22",
+            "#1abc9c",
+            "#ec64a5",
+        ];
+
+        function loadOCRModels() {
+            fetch("/api/ocr_models")
+                .then(r => r.json())
+                .then(models => {
+                    ocrModelSelect.innerHTML = "";
+                    models.forEach(m => {
+                        const opt = document.createElement("option");
+                        opt.value = m;
+                        opt.textContent = m;
+                        ocrModelSelect.appendChild(opt);
+                    });
+                })
+                .catch(() => {
+                    ocrModelSelect.innerHTML = '<option value="">Failed to load models</option>';
+                });
+        }
+
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            redraw();
+        }
+
+        function computeImageLayout() {
+            if (!originalImage) return;
+            const cw = canvas.width;
+            const ch = canvas.height;
+            const iw = originalImage.width;
+            const ih = originalImage.height;
+            scaleFactor = Math.min(cw / iw, ch / ih);
+            const dw = iw * scaleFactor;
+            const dh = ih * scaleFactor;
+            offsetX = (cw - dw) / 2;
+            offsetY = (ch - dh) / 2;
+        }
+
+        function canvasToImage(cx, cy) {
+            return {
+                x: (cx - offsetX) / scaleFactor,
+                y: (cy - offsetY) / scaleFactor,
+            };
+        }
+
+        function imageToCanvas(ix, iy) {
+            return {
+                x: ix * scaleFactor + offsetX,
+                y: iy * scaleFactor + offsetY,
+            };
+        }
+
+        function redraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (!originalImage) return;
+
+            computeImageLayout();
+            const dw = originalImage.width * scaleFactor;
+            const dh = originalImage.height * scaleFactor;
+            ctx.drawImage(originalImage, offsetX, offsetY, dw, dh);
+
+            boundingBoxes.forEach((bb, i) => {
+                const tl = imageToCanvas(bb.x1, bb.y1);
+                const br = imageToCanvas(bb.x2, bb.y2);
+                const w = br.x - tl.x;
+                const h = br.y - tl.y;
+                const colorIdx = i % BB_COLORS.length;
+                const isHovered = i === hoveredBBIndex;
+
+                ctx.fillStyle = isHovered
+                    ? "rgba(74, 158, 255, 0.4)"
+                    : BB_COLORS[colorIdx];
+                ctx.fillRect(tl.x, tl.y, w, h);
+
+                ctx.strokeStyle = isHovered ? "#fff" : BB_BORDER_COLORS[colorIdx];
+                ctx.lineWidth = isHovered ? 3 : 2;
+                ctx.setLineDash([]);
+                ctx.strokeRect(tl.x, tl.y, w, h);
+
+                ctx.fillStyle = "#fff";
+                ctx.font = "bold 14px sans-serif";
+                ctx.fillText(`#${i + 1}`, tl.x + 4, tl.y + 16);
+            });
+
+            if (isDrawing && drawStart && currentMouse) {
+                const sx = drawStart.cx;
+                const sy = drawStart.cy;
+                const w = currentMouse.x - sx;
+                const h = currentMouse.y - sy;
+                ctx.setLineDash([6, 3]);
+                ctx.strokeStyle = "#4a9eff";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(sx, sy, w, h);
+                ctx.setLineDash([]);
+            }
+        }
+
+        function renderBBList() {
+            const hasBoxes = boundingBoxes.length > 0;
+            emptyState.style.display = hasBoxes ? "none" : "block";
+
+            const existing = bbListEl.querySelectorAll(".bb-entry");
+            existing.forEach(e => e.remove());
+
+            boundingBoxes.forEach((bb, i) => {
+                const entry = document.createElement("div");
+                entry.className = "bb-entry";
+                entry.dataset.index = i;
+
+                entry.addEventListener("mouseenter", () => {
+                    hoveredBBIndex = i;
+                    redraw();
+                });
+                entry.addEventListener("mouseleave", () => {
+                    hoveredBBIndex = -1;
+                    redraw();
+                });
+
+                const x1 = Math.round(bb.x1);
+                const y1 = Math.round(bb.y1);
+                const x2 = Math.round(bb.x2);
+                const y2 = Math.round(bb.y2);
+
+                const header = document.createElement("div");
+                header.className = "bb-entry-header";
+
+                const coords = document.createElement("span");
+                coords.className = "bb-coords";
+                coords.textContent = `BB #${i + 1}: (${x1},${y1})-(${x2},${y2})`;
+
+                const actions = document.createElement("div");
+                actions.className = "bb-entry-actions";
+
+                const ocrBtn = document.createElement("button");
+                ocrBtn.className = "btn btn-primary";
+                ocrBtn.textContent = "Run OCR";
+                ocrBtn.addEventListener("click", () => runOCR(i));
+
+                const delBtn = document.createElement("button");
+                delBtn.className = "btn btn-danger";
+                delBtn.textContent = "Delete";
+                delBtn.addEventListener("click", () => deleteBB(i));
+
+                actions.appendChild(ocrBtn);
+                actions.appendChild(delBtn);
+                header.appendChild(coords);
+                header.appendChild(actions);
+
+                const textInput = document.createElement("input");
+                textInput.type = "text";
+                textInput.className = "bb-text-input";
+                textInput.placeholder = "Text...";
+                textInput.value = bb.text;
+                textInput.addEventListener("input", () => {
+                    updateBBText(i, textInput.value);
+                });
+
+                entry.appendChild(header);
+                entry.appendChild(textInput);
+                bbListEl.appendChild(entry);
+            });
+        }
+
+        function updateBBText(index, text) {
+            boundingBoxes[index].text = text;
+        }
+
+        function deleteBB(index) {
+            boundingBoxes.splice(index, 1);
+            hoveredBBIndex = -1;
+            renderBBList();
+            redraw();
+        }
+
+        function clearAll() {
+            boundingBoxes = [];
+            hoveredBBIndex = -1;
+            renderBBList();
+            redraw();
+            showStatus("");
+        }
+
+        function showStatus(msg) {
+            statusMsg.textContent = msg;
+        }
+
+        function cropBBToBase64(bb) {
+            const w = Math.abs(bb.x2 - bb.x1);
+            const h = Math.abs(bb.y2 - bb.y1);
+            const sx = Math.min(bb.x1, bb.x2);
+            const sy = Math.min(bb.y1, bb.y2);
+            const tmpCanvas = document.createElement("canvas");
+            tmpCanvas.width = w;
+            tmpCanvas.height = h;
+            const tmpCtx = tmpCanvas.getContext("2d");
+            tmpCtx.drawImage(originalImage, sx, sy, w, h, 0, 0, w, h);
+            return tmpCanvas.toDataURL("image/png").split(",")[1];
+        }
+
+        function runOCR(index) {
+            if (!originalImage) return;
+            const bb = boundingBoxes[index];
+            const model = ocrModelSelect.value;
+            if (!model) {
+                showStatus("No OCR model selected");
+                return;
+            }
+
+            const base64 = cropBBToBase64(bb);
+            showStatus(`Running OCR on BB #${index + 1}...`);
+
+            fetch("/api/run_ocr", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: base64, model_name: model }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus(`OCR error: ${data.error}`);
+                        return;
+                    }
+                    const boxes = data.bounding_boxes || [];
+                    const texts = boxes.map(b => b.text);
+                    bb.text = texts.join(" ");
+                    renderBBList();
+                    showStatus(`OCR complete for BB #${index + 1}`);
+                })
+                .catch(err => {
+                    showStatus(`OCR failed: ${err.message}`);
+                });
+        }
+
+        async function runOCROnEmpty() {
+            if (!originalImage) return;
+            const model = ocrModelSelect.value;
+            if (!model) {
+                showStatus("No OCR model selected");
+                return;
+            }
+            const emptyIndices = boundingBoxes
+                .map((bb, i) => bb.text.trim() === "" ? i : -1)
+                .filter(i => i >= 0);
+            if (emptyIndices.length === 0) {
+                showStatus("No empty bounding boxes");
+                return;
+            }
+            showStatus(`Running OCR on ${emptyIndices.length} empty BB(s)...`);
+            for (const idx of emptyIndices) {
+                const bb = boundingBoxes[idx];
+                const base64 = cropBBToBase64(bb);
+                try {
+                    const r = await fetch("/api/run_ocr", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ image: base64, model_name: model }),
+                    });
+                    const data = await r.json();
+                    if (data.error) {
+                        showStatus(`OCR error on BB #${idx + 1}: ${data.error}`);
+                        continue;
+                    }
+                    const boxes = data.bounding_boxes || [];
+                    bb.text = boxes.map(b => b.text).join(" ");
+                } catch (err) {
+                    showStatus(`OCR failed on BB #${idx + 1}: ${err.message}`);
+                }
+            }
+            renderBBList();
+            redraw();
+            showStatus(`OCR complete on ${emptyIndices.length} BB(s)`);
+        }
+
+        function imageToBase64() {
+            const tmpCanvas = document.createElement("canvas");
+            tmpCanvas.width = originalImage.width;
+            tmpCanvas.height = originalImage.height;
+            const tmpCtx = tmpCanvas.getContext("2d");
+            tmpCtx.drawImage(originalImage, 0, 0);
+            return tmpCanvas.toDataURL("image/png").split(",")[1];
+        }
+
+        function runOCRWholeImage() {
+            if (!originalImage) return;
+            const model = ocrModelSelect.value;
+            if (!model) {
+                showStatus("No OCR model selected");
+                return;
+            }
+            const base64 = imageToBase64();
+            showStatus("Running OCR on whole image...");
+            fetch("/api/run_ocr", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ image: base64, model_name: model }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus(`OCR error: ${data.error}`);
+                        return;
+                    }
+                    const boxes = data.bounding_boxes || [];
+                    boxes.forEach(b => {
+                        const coords = b.coordinates;
+                        boundingBoxes.push({
+                            x1: coords[0][0],
+                            y1: coords[0][1],
+                            x2: coords[1][0],
+                            y2: coords[1][1],
+                            text: b.text,
+                        });
+                    });
+                    renderBBList();
+                    redraw();
+                    showStatus(`Added ${boxes.length} BB(s) from whole-image OCR`);
+                })
+                .catch(err => {
+                    showStatus(`OCR failed: ${err.message}`);
+                });
+        }
+
+        function saveAll() {
+            if (boundingBoxes.length === 0) {
+                showStatus("No bounding boxes to save");
+                return;
+            }
+
+            const payload = {
+                bounding_boxes: boundingBoxes.map(bb => ({
+                    coordinates: [
+                        [Math.round(bb.x1), Math.round(bb.y1)],
+                        [Math.round(bb.x2), Math.round(bb.y2)],
+                    ],
+                    text: bb.text,
+                    confidence: 1.0,
+                })),
+                output_path: outputPathInput.value,
+                filename: currentFilename,
+            };
+
+            showStatus("Saving...");
+
+            fetch("/api/save", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    showStatus(`Saved to: ${data.path || "done"}`);
+                })
+                .catch(err => {
+                    showStatus(`Save failed: ${err.message}`);
+                });
+        }
+
+        imageInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentFilename = file.name;
+            filenameDisplay.textContent = file.name;
+            boundingBoxes = [];
+            hoveredBBIndex = -1;
+
+            const reader = new FileReader();
+            reader.onload = ev => {
+                const img = new Image();
+                img.onload = () => {
+                    originalImage = img;
+                    resizeCanvas();
+                    renderBBList();
+                    showStatus("");
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        jsonInput.addEventListener("change", e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = ev => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    const boxes = data.bounding_boxes || [];
+                    boxes.forEach(b => {
+                        const coords = b.coordinates;
+                        boundingBoxes.push({
+                            x1: coords[0][0],
+                            y1: coords[0][1],
+                            x2: coords[1][0],
+                            y2: coords[1][1],
+                            text: b.text || "",
+                        });
+                    });
+                    renderBBList();
+                    redraw();
+                    showStatus(`Loaded ${boxes.length} BB(s) from ${file.name}`);
+                } catch (err) {
+                    showStatus(`Failed to parse JSON: ${err.message}`);
+                }
+            };
+            reader.readAsText(file);
+            jsonInput.value = "";
+        });
+
+        canvas.addEventListener("mousedown", e => {
+            if (!originalImage) return;
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+            const imgPt = canvasToImage(cx, cy);
+            if (imgPt.x < 0 || imgPt.y < 0 ||
+                imgPt.x > originalImage.width ||
+                imgPt.y > originalImage.height) return;
+
+            isDrawing = true;
+            drawStart = { cx, cy, ix: imgPt.x, iy: imgPt.y };
+            currentMouse = { x: cx, y: cy };
+        });
+
+        canvas.addEventListener("mousemove", e => {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            currentMouse = {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top,
+            };
+            redraw();
+        });
+
+        canvas.addEventListener("mouseup", e => {
+            if (!isDrawing) return;
+            isDrawing = false;
+            const rect = canvas.getBoundingClientRect();
+            const cx = e.clientX - rect.left;
+            const cy = e.clientY - rect.top;
+            const endPt = canvasToImage(cx, cy);
+
+            const x1 = Math.max(0, Math.min(drawStart.ix, endPt.x));
+            const y1 = Math.max(0, Math.min(drawStart.iy, endPt.y));
+            const x2 = Math.min(originalImage.width, Math.max(drawStart.ix, endPt.x));
+            const y2 = Math.min(originalImage.height, Math.max(drawStart.iy, endPt.y));
+
+            if (Math.abs(x2 - x1) > 3 && Math.abs(y2 - y1) > 3) {
+                boundingBoxes.push({ x1, y1, x2, y2, text: "" });
+                renderBBList();
+            }
+
+            drawStart = null;
+            currentMouse = null;
+            redraw();
+        });
+
+        canvas.addEventListener("mouseleave", () => {
+            if (isDrawing) {
+                isDrawing = false;
+                drawStart = null;
+                currentMouse = null;
+                redraw();
+            }
+        });
+
+        window.addEventListener("resize", resizeCanvas);
+        loadOCRModels();
+        resizeCanvas();
+    </script>
+</body>
+</html>
