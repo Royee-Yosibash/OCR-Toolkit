@@ -1,9 +1,9 @@
-import json
 from collections.abc import Callable
 from dataclasses import dataclass, fields, field
 from pathlib import Path
 
 from ocr_backbone.bounding_box import BoundingBox
+from utils.json_utils import load_json
 
 
 @dataclass
@@ -56,9 +56,7 @@ def load_config(path: str | Path) -> OCRConfig:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
     """
-    path = Path(path)
-    with open(path) as f:
-        data = json.load(f)
+    data = load_json(path)
     return OCRConfig(
         model_name=data["model_name"],
         model_params=data.get("model_params", {}),

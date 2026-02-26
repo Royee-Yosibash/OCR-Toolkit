@@ -2,7 +2,6 @@
 
 import base64
 import io
-import json
 from pathlib import Path
 
 import numpy as np
@@ -12,6 +11,7 @@ from PIL import Image
 from ocr_backbone.ocr_abstract import OCRAbstact
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from utils.json_utils import save_json
 
 
 def create_app() -> Flask:
@@ -101,9 +101,7 @@ def create_app() -> Flask:
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
             result = OCRResult.from_dict({"bounding_boxes": bounding_boxes})
-            save_path.write_text(
-                json.dumps(result.to_dict(), indent=2), encoding="utf-8"
-            )
+            save_json(save_path, result.to_dict())
 
             return jsonify({"status": "ok", "path": str(save_path)})
         except KeyError as e:

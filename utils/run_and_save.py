@@ -1,11 +1,11 @@
-import json
-
 import numpy as np
 
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstact
 from ocr_backbone.ocr_result import OCRResult
 from pathlib import Path
+
+from utils.json_utils import save_json
 
 from datasets import load_dataset
 
@@ -24,9 +24,7 @@ def run_and_save(image: np.ndarray, ocr: OCRAbstact, save_path: str) -> OCRResul
         The OCRResult produced by the OCR run.
     """
     result = ocr.get_text_bb(image)
-    with open(save_path, "w") as f:
-        json.dump(result.to_dict(), f, indent=2)
-        f.write("\n")
+    save_json(save_path, result.to_dict())
     return result
 
 

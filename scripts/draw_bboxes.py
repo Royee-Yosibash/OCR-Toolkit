@@ -8,13 +8,13 @@ same directory as the original image.
 """
 
 import argparse
-import json
 from pathlib import Path
 
 import cv2
 import numpy as np
 
 from ocr_backbone.ocr_result import OCRResult
+from utils.json_utils import load_json
 
 BOX_COLORS = [
     (0, 255, 0),
@@ -42,8 +42,7 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
         The path to the output image.
     """
     image = cv2.imread(image_path)
-    with open(results_path) as f:
-        ocr_result = OCRResult.from_dict(json.load(f))
+    ocr_result = OCRResult.from_dict(load_json(Path(results_path)))
     bboxes = ocr_result.bounding_boxes
 
     for i, bb in enumerate(bboxes):
