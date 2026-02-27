@@ -14,7 +14,7 @@ from PIL import Image
 
 import ocr_modules
 from consts import IMAGE_EXTENSIONS
-from evalutation.evaluate_ocrs import run_multiple_ocrs_and_save, run_ocr_and_save
+from evalutation.evaluation_pipeline import run_multiple_ocrs_and_save, run_ocr_and_save
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_backbone.ocr_abstract import OCRAbstact
 from utils.datasets_handles import collect_images
