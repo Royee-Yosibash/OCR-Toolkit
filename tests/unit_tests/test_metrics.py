@@ -2,7 +2,7 @@ import unittest
 
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_result import OCRResult
-from evalutation.metrics import (
+from evaluation.metrics import (
     character_error_rate,
     word_error_rate,
     ocr_result_cer,

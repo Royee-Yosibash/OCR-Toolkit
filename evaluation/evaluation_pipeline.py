@@ -27,7 +27,7 @@ from typing import List
 
 import numpy as np
 
-from evalutation.metrics import MetricFn
+from evaluation.metrics import MetricFn
 from ocr_backbone.ocr_abstract import OCRAbstact
 from ocr_backbone.ocr_result import OCRResult
 from utils.json_utils import save_json, load_json
