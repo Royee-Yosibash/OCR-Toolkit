@@ -52,11 +52,10 @@ class OCRAbstact(ABC):
         instance = cls._registry[model_name](config=config)
         return instance
 
-    @abstractmethod
     def __init__(self, config: Union[OCRConfig, dict]) -> None:
         """Initialize the OCR engine.
         """
-        self.config = config
+        self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config) 
 
     @abstractmethod
     def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:

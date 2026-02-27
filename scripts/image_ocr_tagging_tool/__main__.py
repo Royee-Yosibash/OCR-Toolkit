@@ -41,7 +41,7 @@ def main() -> None:
 
     _import_all_modules()
 
-    from scripts.tagging_images_ocr.app import create_app
+    from scripts.image_ocr_tagging_tool.app import create_app
 
     app = create_app()
 

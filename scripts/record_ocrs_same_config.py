@@ -13,11 +13,12 @@ import numpy as np
 from PIL import Image
 
 import ocr_modules
+from consts import IMAGE_EXTENSIONS
+from evalutation.evaluate_ocrs import run_multiple_ocrs_and_save, run_ocr_and_save
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_backbone.ocr_abstract import OCRAbstact
-from utils.run_and_save import run_and_save
-
-IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".webp"}
+from utils.datasets_handles import collect_images
+from utils.json_utils import load_json
 
 
 def _import_all_modules() -> None:
@@ -27,31 +28,6 @@ def _import_all_modules() -> None:
     package_path = Path(ocr_modules.__file__).parent
     for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
         importlib.import_module(f"ocr_modules.{name}")
-
-
-def _collect_images(path: Path) -> list[Path]:
-    """Return a sorted list of image paths from a file or directory.
-
-    Args:
-        path: A path to a single image file or a directory containing
-            images.
-
-    Returns:
-        A sorted list of image file paths.
-
-    Raises:
-        FileNotFoundError: If the path does not exist.
-        ValueError: If the path is a file with an unsupported extension.
-    """
-    if path.is_dir():
-        images = sorted(
-            p for p in path.iterdir()
-            if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS
-        )
-        return images
-    if path.suffix.lower() not in IMAGE_EXTENSIONS:
-        raise ValueError(f"Unsupported image format: {path.suffix}")
-    return [path]
 
 
 def _resolve_output_dir(cls: type, output_root: Path) -> Path:
@@ -75,10 +51,10 @@ def _resolve_output_dir(cls: type, output_root: Path) -> Path:
     return output_dir
 
 
-def record_all(
+def record_with_all_ocr_modules(
     image_path: str,
     output_dir: str,
-    config: OCRConfig | None = None,
+    config: dict,
 ) -> None:
     """Run all registered OCR modules on image(s) and save expected results.
 
@@ -89,54 +65,51 @@ def record_all(
             created per module using the registered class name.
     """
     _import_all_modules()
-
+    
     if not OCRAbstact._registry:
-        print("No OCR modules found.")
-        return
+        raise NotImplementedError("No OCR modules found.")
 
-    images = _collect_images(Path(image_path))
+    if "model_name" in config:
+        raise IOError(f"The config can not set a model_name")
+
+    images = collect_images(Path(image_path))
     if not images:
-        print(f"No images found at {image_path}")
-        return
+        raise IOError(f"No images found at {image_path}")
 
-    output_root = Path(output_dir)
-
+    ocrs, labels = list(), list()
     for name, cls in OCRAbstact._registry.items():
-        module_config = config or OCRConfig(model_name=name)
-        module_output = _resolve_output_dir(cls, output_root)
+        labels.append(name)
+        ocrs.append(OCRAbstact.from_config(config=OCRConfig(model_name=name, **config)))
 
-        print(f"Recording {name}...")
-        for img_path in images:
-            image = np.array(Image.open(img_path))
-            save_path = str(module_output / f"{img_path.stem}.json")
-            result = run_and_save(image, cls(config=module_config), save_path)
-            print(f"  {img_path.name}: {len(result.bounding_boxes)} bounding boxes -> {save_path}")
+    for img_path in images:
+        image = np.array(Image.open(img_path))
+        run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
+                                   save_dir=Path(output_dir), overwrite=True)
+        
+        # Compute metrics too? we can then join with evaluate....
 
 
 def main() -> None:
-    """Parse arguments and record OCR output for all modules.
+    """Parse arguments and record outputs from all OCR modules using the same config.
 
     Run from the terminal as::
 
-        python -m scripts.record_ocr <image_path> <output_dir> [--config <config.json>]
+        python -m scripts.record_ocrs_same_config <image_path> <output_dir> [--config <config.json>]
 
     ``image_path`` may be a single image file or a directory of images.
     ``output_dir`` is the root folder where results are saved, organized
     as ``<output_dir>/<module>/expected/<image_stem>.json``.
     """
     parser = argparse.ArgumentParser(
-        description="Record expected OCR results for all registered modules.",
+        description="Record expected OCR results for all registered modules using the same config.",
     )
     parser.add_argument("image_path", help="Path to an image file or a directory of images.")
     parser.add_argument("output_dir", help="Root directory for saving results.")
-    parser.add_argument(
-        "--config", "-c",
-        help="Path to a JSON config file.",
-    )
+    parser.add_argument("--config", "-c", help="Path to a JSON config file.",)
     args = parser.parse_args()
 
-    config = load_config(args.config) if args.config else None
-    record_all(args.image_path, args.output_dir, config)
+    config = load_json(args.config) if args.config else {}
+    record_with_all_ocr_modules(args.image_path, args.output_dir, config)
 
 
 if __name__ == "__main__":

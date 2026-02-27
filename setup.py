@@ -6,7 +6,7 @@ release_data = json.load(open('release_data.json'))
 setup(
     name="ocr-highlight",
     version=release_data['version'],
-    description="Recipe management application",
+    description="OCR enhancment package that allows evaluation for specific use cases",
     python_requires=">=3.12",
     packages=find_packages(),
     include_package_data=True,

@@ -41,6 +41,17 @@ class OCRConfig:
                 setattr(self, key, value)
             else:
                 self.model_params[key] = value
+    
+    
+    @classmethod
+    def from_dict(raw_dict:dict):
+        return OCRConfig(
+            model_name=raw_dict["model_name"],
+            model_params=raw_dict.get("model_params", {}),
+            grid_rows=raw_dict.get("grid_rows", 1),
+            grid_cols=raw_dict.get("grid_cols", 1),
+    )
+
 
 
 def load_config(path: str | Path) -> OCRConfig:
@@ -55,11 +66,7 @@ def load_config(path: str | Path) -> OCRConfig:
     Raises:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
-    """
+    """    
     data = load_json(path)
-    return OCRConfig(
-        model_name=data["model_name"],
-        model_params=data.get("model_params", {}),
-        grid_rows=data.get("grid_rows", 1),
-        grid_cols=data.get("grid_cols", 1),
-    )
+    return OCRConfig.from_dict(data)
+    
