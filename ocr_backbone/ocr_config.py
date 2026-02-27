@@ -44,8 +44,8 @@ class OCRConfig:
     
     
     @classmethod
-    def from_dict(raw_dict:dict):
-        return OCRConfig(
+    def from_dict(cls, raw_dict:dict):
+        return cls(
             model_name=raw_dict["model_name"],
             model_params=raw_dict.get("model_params", {}),
             grid_rows=raw_dict.get("grid_rows", 1),
