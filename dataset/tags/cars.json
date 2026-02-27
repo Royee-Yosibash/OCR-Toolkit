@@ -1,0 +1,172 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          1412,
+          82
+        ],
+        [
+          1508,
+          110
+        ]
+      ],
+      "text": "Jueens Kark",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1517,
+          84
+        ],
+        [
+          1657,
+          112
+        ]
+      ],
+      "text": "Warwick Avenue",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1407,
+          109
+        ],
+        [
+          1648,
+          145
+        ]
+      ],
+      "text": "Edgware Road   Oxford Clrcus",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1388,
+          158
+        ],
+        [
+          1626,
+          231
+        ]
+      ],
+      "text": "Willesden",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1612,
+          192
+        ],
+        [
+          1684,
+          229
+        ]
+      ],
+      "text": "Garage",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1218,
+          252
+        ],
+        [
+          1288,
+          280
+        ]
+      ],
+      "text": "VP 535",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1916,
+          396
+        ],
+        [
+          2048,
+          461
+        ]
+      ],
+      "text": "TAXI",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1018,
+          428
+        ],
+        [
+          1157,
+          489
+        ]
+      ],
+      "text": "TAXI",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1178,
+          646
+        ],
+        [
+          1269,
+          669
+        ]
+      ],
+      "text": "GREAT",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          341,
+          909
+        ],
+        [
+          495,
+          947
+        ]
+      ],
+      "text": "LG54 XTF",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          886,
+          958
+        ],
+        [
+          1104,
+          1006
+        ]
+      ],
+      "text": "R594 TGC",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1790,
+          1039
+        ],
+        [
+          2015,
+          1105
+        ]
+      ],
+      "text": "LX5I 0BW",
+      "confidence": 1
+    }
+  ]
+}

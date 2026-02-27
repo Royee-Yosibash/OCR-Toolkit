@@ -43,22 +43,103 @@ class BoundingBox:
                 f"bottom_right {bottom_right}."
             )
 
+    def __lt__(self, other: object) -> bool:
+        """Compare bounding boxes by top-left position (y then x).
+
+        Args:
+            other: Another BoundingBox to compare against.
+
+        Returns:
+            True if this bounding box comes before ``other`` in
+            top-to-bottom, left-to-right reading order.
+        """
+        if not isinstance(other, BoundingBox):
+            return NotImplemented
+        self_tl = self.coordinates[0]
+        other_tl = other.coordinates[0]
+        return (self_tl[1], self_tl[0]) < (other_tl[1], other_tl[0])
+
     def _remap_bounding_box(self, x_offset: int, y_offset: int):
         """Remap a bounding box from sub-image coordinates to original image coordinates.
 
         Args:
-            bbox: A BoundingBox with coordinates relative to a sub-image.
             x_offset: Horizontal pixel offset of the sub-image in the original image.
             y_offset: Vertical pixel offset of the sub-image in the original image.
-
-        Returns:
-            A new BoundingBox with coordinates shifted by the offsets.
         """
         top_left, bottom_right = self.coordinates
         new_coords = (
             (top_left[0] + x_offset, top_left[1] + y_offset),
             (bottom_right[0] + x_offset, bottom_right[1] + y_offset),
         )
-
         self.coordinates = new_coords
 
+    @classmethod
+    def from_dict(cls, data: dict):
+        """Create a BoundingBox from a dict produced by ``to_dict``.
+
+        Args:
+            data: A dict with coordinates, text, and optionally confidence.
+
+        Returns:
+            A BoundingBox instance.
+        """
+        coords = data["coordinates"]
+        return cls(
+            coordinates=(tuple(coords[0]), tuple(coords[1])),
+            text=data["text"],
+            confidence=data.get("confidence", 0.0),
+        )
+
+    @classmethod
+    def from_pixel_list(
+        cls, pixels: list[tuple[int, int]], text: str = "", confidence: float = 0.0
+        ):
+        """Create a BoundingBox from a list of pixel coordinates.
+
+        Computes the axis-aligned bounding box that encloses all given pixels.
+
+        Args:
+            pixels: A non-empty list of (x, y) pixel coordinates.
+            text: The text associated with the bounding box.
+            confidence: Confidence score of the detection.
+
+        Returns:
+            A BoundingBox enclosing all provided pixels.
+
+        Raises:
+            ValueError: If the pixel list is empty.
+        """
+        if not pixels:
+            raise ValueError("Pixel list must not be empty.")
+        xs, ys = zip(*pixels)
+        return cls(
+            coordinates=((min(xs), min(ys)), (max(xs), max(ys))),
+            text=text,
+            confidence=confidence,
+        )
+
+    def to_dict(self) -> dict:
+        """Convert the bounding box to a JSON-serializable dict.
+
+        Returns:
+            A dict with coordinates, text, and confidence fields.
+        """
+        return {
+            "coordinates": [list(self.coordinates[0]), list(self.coordinates[1])],
+            "text": self.text,
+            "confidence": round(self.confidence, 6),
+        }
+
+    def to_pixel_list(self) -> list[tuple[int, int]]:
+        """Return all pixel coordinates contained in the bounding box.
+
+        Returns:
+            A list of (x, y) tuples for every pixel from top_left to
+            bottom_right (inclusive).
+        """
+        top_left, bottom_right = self.coordinates
+        return [
+            (x, y)
+            for y in range(top_left[1], bottom_right[1] + 1)
+            for x in range(top_left[0], bottom_right[0] + 1)
+        ]

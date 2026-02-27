@@ -1,0 +1,116 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          18,
+          16
+        ],
+        [
+          458,
+          42
+        ]
+      ],
+      "text": "In the beginning God created the heavens and the",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          19,
+          39
+        ],
+        [
+          441,
+          59
+        ]
+      ],
+      "text": "earth. The earth was without form; and void; and",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          18,
+          57
+        ],
+        [
+          502,
+          83
+        ]
+      ],
+      "text": "darkness was on the face of the deep. And the Spirit of",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          18,
+          77
+        ],
+        [
+          472,
+          104
+        ]
+      ],
+      "text": "God was hovering over the face of the waters Then",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          110,
+          100
+        ],
+        [
+          492,
+          124
+        ]
+      ],
+      "text": "'Let there be light\"; and there was light And",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          19,
+          101
+        ],
+        [
+          103,
+          121
+        ]
+      ],
+      "text": "God said,",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          18,
+          118
+        ],
+        [
+          474,
+          146
+        ]
+      ],
+      "text": "God saw the light; that it was good; and God divided",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          18,
+          142
+        ],
+        [
+          260,
+          166
+        ]
+      ],
+      "text": "the light from the darkness:",
+      "confidence": 1
+    }
+  ]
+}

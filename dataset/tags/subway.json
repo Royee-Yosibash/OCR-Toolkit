@@ -1,0 +1,88 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          921,
+          82
+        ],
+        [
+          995,
+          132
+        ]
+      ],
+      "text": "East Side\n & Brooklyn",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1036,
+          100
+        ],
+        [
+          1139,
+          165
+        ]
+      ],
+      "text": "To Rockaway Pkwy\n Canarsie\n all times",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1023,
+          108
+        ],
+        [
+          1033,
+          124
+        ]
+      ],
+      "text": "L",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          16,
+          154
+        ],
+        [
+          159,
+          206
+        ]
+      ],
+      "text": "8105",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          314,
+          183
+        ],
+        [
+          422,
+          222
+        ]
+      ],
+      "text": "CANARSIE",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          179,
+          621
+        ],
+        [
+          244,
+          656
+        ]
+      ],
+      "text": "1318\n 72",
+      "confidence": 1
+    }
+  ]
+}

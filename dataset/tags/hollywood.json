@@ -1,0 +1,18 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          258,
+          226
+        ],
+        [
+          499,
+          294
+        ]
+      ],
+      "text": "HOLLYWOOD",
+      "confidence": 1
+    }
+  ]
+}

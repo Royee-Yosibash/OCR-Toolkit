@@ -1,0 +1,172 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          445,
+          411
+        ],
+        [
+          463,
+          435
+        ]
+      ],
+      "text": "13",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          621,
+          423
+        ],
+        [
+          723,
+          461
+        ]
+      ],
+      "text": "iStock",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          451,
+          441
+        ],
+        [
+          469,
+          467
+        ]
+      ],
+      "text": "12",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          624,
+          460
+        ],
+        [
+          772,
+          484
+        ]
+      ],
+      "text": "Credit: ollinka",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          454,
+          474
+        ],
+        [
+          478,
+          500
+        ]
+      ],
+      "text": "11",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          465,
+          505
+        ],
+        [
+          483,
+          527
+        ]
+      ],
+      "text": "10",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          472,
+          541
+        ],
+        [
+          487,
+          554
+        ]
+      ],
+      "text": "9",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          476,
+          568
+        ],
+        [
+          495,
+          585
+        ]
+      ],
+      "text": "8",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          482,
+          598
+        ],
+        [
+          502,
+          617
+        ]
+      ],
+      "text": "7",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          491,
+          630
+        ],
+        [
+          507,
+          647
+        ]
+      ],
+      "text": "6",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          655
+        ],
+        [
+          79,
+          669
+        ]
+      ],
+      "text": "485725200",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          496,
+          663
+        ],
+        [
+          515,
+          676
+        ]
+      ],
+      "text": "5",
+      "confidence": 1
+    }
+  ]
+}
