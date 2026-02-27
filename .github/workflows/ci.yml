@@ -26,4 +26,4 @@ jobs:
         run: pip install -e .
 
       - name: Run tests
-        run: python tests/tests_runner.py
+        run: python -m tests.tests_runner
