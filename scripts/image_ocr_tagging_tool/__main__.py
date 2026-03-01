@@ -2,6 +2,16 @@
 
 Imports all OCR modules to trigger subclass registration, creates the
 Flask application, and opens the UI in the default browser.
+
+Usage::
+
+    python -m scripts.image_ocr_tagging_tool [--port PORT]
+
+Args:
+    --port PORT: Port to run the Flask server on (default: 5000).
+
+The server starts on http://localhost:PORT and the browser opens
+automatically.
 """
 
 import argparse
@@ -50,16 +60,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    """Run the OCR tagging tool backend.
-
-    Usage::
-
-        python -m scripts.tagging_images_ocr [--port PORT]
-
-    Args:
-        --port PORT: Port to run the Flask server on (default: 5000).
-
-    The server starts on http://localhost:PORT and the browser opens
-    automatically.
-    """
     main()

@@ -98,6 +98,9 @@ def create_app() -> Flask:
                 save_path = save_dir / f"{filename_stem}.json"
             else:
                 save_path = Path(output_path)
+                if save_path.is_dir() or not save_path.suffix:
+                    filename_stem = Path(filename).stem
+                    save_path = save_path / f"{filename_stem}.json"
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
             result = OCRResult.from_dict({"bounding_boxes": bounding_boxes})
