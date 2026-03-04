@@ -178,7 +178,7 @@ def validate_dataset() -> None:
         )
 
 
-def dataset_generator() -> Generator[tuple[np.ndarray, OCRResult], None, None]:
+def dataset_generator() -> Generator[tuple[np.ndarray, OCRResult, str], None, None]:
     """Yield (image, ground_truth, stem) tuples from the dataset.
 
     Iterates over all tags files in the dataset, finds matching images,
@@ -196,4 +196,4 @@ def dataset_generator() -> Generator[tuple[np.ndarray, OCRResult], None, None]:
         image_path = _find_image_for_stem(stem)
         image = load_image(image_path)
         tags = load_tags(tags_path)
-        yield image, tags
+        yield image, tags, stem

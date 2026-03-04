@@ -83,8 +83,10 @@ def record_with_all_ocr_modules(
 
     for img_path in images:
         image = np.array(Image.open(img_path))
+        image_save_dir = Path(output_dir) / img_path.stem
+        image_save_dir.mkdir(parents=True, exist_ok=True)
         run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
-                                   save_dir=Path(output_dir), overwrite=True)
+                                   save_dir=image_save_dir, overwrite=True)
         
         # Compute metrics too? we can then join with evaluate....
 
