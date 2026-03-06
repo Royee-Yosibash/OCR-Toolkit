@@ -30,6 +30,7 @@ import numpy as np
 from evaluation.metrics import MetricFn
 from ocr_backbone.ocr_abstract import OCRAbstact
 from ocr_backbone.ocr_result import OCRResult
+from utils.datasets_handles import dataset_generator
 from utils.json_utils import save_json, load_json
 
 
@@ -38,24 +39,6 @@ OCR_RESULTS_FILE = "ocr_result.json"
 AGGREGATE_RESULTS_FILE = "aggregate.json"
 GT_FILE = "ground_truth.json"
 METRICS_FILE = "metrics.json"
-
-
-def run_ocr_and_save(image: np.ndarray, ocr: OCRAbstact, save_path: str) -> OCRResult:
-    """Run OCR on an image and save the results to a JSON file.
-
-    The OCR configuration is read from ``ocr.config``.
-
-    Args:
-        image: Input image as a numpy array (H x W x C).
-        ocr: An initialized OCR instance with its config already set.
-        save_path: Path where the results JSON will be saved.
-
-    Returns:
-        The OCRResult produced by the OCR run.
-    """
-    result = ocr.get_text_bb(image)
-    save_json(save_path, result.to_dict(), mkdir=True)
-    return result
 
 
 def run_multiple_ocrs_and_save(image: np.ndarray, 
@@ -68,7 +51,8 @@ def run_multiple_ocrs_and_save(image: np.ndarray,
         save_path = save_dir / label
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
             continue
-        run_ocr_and_save(image=image, ocr=ocr, save_path=save_path / OCR_RESULTS_FILE)
+        result = ocr.get_text_bb(image=image)
+        save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
 
 
 @dataclass
@@ -155,30 +139,7 @@ def _build_iterator(
     else:
         for image_id, (image, gt) in enumerate(dataset):
             yield image_id, image, gt
-
-
-def _run_ocrs_for_image(
-    image: np.ndarray,
-    image_dir: Path,
-    ocrs: list[OCRAbstact],
-    labels: list[str],
-    ground_truth: OCRResult,
-    overwrite: bool,
-) -> None:
-    """Run all OCRs on a single image and save results.
-
-    Args:
-        image: Input image as a numpy array.
-        image_dir: Directory for this image's results.
-        ocrs: List of OCR instances.
-        labels: Corresponding labels for each OCR.
-        ground_truth: Ground truth OCRResult to save alongside.
-        overwrite: If True, re-run even if results exist.
-    """
-    image_dir.mkdir(parents=True, exist_ok=True)
-    save_json(image_dir / GT_FILE, ground_truth.to_dict())
-    run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
-                               save_path=image_dir, overwrite=overwrite)
+    
 
 
 def _score_image(
@@ -212,7 +173,7 @@ def _score_image(
 def evaluatation_pipeline(
     metrics: list[MetricFn],
     output_dir: str | Path,
-    dataset: Iterable[tuple[np.ndarray, OCRResult]] | None = None,
+    dataset: str | None = None,
     ocrs: list[OCRAbstact] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
@@ -227,7 +188,8 @@ def evaluatation_pipeline(
         metrics: List of metric callables with signature
             (OCRResult, OCRResult) -> float | int | bool.
         output_dir: Directory where results are persisted.
-        dataset: Iterable yielding (image, ground_truth) tuples.
+        dataset: Dataset identifier string. Currently a path to a local
+            directory containing ``images/`` and ``tags/`` subdirectories.
             Required unless metrics_only is True.
         ocrs: List of initialized OCR instances to evaluate. Required
             unless metrics_only is True.
@@ -243,10 +205,15 @@ def evaluatation_pipeline(
     per_image: dict[str, dict[str, dict[int, float]]] = {}
     labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
-    for image_id, image, ground_truth in _build_iterator(output_dir, dataset, metrics_only):
+    for image_id, image, ground_truth in \
+        _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
+        
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         if not metrics_only:
-            _run_ocrs_for_image(image, image_dir, ocrs, labels, ground_truth, overwrite)
+            image_dir.mkdir(parents=True, exist_ok=True)
+            save_json(image_dir / GT_FILE, ground_truth.to_dict())
+            run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
+                               save_dir=image_dir, overwrite=overwrite)
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 

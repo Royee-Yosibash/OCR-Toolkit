@@ -178,22 +178,30 @@ def validate_dataset() -> None:
         )
 
 
-def dataset_generator() -> Generator[tuple[np.ndarray, OCRResult, str], None, None]:
-    """Yield (image, ground_truth, stem) tuples from the dataset.
+def dataset_generator(
+    dataset_root: Path | str | None = None,
+) -> Generator[tuple[np.ndarray, OCRResult], None, None]:
+    """Yield (image, ground_truth) tuples from a dataset directory.
 
-    Iterates over all tags files in the dataset, finds matching images,
-    and yields them one at a time. Suitable for use as input + ground
-    truth when testing an OCR engine.
+    The directory must contain an ``images/`` subfolder with image files
+    and a ``tags/`` subfolder with identically-stemmed JSON tag files.
+
+    Args:
+        dataset_root: Root directory of the dataset. Defaults to the
+            built-in ``dataset/`` directory when *None*.
 
     Yields:
-        A tuple of (image, ocr_result, stem) where image is a numpy
-        array (H x W x 3), ocr_result is the ground-truth OCRResult,
-        and stem is the shared filename stem.
-
+        A tuple of (image, ocr_result) where image is a numpy array
+        (H x W x 3) and ocr_result is the ground-truth OCRResult.
     """
-    for tags_path in sorted(TAGS_DIR.glob("*.json")):
+    root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
+    images_dir = root / "images"
+    tags_dir = root / "tags"
+
+    for tags_path in sorted(tags_dir.glob("*.json")):
         stem = tags_path.stem
-        image_path = _find_image_for_stem(stem)
-        image = load_image(image_path)
+        matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
+                   if (images_dir / f"{stem}{ext}").exists()]
+        image = load_image(matches[0])
         tags = load_tags(tags_path)
-        yield image, tags, stem
+        yield image, tags
