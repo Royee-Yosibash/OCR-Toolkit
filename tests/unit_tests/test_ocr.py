@@ -16,7 +16,7 @@ class DummyOCR(OCRAbstact):
             config = OCRConfig(model_name="DummyOCR")
         super().__init__(config)
 
-    def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:
+    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
         h, w = image.shape[:2]
         return OCRResult(bounding_boxes=[
             BoundingBox(
