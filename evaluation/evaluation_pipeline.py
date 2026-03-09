@@ -20,25 +20,29 @@ Directory structure created by evaluate::
         aggregate.json
 """
 
+import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List
 
 import numpy as np
-
 from evaluation.metrics import MetricFn
 from ocr_backbone.ocr_abstract import OCRAbstact
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
 from utils.json_utils import save_json, load_json
+from utils.statistics import beta_ci, bootstrap_ci
 
+logger = logging.getLogger(__name__)
 
 IMAGE_DIR_NAME = "image_{x}"
 OCR_RESULTS_FILE = "ocr_result.json"
 AGGREGATE_RESULTS_FILE = "aggregate.json"
 GT_FILE = "ground_truth.json"
 METRICS_FILE = "metrics.json"
+DEFAULT_CI_LEVELS = (95,)
+
 
 
 def run_multiple_ocrs_and_save(image: np.ndarray, 
@@ -93,23 +97,39 @@ def _compute_metrics(
 
 def _compute_aggregate(
     per_image: dict[str, dict[str, dict[int, float]]],
+    metrics: list[MetricFn],
+    ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS,
 ) -> dict[str, dict[str, dict[str, float]]]:
     """Compute aggregate statistics from per-image results.
 
+    Uses Beta-distribution CIs for bounded metrics and bootstrap CIs
+    for unbounded metrics.
+
     Args:
         per_image: Nested dict of ocr_label -> metric_name -> image_id -> value.
+        metrics: List of metric functions (used to look up ``is_bounded``).
+        ci_levels: Confidence interval percentages to compute. For each
+            level *L*, the ``ci`` dict stores ``L`` -> [lower, upper].
 
     Returns:
         Nested dict of ocr_label -> metric_name -> stat_name -> value.
     """
+    bounded_lookup = {m.__name__: getattr(m, "is_bounded", False) for m in metrics}
+
     aggregate = {}
     for ocr_label, metric_dict in per_image.items():
         aggregate[ocr_label] = {}
         for metric_name, image_scores in metric_dict.items():
             values = np.array(list(image_scores.values()))
+            is_bounded = bounded_lookup.get(metric_name, False)
+            ci_fn = beta_ci if is_bounded else bootstrap_ci
+            ci = {}
+            for level in ci_levels:
+                ci[str(level)] = ci_fn(values, level)
             aggregate[ocr_label][metric_name] = {
                 "mean": float(np.mean(values)),
-                "std": float(np.std(values)),
+                "ci": ci,
+                "n": len(values),
                 "min": float(np.min(values)),
                 "max": float(np.max(values)),
                 "median": float(np.median(values)),
@@ -217,7 +237,7 @@ def evaluatation_pipeline(
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
-    aggregate = _compute_aggregate(per_image)
+    aggregate = _compute_aggregate(per_image, metrics)
     save_json(output_dir / AGGREGATE_RESULTS_FILE, aggregate)
 
     return EvaluationResult(per_image=per_image, aggregate=aggregate)
