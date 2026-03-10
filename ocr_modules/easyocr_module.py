@@ -22,18 +22,18 @@ class EasyOCRModule(OCRAbstact):
         super().__init__(config)
         self._reader = easyocr.Reader(self.config.model_params.get("languages", ["en"]))
 
-    def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:
+    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
         """Run EasyOCR on a single image.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            model_params: Additional keyword arguments passed to
+            single_run_model_params: Additional keyword arguments passed to
                 ``easyocr.Reader.readtext``.
 
         Returns:
             An OCRResult containing detected text regions.
         """
-        results = self._reader.readtext(image, **model_params)
+        results = self._reader.readtext(image, **single_run_model_params)
         bboxes = []
         for corners, text, score in results:
             xs = [int(pt[0]) for pt in corners]

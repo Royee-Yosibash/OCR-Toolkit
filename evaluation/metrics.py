@@ -16,6 +16,32 @@ _WHITESPACE_RE = re.compile(r"\s+")
 MetricFn = Callable[[OCRResult, OCRResult], float | int | bool]
 
 
+def bounded_metric(fn: MetricFn) -> MetricFn:
+    """Mark a metric function as bounded to [0, 1].
+
+    Args:
+        fn: The metric function to decorate.
+
+    Returns:
+        The same function with ``is_bounded`` set to True.
+    """
+    fn.is_bounded = True
+    return fn
+
+
+def unbounded_metric(fn: MetricFn) -> MetricFn:
+    """Mark a metric function as unbounded (can exceed [0, 1]).
+
+    Args:
+        fn: The metric function to decorate.
+
+    Returns:
+        The same function with ``is_bounded`` set to False.
+    """
+    fn.is_bounded = False
+    return fn
+
+
 def _levenshtein_distance(s1: Sequence, s2: Sequence) -> int:
     """Compute the Levenshtein (edit) distance between two sequences.
 
@@ -131,6 +157,7 @@ def _ocr_result_to_words(result: OCRResult) -> list[str]:
     return _ocr_result_to_text(result).split()
 
 
+@unbounded_metric
 def ocr_result_cer(prediction: OCRResult, ground_truth: OCRResult) -> float:
     """Compute the CER over full concatenated text of two OCRResults.
 
@@ -147,6 +174,7 @@ def ocr_result_cer(prediction: OCRResult, ground_truth: OCRResult) -> float:
     )
 
 
+@unbounded_metric
 def ocr_result_wer(prediction: OCRResult, ground_truth: OCRResult) -> float:
     """Compute the WER over full concatenated text of two OCRResults.
 
@@ -163,6 +191,7 @@ def ocr_result_wer(prediction: OCRResult, ground_truth: OCRResult) -> float:
     )
 
 
+@unbounded_metric
 def word_count_ratio(prediction: OCRResult, ground_truth: OCRResult) -> float:
     """Compute the ratio of predicted word count to ground truth word count.
 
@@ -185,6 +214,7 @@ def word_count_ratio(prediction: OCRResult, ground_truth: OCRResult) -> float:
     return len(pred_words) / len(gt_words)
 
 
+@bounded_metric
 def word_recall(prediction: OCRResult, ground_truth: OCRResult) -> float:
     """Compute the fraction of ground truth words found in the prediction.
 
@@ -208,6 +238,7 @@ def word_recall(prediction: OCRResult, ground_truth: OCRResult) -> float:
     return matched / len(gt_words)
 
 
+@bounded_metric
 def word_precision(prediction: OCRResult, ground_truth: OCRResult) -> float:
     """Compute the fraction of predicted words found in the ground truth.
 

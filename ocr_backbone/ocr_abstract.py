@@ -58,12 +58,12 @@ class OCRAbstact(ABC):
         self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config) 
 
     @abstractmethod
-    def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:
+    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
         """Run OCR on a single image.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            model_params: Model-specific runtime parameters for this run.
+            single_run_model_params: Model-specific runtime parameters for this run.
 
         Returns:
             An OCRResult containing detected text regions.

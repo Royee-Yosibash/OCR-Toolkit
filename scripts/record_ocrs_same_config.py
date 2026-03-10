@@ -14,8 +14,8 @@ from PIL import Image
 
 import ocr_modules
 from consts import IMAGE_EXTENSIONS
-from evaluation.evaluation_pipeline import run_multiple_ocrs_and_save, run_ocr_and_save
-from ocr_backbone.ocr_config import OCRConfig, load_config
+from evaluation.evaluation_pipeline import run_multiple_ocrs_and_save
+from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstact
 from utils.datasets_handles import collect_images
 from utils.json_utils import load_json
@@ -28,27 +28,6 @@ def _import_all_modules() -> None:
     package_path = Path(ocr_modules.__file__).parent
     for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
         importlib.import_module(f"ocr_modules.{name}")
-
-
-def _resolve_output_dir(cls: type, output_root: Path) -> Path:
-    """Return the expected-results directory for a registered OCR class.
-
-    Maps the class back to its source module name (e.g.
-    ``ocr_modules.easyocr_module`` -> ``easyocr``) and returns
-    ``<output_root>/<name>/expected/``.
-
-    Args:
-        cls: The OCR subclass.
-        output_root: Root directory for all module outputs.
-
-    Returns:
-        Path to the expected-results directory.
-    """
-    module_name = cls.__module__.rsplit(".", 1)[-1]
-    short_name = module_name.removesuffix("_module")
-    output_dir = output_root / short_name / "expected"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    return output_dir
 
 
 def record_with_all_ocr_modules(
@@ -83,8 +62,10 @@ def record_with_all_ocr_modules(
 
     for img_path in images:
         image = np.array(Image.open(img_path))
+        image_save_dir = Path(output_dir) / img_path.stem
+        image_save_dir.mkdir(parents=True, exist_ok=True)
         run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
-                                   save_dir=Path(output_dir), overwrite=True)
+                                   save_dir=image_save_dir, overwrite=True)
         
         # Compute metrics too? we can then join with evaluate....
 

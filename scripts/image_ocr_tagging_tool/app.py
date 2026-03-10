@@ -91,6 +91,17 @@ def create_app() -> Flask:
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
+            empty_bbs = [
+                i for i, bb in enumerate(bounding_boxes)
+                if not bb.get("text", "").strip()
+            ]
+            if empty_bbs:
+                indices = ", ".join(str(i + 1) for i in empty_bbs)
+                return jsonify({
+                    "error": f"BB(s) #{indices} have no text. "
+                             f"Fill in or delete them before saving."
+                }), 400
+
             if not output_path:
                 filename_stem = Path(filename).stem
                 save_dir = Path.home() / "Downloads" / "ocr_tags"
@@ -98,6 +109,9 @@ def create_app() -> Flask:
                 save_path = save_dir / f"{filename_stem}.json"
             else:
                 save_path = Path(output_path)
+                if save_path.is_dir() or not save_path.suffix:
+                    filename_stem = Path(filename).stem
+                    save_path = save_path / f"{filename_stem}.json"
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
             result = OCRResult.from_dict({"bounding_boxes": bounding_boxes})

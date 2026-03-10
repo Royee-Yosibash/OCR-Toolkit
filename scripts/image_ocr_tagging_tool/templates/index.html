@@ -312,8 +312,8 @@
             <div class="toolbar-section">
                 <label>OCR Actions</label>
                 <div style="display: flex; gap: 8px;">
-                    <button class="btn btn-primary" style="flex:1; font-size:12px;" onclick="runOCROnEmpty()">OCR Empty BBs</button>
                     <button class="btn btn-secondary" style="flex:1; font-size:12px;" onclick="runOCRWholeImage()">OCR Whole Image</button>
+                    <button class="btn btn-primary" style="flex:1; font-size:12px;" onclick="runOCROnEmpty()">OCR Empty BBs</button>
                 </div>
             </div>
 
@@ -477,6 +477,7 @@
         }
 
         function renderBBList() {
+            const scrollTop = bbListEl.scrollTop;
             const hasBoxes = boundingBoxes.length > 0;
             emptyState.style.display = hasBoxes ? "none" : "block";
 
@@ -540,6 +541,7 @@
                 entry.appendChild(textInput);
                 bbListEl.appendChild(entry);
             });
+            bbListEl.scrollTop = scrollTop;
         }
 
         function updateBBText(index, text) {
