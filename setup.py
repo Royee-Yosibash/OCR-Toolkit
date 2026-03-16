@@ -41,9 +41,10 @@ def _read_requirements(path: str = "requirements.txt") -> tuple[list[str], dict[
 base_requires, extras_require = _read_requirements()
 
 setup(
-    name="ocr-highlight",
+    name="ocr-enhancment-toolset",
     version=release_data['version'],
-    description="OCR enhancment package that allows evaluation for specific use cases",
+    description="OCR enhancment package that improves performances" \
+        " and allows evaluations for different use cases",
     python_requires=">=3.12",
     packages=find_packages(),
     include_package_data=True,
