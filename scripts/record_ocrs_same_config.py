@@ -40,8 +40,8 @@ def record_with_all_ocr_modules(
     Args:
         image_path: Path to a single image or a directory of images.
         output_dir: Root directory where per-module results are saved.
-        config: Optional OCR config. When None a default config is
-            created per module using the registered class name.
+        config: Dict of extra OCR config fields (e.g. grid_rows,
+            model_params). Must not contain ``model_name``.
     """
     _import_all_modules()
     

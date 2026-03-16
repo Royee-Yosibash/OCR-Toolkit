@@ -190,7 +190,7 @@ def _score_image(
             per_image.setdefault(label, {}).setdefault(metric_name, {})[image_id] = value
 
 
-def evaluatation_pipeline(
+def evaluation_pipeline(
     metrics: list[MetricFn],
     output_dir: str | Path,
     dataset: str | None = None,

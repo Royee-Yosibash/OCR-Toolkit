@@ -1,3 +1,4 @@
+import importlib
 from collections.abc import Callable
 from dataclasses import dataclass, fields, field
 from pathlib import Path
@@ -43,14 +44,56 @@ class OCRConfig:
                 self.model_params[key] = value
     
     
+    def to_dict(self) -> dict:
+        """Convert the config to a JSON-serializable dict.
+
+        ``bb_validator`` is stored as a ``"module.path:function_name"``
+        string when present, so the dict can be round-tripped through JSON.
+
+        Returns:
+            A plain dict representation of this config.
+        """
+        data = {
+            "model_name": self.model_name,
+            "model_params": self.model_params,
+            "grid_rows": self.grid_rows,
+            "grid_cols": self.grid_cols,
+        }
+        if self.bb_validator is not None:
+            module = self.bb_validator.__module__
+            qualname = self.bb_validator.__qualname__
+            data["bb_validator"] = f"{module}:{qualname}"
+        return data
+
     @classmethod
-    def from_dict(cls, raw_dict:dict):
+    def from_dict(cls, raw_dict: dict):
+        """Create an OCRConfig from a plain dict.
+
+        ``bb_validator`` may be a callable or a dotted-path string in the
+        form ``"module.path:function_name"``. Strings are dynamically
+        imported.
+
+        Args:
+            raw_dict: Dict with at least ``model_name`` and optionally
+                ``model_params``, ``grid_rows``, ``grid_cols``, and
+                ``bb_validator``.
+
+        Returns:
+            An OCRConfig instance.
+        """
+        bb_validator = raw_dict.get("bb_validator", None)
+        if isinstance(bb_validator, str):
+            module_path, attr_name = bb_validator.rsplit(":", 1)
+            module = importlib.import_module(module_path)
+            bb_validator = getattr(module, attr_name)
+
         return cls(
             model_name=raw_dict["model_name"],
             model_params=raw_dict.get("model_params", {}),
             grid_rows=raw_dict.get("grid_rows", 1),
             grid_cols=raw_dict.get("grid_cols", 1),
-    )
+            bb_validator=bb_validator,
+        )
 
 
 
