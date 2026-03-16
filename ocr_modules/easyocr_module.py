@@ -4,12 +4,12 @@ import easyocr
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 
 
-class EasyOCRModule(OCRAbstact):
+class EasyOCRModule(OCRAbstract):
     """OCR module using the EasyOCR engine."""
 
     def __init__(self, config: Union[OCRConfig, dict]) -> None:

@@ -6,7 +6,7 @@ from typing import Union
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 from paddleocr import PaddleOCR
@@ -33,7 +33,7 @@ def _gpu_available() -> bool:
         return False
 
 
-class PaddleOCRModule(OCRAbstact):
+class PaddleOCRModule(OCRAbstract):
     """OCR module using PaddleOCR (PP-OCRv5).
 
     When a GPU is available the server models and ``device="gpu:0"`` are

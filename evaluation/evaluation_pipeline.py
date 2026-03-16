@@ -28,7 +28,7 @@ from typing import List
 
 import numpy as np
 from evaluation.metrics import MetricFn
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
 from utils.json_utils import save_json, load_json
@@ -46,7 +46,7 @@ DEFAULT_CI_LEVELS = (95,)
 
 
 def run_multiple_ocrs_and_save(image: np.ndarray, 
-                               ocrs: List[OCRAbstact], 
+                               ocrs: List[OCRAbstract], 
                                labels: List[str], 
                                save_dir: Path,
                                overwrite=False):
@@ -194,7 +194,7 @@ def evaluation_pipeline(
     metrics: list[MetricFn],
     output_dir: str | Path,
     dataset: str | None = None,
-    ocrs: list[OCRAbstact] | None = None,
+    ocrs: list[OCRAbstract] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
 ) -> EvaluationResult:

@@ -9,7 +9,7 @@ from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 
 
-class OCRAbstact(ABC):
+class OCRAbstract(ABC):
     """Abstract base class for OCR engines.
 
     Handles splitting an image into a grid of sub-images, running OCR on each
@@ -27,7 +27,7 @@ class OCRAbstact(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         """Auto-register concrete subclasses by class name."""
         super().__init_subclass__(**kwargs)
-        OCRAbstact._registry[cls.__name__] = cls
+        OCRAbstract._registry[cls.__name__] = cls
 
     @classmethod
     def from_config(cls, config: Union[OCRConfig, dict]):

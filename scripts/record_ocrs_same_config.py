@@ -16,14 +16,14 @@ import ocr_modules
 from consts import IMAGE_EXTENSIONS
 from evaluation.evaluation_pipeline import run_multiple_ocrs_and_save
 from ocr_backbone.ocr_config import OCRConfig
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from utils.datasets_handles import collect_images
 from utils.json_utils import load_json
 
 
 def _import_all_modules() -> None:
     """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstact._registry.
+    subclass registration in OCRAbstract._registry.
     """
     package_path = Path(ocr_modules.__file__).parent
     for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
@@ -45,7 +45,7 @@ def record_with_all_ocr_modules(
     """
     _import_all_modules()
     
-    if not OCRAbstact._registry:
+    if not OCRAbstract._registry:
         raise NotImplementedError("No OCR modules found.")
 
     if "model_name" in config:
@@ -56,9 +56,9 @@ def record_with_all_ocr_modules(
         raise IOError(f"No images found at {image_path}")
 
     ocrs, labels = list(), list()
-    for name, cls in OCRAbstact._registry.items():
+    for name, cls in OCRAbstract._registry.items():
         labels.append(name)
-        ocrs.append(OCRAbstact.from_config(config=OCRConfig(model_name=name, **config)))
+        ocrs.append(OCRAbstract.from_config(config=OCRConfig(model_name=name, **config)))
 
     for img_path in images:
         image = np.array(Image.open(img_path))

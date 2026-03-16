@@ -25,7 +25,7 @@ import ocr_modules
 
 def _import_all_modules() -> None:
     """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstact._registry.
+    subclass registration in OCRAbstract._registry.
     """
     package_path = Path(ocr_modules.__file__).parent
     for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
