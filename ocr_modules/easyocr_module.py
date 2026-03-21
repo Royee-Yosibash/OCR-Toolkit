@@ -31,7 +31,7 @@ if _HAS_EASYOCR:
                     unpacked into one.
             """
             super().__init__(config)
-            self._reader = easyocr.Reader(self.config.model_params.get("languages", ["en"]))
+            self._reader = easyocr.Reader(self.config.model_params.pop("languages", ["en"]))
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run EasyOCR on a single image.

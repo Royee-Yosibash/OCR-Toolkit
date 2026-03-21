@@ -74,9 +74,17 @@ def _find_image_for_stem(stem: str) -> Path:
 
     Returns:
         The Path to the matching image.
+
+    Raises:
+        FileNotFoundError: If no image with a supported extension exists
+            for the given stem.
     """
     matches = [IMAGES_DIR / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
                if (IMAGES_DIR / f"{stem}{ext}").exists()]
+    if not matches:
+        raise FileNotFoundError(
+            f"No image found for stem '{stem}' in {IMAGES_DIR}"
+        )
     return matches[0]
 
 
@@ -202,6 +210,10 @@ def dataset_generator(
         stem = tags_path.stem
         matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
                    if (images_dir / f"{stem}{ext}").exists()]
+        if not matches:
+            raise FileNotFoundError(
+                f"No image found for stem '{stem}' in {images_dir}"
+            )
         image = load_image(matches[0])
         tags = load_tags(tags_path)
         yield image, tags

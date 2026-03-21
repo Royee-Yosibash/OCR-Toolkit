@@ -1,4 +1,5 @@
 import json
+import unittest
 from pathlib import Path
 
 import numpy as np
@@ -12,13 +13,16 @@ TESTS_DIR = Path(__file__).parents[2]
 EXPECTED_DIR = Path(__file__).parent / "expected"
 
 
-def test_easyocr_regression_test_image():
-    image = np.array(Image.open(TESTS_DIR / "test_image.png"))
-    config = OCRConfig(model_name="easyocr", model_params={"languages": ["en"]},)
-    ocr = EasyOCRModule(config=config)
+class TestEasyOCRRegression(unittest.TestCase):
+    """Regression tests for the EasyOCR module."""
 
-    result = ocr.get_text_bb(image)
-    with open(EXPECTED_DIR / "test_image.json") as f:
-        expected = OCRResult.from_dict(json.load(f))
+    def test_regression_test_image(self):
+        image = np.array(Image.open(TESTS_DIR / "test_image.png"))
+        config = OCRConfig(model_name="easyocr", model_params={"languages": ["en"]})
+        ocr = EasyOCRModule(config=config)
 
-    assert result.is_close(expected)
+        result = ocr.get_text_bb(image)
+        with open(EXPECTED_DIR / "test_image.json") as f:
+            expected = OCRResult.from_dict(json.load(f))
+
+        self.assertTrue(result.is_close(expected))
