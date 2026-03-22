@@ -11,10 +11,9 @@ Usage::
 """
 
 import argparse
-import importlib
-import pkgutil
 from pathlib import Path
-import ocr_modules
+
+from ocr_modules import import_all_modules
 from evaluation.evaluation_pipeline import evaluation_pipeline
 from evaluation.metrics import (
     ocr_result_cer,
@@ -37,15 +36,6 @@ ALL_METRICS = [
 ]
 
 DEFAULT_DATASET = "dataset"
-
-
-def _import_all_modules() -> None:
-    """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstract._registry.
-    """
-    package_path = Path(ocr_modules.__file__).parent
-    for _, name, _ in pkgutil.iter_modules([str(package_path)]):
-        importlib.import_module(f"ocr_modules.{name}")
 
 
 def main() -> None:
@@ -71,7 +61,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    _import_all_modules()
+    import_all_modules()
 
     ocrs = []
     for name in OCRAbstract._registry:
@@ -79,7 +69,7 @@ def main() -> None:
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    result = evaluation_pipeline(
+    evaluation_pipeline(
         metrics=ALL_METRICS,
         output_dir=output_dir,
         dataset=args.dataset,

@@ -1,6 +1,5 @@
 import copy
 from abc import ABC, abstractmethod
-from typing import Union
 
 import numpy as np
 
@@ -30,7 +29,7 @@ class OCRAbstract(ABC):
         OCRAbstract._registry[cls.__name__] = cls
 
     @classmethod
-    def from_config(cls, config: Union[OCRConfig, dict]):
+    def from_config(cls, config: OCRConfig | dict):
         """Create an OCR instance from a config.
 
         Looks up the registered subclass matching ``config.model_name``
@@ -52,7 +51,7 @@ class OCRAbstract(ABC):
         instance = cls._registry[model_name](config=config)
         return instance
 
-    def __init__(self, config: Union[OCRConfig, dict]) -> None:
+    def __init__(self, config: OCRConfig | dict) -> None:
         """Initialize the OCR engine.
         """
         self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config) 

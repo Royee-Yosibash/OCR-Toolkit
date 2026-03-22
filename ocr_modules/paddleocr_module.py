@@ -1,7 +1,6 @@
 """OCR module using the PaddleOCR engine."""
 
 import logging
-from typing import Union
 
 import numpy as np
 
@@ -48,7 +47,7 @@ if _HAS_PADDLEOCR:
         models are selected and a warning is logged.
         """
 
-        def __init__(self, config: Union[OCRConfig, dict]) -> None:
+        def __init__(self, config: OCRConfig | dict) -> None:
             """Initialize the PaddleOCR engine.
 
             Args:

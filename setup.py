@@ -4,7 +4,8 @@ from setuptools import setup, find_packages
 
 FULL_MARKER = "# full"
 
-release_data = json.load(open('release_data.json'))
+with open('release_data.json') as f:
+    release_data = json.load(f)
 
 
 def _read_requirements(path: str = "requirements.txt") -> tuple[list[str], dict[str, list[str]]]:
@@ -41,9 +42,9 @@ def _read_requirements(path: str = "requirements.txt") -> tuple[list[str], dict[
 base_requires, extras_require = _read_requirements()
 
 setup(
-    name="ocr-enhancment-toolset",
+    name="ocr-enhancement-toolset",
     version=release_data['version'],
-    description="OCR enhancment package that improves performances" \
+    description="OCR enhancement package that improves performances" \
         " and allows evaluations for different use cases",
     python_requires=">=3.12",
     packages=find_packages(),

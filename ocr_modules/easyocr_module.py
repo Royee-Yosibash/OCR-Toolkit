@@ -1,5 +1,4 @@
 import logging
-from typing import Union
 
 import numpy as np
 
@@ -23,7 +22,7 @@ if _HAS_EASYOCR:
     class EasyOCRModule(OCRAbstract):
         """OCR module using the EasyOCR engine."""
 
-        def __init__(self, config: Union[OCRConfig, dict]) -> None:
+        def __init__(self, config: OCRConfig | dict) -> None:
             """Initialize the EasyOCR reader.
 
             Args:

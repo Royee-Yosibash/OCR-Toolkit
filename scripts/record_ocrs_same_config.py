@@ -5,29 +5,17 @@ the output to <output_dir>/<module>/expected/<image_stem>.json.
 """
 
 import argparse
-import importlib
-import pkgutil
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
-
-import ocr_modules
 from consts import IMAGE_EXTENSIONS
 from evaluation.evaluation_pipeline import run_multiple_ocrs_and_save
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
+from ocr_modules import import_all_modules
 from utils.datasets_handles import collect_images
 from utils.json_utils import load_json
-
-
-def _import_all_modules() -> None:
-    """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstract._registry.
-    """
-    package_path = Path(ocr_modules.__file__).parent
-    for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
-        importlib.import_module(f"ocr_modules.{name}")
 
 
 def record_with_all_ocr_modules(
@@ -43,13 +31,13 @@ def record_with_all_ocr_modules(
         config: Dict of extra OCR config fields (e.g. grid_rows,
             model_params). Must not contain ``model_name``.
     """
-    _import_all_modules()
+    import_all_modules()
     
     if not OCRAbstract._registry:
         raise NotImplementedError("No OCR modules found.")
 
     if "model_name" in config:
-        raise IOError(f"The config can not set a model_name")
+        raise ValueError("The config must not set a model_name")
 
     images = collect_images(Path(image_path))
     if not images:
