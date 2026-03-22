@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 
@@ -68,9 +69,7 @@ class OCRAbstract(ABC):
             An OCRResult containing detected text regions.
         """
 
-    def _split_image(
-        self, image: np.ndarray, rows: int, cols: int
-    ) -> list[list[np.ndarray]]:
+    def _split_image(self, input_image: InputImage, rows: int, cols: int)-> list[InputImage]:
         """Split an image into a grid of sub-images.
 
         Args:
@@ -79,18 +78,20 @@ class OCRAbstract(ABC):
             cols: Number of columns in the grid.
 
         Returns:
-            A 2D list (rows x cols) of sub-image numpy arrays.
+            A list (rows x cols) of sub-image InputImages.
         """
-        h, w = image.shape[:2]
+        h, w = input_image.image.shape[:2]
         row_edges = np.linspace(0, h, rows + 1, dtype=int)
         col_edges = np.linspace(0, w, cols + 1, dtype=int)
         grid = []
         for r in range(rows):
-            row_cells = []
             for c in range(cols):
-                cell = image[row_edges[r] : row_edges[r + 1], col_edges[c] : col_edges[c + 1]]
-                row_cells.append(cell)
-            grid.append(row_cells)
+                sub_image = input_image.image[row_edges[r] : row_edges[r + 1], 
+                                              col_edges[c] : col_edges[c + 1]]
+                grid.append(InputImage(image=sub_image, 
+                                       x_offset=int(col_edges[c]), 
+                                       y_offset=int(row_edges[r])))
+                
         return grid
 
     def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
@@ -117,23 +118,18 @@ class OCRAbstract(ABC):
         else:
             config = self.config
 
-        rows, cols = config.grid_rows, config.grid_cols
-        h, w = image.shape[:2]
-        row_edges = np.linspace(0, h, rows + 1, dtype=int)
-        col_edges = np.linspace(0, w, cols + 1, dtype=int)
+        input_image = InputImage(image=image)
 
-        grid = self._split_image(image, rows, cols)
+        rows, cols = config.grid_rows, config.grid_cols
+        cells = self._split_image(input_image, rows, cols)
         all_bboxes: list[BoundingBox] = []
 
-        for r in range(rows):
-            for c in range(cols):
-                cell = grid[r][c]
-                cell_result = self._run_single(cell, config.model_params)
-                x_offset = int(col_edges[c])
-                y_offset = int(row_edges[r])
-                for bb in cell_result.bounding_boxes:
-                    bb._remap_bounding_box(x_offset, y_offset)
-                all_bboxes += cell_result.bounding_boxes
+        for cell in cells:
+            cell_result = self._run_single(cell.image, config.model_params)
+            for bb in cell_result.bounding_boxes:
+                bb._remap_bounding_box(cell.x_offset, cell.y_offset)
+            
+            all_bboxes += cell_result.bounding_boxes
 
         if config.bb_validator is not None:
             all_bboxes = [bb for bb in all_bboxes if config.bb_validator(bb)]

@@ -3,6 +3,7 @@ import unittest
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
@@ -73,13 +74,12 @@ class TestOCR(unittest.TestCase):
     def test_split_image_dimensions(self):
         ocr = DummyOCR()
         image = np.zeros((90, 120, 3), dtype=np.uint8)
-        grid = ocr._split_image(image, rows=3, cols=3)
-        self.assertEqual(len(grid), 3)
-        self.assertEqual(len(grid[0]), 3)
-        for row in grid:
-            for cell in row:
-                self.assertEqual(cell.shape[0], 30)
-                self.assertEqual(cell.shape[1], 40)
+        input_image = InputImage(image=image)
+        grid = ocr._split_image(input_image, rows=3, cols=3)
+        self.assertEqual(len(grid), 9)
+        for cell in grid:
+            self.assertEqual(cell.image.shape[0], 30)
+            self.assertEqual(cell.image.shape[1], 40)
 
     def test_from_config_returns_registered_class(self):
         config = OCRConfig(model_name="DummyOCR")
