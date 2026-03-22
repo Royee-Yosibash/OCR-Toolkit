@@ -1,10 +1,11 @@
 datasets==4.5.0
-easyocr==1.7.2
+easyocr==1.7.2  # full
 flask>=3.0
+matplotlib>=3.10.0
 numpy==2.4.2
 opencv-python-headless==4.13.0.92
-paddleocr>=3.4.0
-paddlepaddle==3.2.0
+paddleocr>=3.4.0  # full
+paddlepaddle==3.2.0  # full
 pillow==12.1.0
 scipy>=1.17.0
 

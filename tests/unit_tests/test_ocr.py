@@ -4,11 +4,11 @@ import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_config import OCRConfig
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 
 
-class DummyOCR(OCRAbstact):
+class DummyOCR(OCRAbstract):
     """Returns a single BB covering the full sub-image."""
 
     def __init__(self, config=None) -> None:
@@ -83,10 +83,10 @@ class TestOCR(unittest.TestCase):
 
     def test_from_config_returns_registered_class(self):
         config = OCRConfig(model_name="DummyOCR")
-        ocr = OCRAbstact.from_config(config)
+        ocr = OCRAbstract.from_config(config)
         self.assertIsInstance(ocr, DummyOCR)
 
     def test_from_config_unknown_model(self):
         config = OCRConfig(model_name="nonexistent")
         with self.assertRaises(ValueError, msg="Unknown model"):
-            OCRAbstact.from_config(config)
+            OCRAbstract.from_config(config)

@@ -8,7 +8,7 @@ import numpy as np
 from flask import Flask, jsonify, render_template, request
 from PIL import Image
 
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 from utils.json_utils import save_json
@@ -38,7 +38,7 @@ def create_app() -> Flask:
         Returns:
             JSON response with a list of model name strings.
         """
-        return jsonify(list(OCRAbstact._registry.keys()))
+        return jsonify(list(OCRAbstract._registry.keys()))
 
     @app.route("/api/run_ocr", methods=["POST"])
     def run_ocr():
@@ -61,7 +61,7 @@ def create_app() -> Flask:
             image_array = np.array(pil_image)
 
             config = {"model_name": model_name, "grid_rows": 1, "grid_cols": 1}
-            ocr = OCRAbstact.from_config(config)
+            ocr = OCRAbstract.from_config(config)
             result = ocr.get_text_bb(image_array)
 
             return jsonify(result.to_dict())

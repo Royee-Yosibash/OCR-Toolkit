@@ -66,17 +66,29 @@ def load_tags(tags_path: Path) -> OCRResult:
     return OCRResult.from_dict(data)
 
 
-def _find_image_for_stem(stem: str) -> Path:
-    """Find an image file in the images directory matching the given stem.
+def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
+    """Find an image file in a directory matching the given stem.
 
     Args:
         stem: Filename stem to search for (without extension).
+        images_dir: Directory to search in. Defaults to the built-in
+            dataset images directory.
 
     Returns:
         The Path to the matching image.
+
+    Raises:
+        FileNotFoundError: If no image with a supported extension exists
+            for the given stem.
     """
-    matches = [IMAGES_DIR / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
-               if (IMAGES_DIR / f"{stem}{ext}").exists()]
+    if images_dir is None:
+        images_dir = IMAGES_DIR
+    matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
+               if (images_dir / f"{stem}{ext}").exists()]
+    if not matches:
+        raise FileNotFoundError(
+            f"No image found for stem '{stem}' in {images_dir}"
+        )
     return matches[0]
 
 
@@ -200,8 +212,6 @@ def dataset_generator(
 
     for tags_path in sorted(tags_dir.glob("*.json")):
         stem = tags_path.stem
-        matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
-                   if (images_dir / f"{stem}{ext}").exists()]
-        image = load_image(matches[0])
+        image = load_image(_find_image_for_stem(stem, images_dir))
         tags = load_tags(tags_path)
         yield image, tags

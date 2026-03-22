@@ -24,11 +24,10 @@ import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List
 
 import numpy as np
 from evaluation.metrics import MetricFn
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
 from utils.json_utils import save_json, load_json
@@ -46,11 +45,21 @@ DEFAULT_CI_LEVELS = (95,)
 
 
 def run_multiple_ocrs_and_save(image: np.ndarray, 
-                               ocrs: List[OCRAbstact], 
-                               labels: List[str], 
+                               ocrs: list[OCRAbstract], 
+                               labels: list[str], 
                                save_dir: Path,
                                overwrite=False):
-    
+    """Run multiple OCR engines on an image and persist each result to disk.
+
+    Args:
+        image: Input image as a numpy array (H x W x C).
+        ocrs: List of initialized OCR engine instances.
+        labels: List of label strings, one per OCR engine, used as
+            subdirectory names under ``save_dir``.
+        save_dir: Directory where per-engine results are saved.
+        overwrite: If True, re-run OCR even when a saved result already
+            exists for that engine.
+    """
     for ocr, label in zip(ocrs, labels):
         save_path = save_dir / label
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
@@ -190,11 +199,11 @@ def _score_image(
             per_image.setdefault(label, {}).setdefault(metric_name, {})[image_id] = value
 
 
-def evaluatation_pipeline(
+def evaluation_pipeline(
     metrics: list[MetricFn],
     output_dir: str | Path,
     dataset: str | None = None,
-    ocrs: list[OCRAbstact] | None = None,
+    ocrs: list[OCRAbstract] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
 ) -> EvaluationResult:

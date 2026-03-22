@@ -11,11 +11,10 @@ Usage::
 """
 
 import argparse
-import importlib
-import pkgutil
 from pathlib import Path
-import ocr_modules
-from evaluation.evaluation_pipeline import evaluatation_pipeline
+
+from ocr_modules import import_all_modules
+from evaluation.evaluation_pipeline import evaluation_pipeline
 from evaluation.metrics import (
     ocr_result_cer,
     ocr_result_wer,
@@ -23,7 +22,7 @@ from evaluation.metrics import (
     word_precision,
     word_recall,
 )
-from ocr_backbone.ocr_abstract import OCRAbstact
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
 
@@ -37,15 +36,6 @@ ALL_METRICS = [
 ]
 
 DEFAULT_DATASET = "dataset"
-
-
-def _import_all_modules() -> None:
-    """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstact._registry.
-    """
-    package_path = Path(ocr_modules.__file__).parent
-    for _, name, _ in pkgutil.iter_modules([str(package_path)]):
-        importlib.import_module(f"ocr_modules.{name}")
 
 
 def main() -> None:
@@ -71,15 +61,15 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    _import_all_modules()
+    import_all_modules()
 
     ocrs = []
-    for name in OCRAbstact._registry:
-        ocrs.append(OCRAbstact.from_config(OCRConfig(model_name=name)))
+    for name in OCRAbstract._registry:
+        ocrs.append(OCRAbstract.from_config(OCRConfig(model_name=name)))
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
-    result = evaluatation_pipeline(
+    evaluation_pipeline(
         metrics=ALL_METRICS,
         output_dir=output_dir,
         dataset=args.dataset,
@@ -89,7 +79,7 @@ def main() -> None:
 
     print(f"\nAggregate results saved to {output_dir}/aggregate.json")
 
-    agg = load_aggregate('scripts/results')
+    agg = load_aggregate(output_dir)
     plot_metric_comparison(agg, save_path=output_dir / 'metric_comparison.png')
     plot_radar(agg, save_path=output_dir / 'radar.png')
     plot_stat_range(agg, save_path=output_dir / 'stat_range.png')

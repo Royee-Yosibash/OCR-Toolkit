@@ -15,21 +15,9 @@ automatically.
 """
 
 import argparse
-import importlib
-import pkgutil
 import webbrowser
-from pathlib import Path
 
-import ocr_modules
-
-
-def _import_all_modules() -> None:
-    """Import every module inside the ocr_modules package to trigger
-    subclass registration in OCRAbstact._registry.
-    """
-    package_path = Path(ocr_modules.__file__).parent
-    for finder, name, is_pkg in pkgutil.iter_modules([str(package_path)]):
-        importlib.import_module(f"ocr_modules.{name}")
+from ocr_modules import import_all_modules
 
 
 def main() -> None:
@@ -49,7 +37,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    _import_all_modules()
+    import_all_modules()
 
     from scripts.image_ocr_tagging_tool.app import create_app
 
