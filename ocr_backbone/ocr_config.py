@@ -23,8 +23,7 @@ class OCRConfig:
 
     model_name: str
     model_params: dict = field(default_factory=dict)
-    grid_rows: int = 1
-    grid_cols: int = 1
+    grid: tuple = field(default=(1, 1))
     bb_validator: Callable[[BoundingBox], bool] | None = None
 
     def update(self, overrides: dict) -> None:
@@ -75,8 +74,7 @@ class OCRConfig:
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
-                ``model_params``, ``grid_rows``, ``grid_cols``, and
-                ``bb_validator``.
+                ``model_params``, and ``bb_validator``.
 
         Returns:
             An OCRConfig instance.
@@ -90,8 +88,6 @@ class OCRConfig:
         return cls(
             model_name=raw_dict["model_name"],
             model_params=raw_dict.get("model_params", {}),
-            grid_rows=raw_dict.get("grid_rows", 1),
-            grid_cols=raw_dict.get("grid_cols", 1),
             bb_validator=bb_validator,
         )
 

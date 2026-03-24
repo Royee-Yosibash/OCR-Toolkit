@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.image_preprocessing import grid_split_image
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
@@ -67,32 +68,15 @@ class OCRAbstract(ABC):
 
         Returns:
             An OCRResult containing detected text regions.
+
         """
 
-    def _split_image(self, input_image: InputImage, rows: int, cols: int)-> list[InputImage]:
-        """Split an image into a grid of sub-images.
+    def _preprocess(self, image: np.ndarray, config: dict) -> list[InputImage]:
+        input_image = InputImage(image=image)
+        grid = config.grid
+        cells = grid_split_image(input_image, grid)
+        return cells
 
-        Args:
-            image: Input image as a numpy array (H x W x C).
-            rows: Number of rows in the grid.
-            cols: Number of columns in the grid.
-
-        Returns:
-            A list (rows x cols) of sub-image InputImages.
-        """
-        h, w = input_image.image.shape[:2]
-        row_edges = np.linspace(0, h, rows + 1, dtype=int)
-        col_edges = np.linspace(0, w, cols + 1, dtype=int)
-        grid = []
-        for r in range(rows):
-            for c in range(cols):
-                sub_image = input_image.image[row_edges[r] : row_edges[r + 1], 
-                                              col_edges[c] : col_edges[c + 1]]
-                grid.append(InputImage(image=sub_image, 
-                                       x_offset=int(col_edges[c]), 
-                                       y_offset=int(row_edges[r])))
-                
-        return grid
 
     def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
@@ -118,10 +102,8 @@ class OCRAbstract(ABC):
         else:
             config = self.config
 
-        input_image = InputImage(image=image)
-
-        rows, cols = config.grid_rows, config.grid_cols
-        cells = self._split_image(input_image, rows, cols)
+        cells = self._preprocess(image=image, config=config)
+        
         all_bboxes: list[BoundingBox] = []
 
         for cell in cells:

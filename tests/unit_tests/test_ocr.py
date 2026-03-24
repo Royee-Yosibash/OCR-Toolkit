@@ -2,30 +2,11 @@ import unittest
 
 import numpy as np
 
-from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.image_preprocessing import grid_split_image
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
-from ocr_backbone.ocr_result import OCRResult
-
-
-class DummyOCR(OCRAbstract):
-    """Returns a single BB covering the full sub-image."""
-
-    def __init__(self, config=None) -> None:
-        if config is None:
-            config = OCRConfig(model_name="DummyOCR")
-        super().__init__(config)
-
-    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
-        h, w = image.shape[:2]
-        return OCRResult(bounding_boxes=[
-            BoundingBox(
-                coordinates=((0, 0), (w, h)),
-                text="dummy",
-                confidence=1.0,
-            )
-        ])
+from tests.unit_tests.dummy_ocr import DummyOCR
 
 
 class TestOCR(unittest.TestCase):
@@ -33,7 +14,7 @@ class TestOCR(unittest.TestCase):
 
     def test_single_cell_grid(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=1, grid_cols=1)
+        ocr.config = OCRConfig(model_name="dummy", grid=(1,1))
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         self.assertEqual(len(result.bounding_boxes), 1)
@@ -41,7 +22,7 @@ class TestOCR(unittest.TestCase):
 
     def test_grid_splits_and_remaps(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2)
+        ocr.config = OCRConfig(model_name="dummy", grid=(2,2))
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         bbs = result.bounding_boxes
@@ -55,8 +36,7 @@ class TestOCR(unittest.TestCase):
         ocr = DummyOCR()
         ocr.config = OCRConfig(
             model_name="dummy",
-            grid_rows=2,
-            grid_cols=2,
+            grid=(2,2),
             bb_validator=lambda bb: bb.coordinates[0][0] == 0,
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
@@ -66,16 +46,15 @@ class TestOCR(unittest.TestCase):
 
     def test_bb_validator_none_keeps_all(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2, bb_validator=None)
+        ocr.config = OCRConfig(model_name="dummy", grid=(2,2), bb_validator=None)
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         self.assertEqual(len(result.bounding_boxes), 4)
 
     def test_split_image_dimensions(self):
-        ocr = DummyOCR()
         image = np.zeros((90, 120, 3), dtype=np.uint8)
         input_image = InputImage(image=image)
-        grid = ocr._split_image(input_image, rows=3, cols=3)
+        grid = grid_split_image(input_image, grid=(3,3))
         self.assertEqual(len(grid), 9)
         for cell in grid:
             self.assertEqual(cell.image.shape[0], 30)
