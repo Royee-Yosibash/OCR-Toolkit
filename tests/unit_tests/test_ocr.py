@@ -2,37 +2,19 @@ import unittest
 
 import numpy as np
 
-from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
-from ocr_backbone.ocr_result import OCRResult
+from tests.unit_tests.dummy_ocr import DummyOCR
 
-
-class DummyOCR(OCRAbstract):
-    """Returns a single BB covering the full sub-image."""
-
-    def __init__(self, config=None) -> None:
-        if config is None:
-            config = OCRConfig(model_name="DummyOCR")
-        super().__init__(config)
-
-    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
-        h, w = image.shape[:2]
-        return OCRResult(bounding_boxes=[
-            BoundingBox(
-                coordinates=((0, 0), (w, h)),
-                text="dummy",
-                confidence=1.0,
-            )
-        ])
+def grid_m_n(m, n):
+    return {"name": "grid_split_image", "kwargs": {"grid": (m, n)}}
 
 
 class TestOCR(unittest.TestCase):
     """Tests for OCR abstract class functionality."""
 
-    def test_single_cell_grid(self):
+    def test_no_preprocessing_single_cell(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=1, grid_cols=1)
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         self.assertEqual(len(result.bounding_boxes), 1)
@@ -40,7 +22,7 @@ class TestOCR(unittest.TestCase):
 
     def test_grid_splits_and_remaps(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2)
+        ocr.config = OCRConfig(model_name="dummy", preprocess_methods=[grid_m_n(2,2)])
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         bbs = result.bounding_boxes
@@ -54,8 +36,7 @@ class TestOCR(unittest.TestCase):
         ocr = DummyOCR()
         ocr.config = OCRConfig(
             model_name="dummy",
-            grid_rows=2,
-            grid_cols=2,
+            preprocess_methods=[grid_m_n(2,2)],
             bb_validator=lambda bb: bb.coordinates[0][0] == 0,
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
@@ -65,21 +46,27 @@ class TestOCR(unittest.TestCase):
 
     def test_bb_validator_none_keeps_all(self):
         ocr = DummyOCR()
-        ocr.config = OCRConfig(model_name="dummy", grid_rows=2, grid_cols=2, bb_validator=None)
+        ocr.config = OCRConfig(
+            model_name="dummy",
+            preprocess_methods=[grid_m_n(2,2)],
+            bb_validator=None,
+        )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_bb(image)
         self.assertEqual(len(result.bounding_boxes), 4)
 
-    def test_split_image_dimensions(self):
+    def test_preprocess_binarize_then_grid(self):
         ocr = DummyOCR()
-        image = np.zeros((90, 120, 3), dtype=np.uint8)
-        grid = ocr._split_image(image, rows=3, cols=3)
-        self.assertEqual(len(grid), 3)
-        self.assertEqual(len(grid[0]), 3)
-        for row in grid:
-            for cell in row:
-                self.assertEqual(cell.shape[0], 30)
-                self.assertEqual(cell.shape[1], 40)
+        ocr.config = OCRConfig(
+            model_name="dummy",
+            preprocess_methods=[
+                {"name": "binarize", "kwargs": {"method": "otsu"}},
+                grid_m_n(2,2),
+            ],
+        )
+        image = np.random.randint(0, 256, (100, 200, 3), dtype=np.uint8)
+        result = ocr.get_text_bb(image)
+        self.assertEqual(len(result.bounding_boxes), 4)
 
     def test_from_config_returns_registered_class(self):
         config = OCRConfig(model_name="DummyOCR")
@@ -90,3 +77,13 @@ class TestOCR(unittest.TestCase):
         config = OCRConfig(model_name="nonexistent")
         with self.assertRaises(ValueError, msg="Unknown model"):
             OCRAbstract.from_config(config)
+
+    def test_unknown_preprocess_method_raises(self):
+        ocr = DummyOCR()
+        ocr.config = OCRConfig(
+            model_name="dummy",
+            preprocess_methods=[{"name": "nonexistent_func"}],
+        )
+        image = np.zeros((50, 50, 3), dtype=np.uint8)
+        with self.assertRaises(AttributeError):
+            ocr.get_text_bb(image)

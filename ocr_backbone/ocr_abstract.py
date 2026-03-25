@@ -1,11 +1,16 @@
 import copy
 from abc import ABC, abstractmethod
+from functools import partial
 
 import numpy as np
 
+import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from collections.abc import Callable
+
 
 
 class OCRAbstract(ABC):
@@ -66,32 +71,52 @@ class OCRAbstract(ABC):
 
         Returns:
             An OCRResult containing detected text regions.
+
         """
 
-    def _split_image(
-        self, image: np.ndarray, rows: int, cols: int
-    ) -> list[list[np.ndarray]]:
-        """Split an image into a grid of sub-images.
+    @staticmethod
+    def _create_pp_method(pp_method: dict) -> Callable:
+        """Build a preprocessing callable from a method descriptor.
+
+        Args:
+            pp_method: A dict with "name" (function name in
+                image_preprocessing) and optional "kwargs" to bind.
+
+        Returns:
+            A callable that accepts an InputImage as its first argument.
+
+        Raises:
+            AttributeError: If the function name does not exist in
+                image_preprocessing.
+        """
+        func = getattr(image_preprocessing, pp_method["name"])
+        kwargs = pp_method.get("kwargs", {})
+        return partial(func, **kwargs) if kwargs else func
+
+    def _preprocess(self, image: np.ndarray, config: OCRConfig) -> list[InputImage]:
+        """Run the preprocessing pipeline defined in the config.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            rows: Number of rows in the grid.
-            cols: Number of columns in the grid.
+            config: The OCR config containing preprocessing steps and grid.
 
         Returns:
-            A 2D list (rows x cols) of sub-image numpy arrays.
+            A list of InputImage cells ready for OCR inference.
         """
-        h, w = image.shape[:2]
-        row_edges = np.linspace(0, h, rows + 1, dtype=int)
-        col_edges = np.linspace(0, w, cols + 1, dtype=int)
-        grid = []
-        for r in range(rows):
-            row_cells = []
-            for c in range(cols):
-                cell = image[row_edges[r] : row_edges[r + 1], col_edges[c] : col_edges[c + 1]]
-                row_cells.append(cell)
-            grid.append(row_cells)
-        return grid
+        input_images = [InputImage(image=image)]
+
+        for pp_method in config.preprocess_methods:
+            method = self._create_pp_method(pp_method)
+
+            outputs = []
+            for in_img in input_images:
+                res = method(in_img)
+                outputs += res if isinstance(res, list) else [res]
+
+            input_images = outputs
+            
+        return input_images
+
 
     def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
@@ -117,23 +142,15 @@ class OCRAbstract(ABC):
         else:
             config = self.config
 
-        rows, cols = config.grid_rows, config.grid_cols
-        h, w = image.shape[:2]
-        row_edges = np.linspace(0, h, rows + 1, dtype=int)
-        col_edges = np.linspace(0, w, cols + 1, dtype=int)
-
-        grid = self._split_image(image, rows, cols)
+        cells = self._preprocess(image=image, config=config)
+        
         all_bboxes: list[BoundingBox] = []
-
-        for r in range(rows):
-            for c in range(cols):
-                cell = grid[r][c]
-                cell_result = self._run_single(cell, config.model_params)
-                x_offset = int(col_edges[c])
-                y_offset = int(row_edges[r])
-                for bb in cell_result.bounding_boxes:
-                    bb._remap_bounding_box(x_offset, y_offset)
-                all_bboxes += cell_result.bounding_boxes
+        for cell in cells:
+            cell_result = self._run_single(cell.image, config.model_params)
+            for bb in cell_result.bounding_boxes:
+                bb._remap_bounding_box(cell.x_offset, cell.y_offset)
+            
+            all_bboxes += cell_result.bounding_boxes
 
         if config.bb_validator is not None:
             all_bboxes = [bb for bb in all_bboxes if config.bb_validator(bb)]

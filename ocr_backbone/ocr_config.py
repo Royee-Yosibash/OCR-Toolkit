@@ -14,18 +14,18 @@ class OCRConfig:
     Args:
         model_name: Name of the OCR model to use.
         model_params: Model-specific runtime parameters.
-        grid_rows: Number of rows to split the image into.
-        grid_cols: Number of columns to split the image into.
         bb_validator: Optional function that takes a BoundingBox and returns
             True if the bounding box is valid. Invalid bounding boxes are
             discarded after OCR inference.
+        preprocess_methods: A list of preprocessing step descriptors. Each
+            entry is a dict with "name" (a function name in
+            image_preprocessing) and optional "kwargs" to pass to it.
     """
 
     model_name: str
     model_params: dict = field(default_factory=dict)
-    grid_rows: int = 1
-    grid_cols: int = 1
     bb_validator: Callable[[BoundingBox], bool] | None = None
+    preprocess_methods: list[dict] = field(default_factory=list)
 
     def update(self, overrides: dict) -> None:
         """Update config attributes from a dict.
@@ -56,8 +56,7 @@ class OCRConfig:
         data = {
             "model_name": self.model_name,
             "model_params": self.model_params,
-            "grid_rows": self.grid_rows,
-            "grid_cols": self.grid_cols,
+            "preprocess_methods": self.preprocess_methods,
         }
         if self.bb_validator is not None:
             module = self.bb_validator.__module__
@@ -75,8 +74,7 @@ class OCRConfig:
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
-                ``model_params``, ``grid_rows``, ``grid_cols``, and
-                ``bb_validator``.
+                ``model_params``, and ``bb_validator``.
 
         Returns:
             An OCRConfig instance.
@@ -87,12 +85,12 @@ class OCRConfig:
             module = importlib.import_module(module_path)
             bb_validator = getattr(module, attr_name)
 
+
         return cls(
             model_name=raw_dict["model_name"],
             model_params=raw_dict.get("model_params", {}),
-            grid_rows=raw_dict.get("grid_rows", 1),
-            grid_cols=raw_dict.get("grid_cols", 1),
             bb_validator=bb_validator,
+            preprocess_methods=raw_dict.get("preprocess_methods", []),
         )
 
 
