@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
-from evaluation.metrics import MetricFn
+from evaluation.metrics import Metric
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
@@ -85,7 +85,7 @@ class EvaluationResult:
 def _compute_metrics(
     prediction: OCRResult,
     ground_truth: OCRResult,
-    metrics: list[MetricFn],
+    metrics: list[Metric],
 ) -> dict[str, float]:
     """Run all metric functions on a prediction/ground-truth pair.
 
@@ -95,18 +95,18 @@ def _compute_metrics(
         metrics: List of metric callables.
 
     Returns:
-        A dict mapping metric function name to its computed value.
+        A dict mapping metric class name to its computed value.
     """
     results = {}
     for metric in metrics:
         value = metric(prediction, ground_truth)
-        results[metric.__name__] = float(value)
+        results[type(metric).__name__] = float(value)
     return results
 
 
 def _compute_aggregate(
     per_image: dict[str, dict[str, dict[int, float]]],
-    metrics: list[MetricFn],
+    metrics: list[Metric],
     ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS,
 ) -> dict[str, dict[str, dict[str, float]]]:
     """Compute aggregate statistics from per-image results.
@@ -116,14 +116,14 @@ def _compute_aggregate(
 
     Args:
         per_image: Nested dict of ocr_label -> metric_name -> image_id -> value.
-        metrics: List of metric functions (used to look up ``is_bounded``).
+        metrics: List of Metric instances (used to look up ``is_bounded``).
         ci_levels: Confidence interval percentages to compute. For each
             level *L*, the ``ci`` dict stores ``L`` -> [lower, upper].
 
     Returns:
         Nested dict of ocr_label -> metric_name -> stat_name -> value.
     """
-    bounded_lookup = {m.__name__: getattr(m, "is_bounded", False) for m in metrics}
+    bounded_lookup = {type(m).__name__: m.is_bounded for m in metrics}
 
     aggregate = {}
     for ocr_label, metric_dict in per_image.items():
@@ -174,7 +174,7 @@ def _build_iterator(
 def _score_image(
     image_dir: Path,
     ground_truth: OCRResult,
-    metrics: list[MetricFn],
+    metrics: list[Metric],
     image_id: int,
     per_image: dict[str, dict[str, dict[int, float]]],
 ) -> None:
@@ -200,7 +200,7 @@ def _score_image(
 
 
 def evaluation_pipeline(
-    metrics: list[MetricFn],
+    metrics: list[Metric],
     output_dir: str | Path,
     dataset: str | None = None,
     ocrs: list[OCRAbstract] | None = None,

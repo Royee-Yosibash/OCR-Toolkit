@@ -4,7 +4,8 @@ Provides text-level metrics (CER, WER) and word-level bag-of-words
 metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
-from collections.abc import Callable, Sequence
+from abc import ABC, abstractmethod
+from collections.abc import Sequence
 import re
 from collections import Counter
 
@@ -13,33 +14,30 @@ from ocr_backbone.ocr_result import OCRResult
 _PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
 _WHITESPACE_RE = re.compile(r"\s+")
 
-MetricFn = Callable[[OCRResult, OCRResult], float | int | bool]
 
+class Metric(ABC):
+    """Base class for OCR evaluation metrics.
 
-def bounded_metric(fn: MetricFn) -> MetricFn:
-    """Mark a metric function as bounded to [0, 1].
+    Subclasses must set ``is_bounded`` and implement ``__call__``.
 
-    Args:
-        fn: The metric function to decorate.
-
-    Returns:
-        The same function with ``is_bounded`` set to True.
+    Attributes:
+        is_bounded: True if the metric value is confined to [0, 1],
+            False if it can exceed that range.
     """
-    fn.is_bounded = True
-    return fn
 
+    is_bounded: bool
 
-def unbounded_metric(fn: MetricFn) -> MetricFn:
-    """Mark a metric function as unbounded (can exceed [0, 1]).
+    @abstractmethod
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        """Compute the metric for a prediction/ground-truth pair.
 
-    Args:
-        fn: The metric function to decorate.
+        Args:
+            prediction: The predicted OCR result.
+            ground_truth: The reference OCR result.
 
-    Returns:
-        The same function with ``is_bounded`` set to False.
-    """
-    fn.is_bounded = False
-    return fn
+        Returns:
+            The metric value as a float.
+        """
 
 
 def _levenshtein_distance(s1: Sequence, s2: Sequence) -> int:
@@ -72,46 +70,6 @@ def _levenshtein_distance(s1: Sequence, s2: Sequence) -> int:
         prev_row = curr_row
 
     return prev_row[-1]
-
-
-def character_error_rate(prediction: str, ground_truth: str) -> float:
-    """Compute the Character Error Rate (CER).
-
-    CER = levenshtein_distance(prediction, ground_truth) / len(ground_truth)
-
-    Args:
-        prediction: The predicted text string.
-        ground_truth: The reference text string.
-
-    Returns:
-        The CER as a float in [0, inf). Returns 0.0 when both strings
-        are empty.
-    """
-    if len(ground_truth) == 0:
-        return 0.0 if len(prediction) == 0 else float(len(prediction))
-    return _levenshtein_distance(prediction, ground_truth) / len(ground_truth)
-
-
-def word_error_rate(prediction: str, ground_truth: str) -> float:
-    """Compute the Word Error Rate (WER).
-
-    Splits both strings on whitespace and computes the Levenshtein
-    distance at the word level, normalized by the number of words in
-    the ground truth.
-
-    Args:
-        prediction: The predicted text string.
-        ground_truth: The reference text string.
-
-    Returns:
-        The WER as a float in [0, inf). Returns 0.0 when both strings
-        are empty.
-    """
-    gt_words = ground_truth.split()
-    pred_words = prediction.split()
-    if len(gt_words) == 0:
-        return 0.0 if len(pred_words) == 0 else float(len(pred_words))
-    return _levenshtein_distance(pred_words, gt_words) / len(gt_words)
 
 
 def _normalize_text(text: str) -> str:
@@ -157,106 +115,101 @@ def _ocr_result_to_words(result: OCRResult) -> list[str]:
     return _ocr_result_to_text(result).split()
 
 
-@unbounded_metric
-def ocr_result_cer(prediction: OCRResult, ground_truth: OCRResult) -> float:
-    """Compute the CER over full concatenated text of two OCRResults.
+class OCRResultCER(Metric):
+    """Compute the Character Error Rate over full concatenated text of two OCRResults.
 
-    Args:
-        prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
-
-    Returns:
-        The CER as a float.
+    CER = levenshtein_distance(prediction, ground_truth) / len(ground_truth).
+    Returns 0.0 when both texts are empty.
     """
-    return character_error_rate(
-        _ocr_result_to_text(prediction),
-        _ocr_result_to_text(ground_truth),
-    )
+
+    is_bounded = False
+
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        pred_text = _ocr_result_to_text(prediction)
+        gt_text = _ocr_result_to_text(ground_truth)
+        if len(gt_text) == 0:
+            return 0.0 if len(pred_text) == 0 else float(len(pred_text))
+        return _levenshtein_distance(pred_text, gt_text) / len(gt_text)
 
 
-@unbounded_metric
-def ocr_result_wer(prediction: OCRResult, ground_truth: OCRResult) -> float:
-    """Compute the WER over full concatenated text of two OCRResults.
+class OCRResultWER(Metric):
+    """Compute the Word Error Rate over full concatenated text of two OCRResults.
 
-    Args:
-        prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
-
-    Returns:
-        The WER as a float.
+    Splits both texts on whitespace and computes the Levenshtein distance
+    at the word level, normalized by the number of ground-truth words.
+    Returns 0.0 when both texts are empty.
     """
-    return word_error_rate(
-        _ocr_result_to_text(prediction),
-        _ocr_result_to_text(ground_truth),
-    )
+
+    is_bounded = False
+
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        pred_words = _ocr_result_to_text(prediction).split()
+        gt_words = _ocr_result_to_text(ground_truth).split()
+        if len(gt_words) == 0:
+            return 0.0 if len(pred_words) == 0 else float(len(pred_words))
+        return _levenshtein_distance(pred_words, gt_words) / len(gt_words)
 
 
-@unbounded_metric
-def word_count_ratio(prediction: OCRResult, ground_truth: OCRResult) -> float:
+class WordCountRatio(Metric):
     """Compute the ratio of predicted word count to ground truth word count.
 
     A value of 1.0 means the same number of words were detected.
     Values above 1.0 indicate over-detection, below 1.0 indicate
     missed words.
-
-    Args:
-        prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
-
-    Returns:
-        The ratio as a float. Returns 1.0 when both are empty, 0.0
-        when prediction is empty but GT is not.
     """
-    gt_words = _ocr_result_to_words(ground_truth)
-    pred_words = _ocr_result_to_words(prediction)
-    if len(gt_words) == 0:
-        return 1.0 if len(pred_words) == 0 else float(len(pred_words))
-    return len(pred_words) / len(gt_words)
+
+    is_bounded = False
+
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        gt_words = _ocr_result_to_words(ground_truth)
+        pred_words = _ocr_result_to_words(prediction)
+        if len(gt_words) == 0:
+            return 1.0 if len(pred_words) == 0 else float(len(pred_words))
+        return len(pred_words) / len(gt_words)
 
 
-@bounded_metric
-def word_recall(prediction: OCRResult, ground_truth: OCRResult) -> float:
+class WordRecall(Metric):
     """Compute the fraction of ground truth words found in the prediction.
 
     Uses bag-of-words matching with multiplicity: each GT word is
     matched at most as many times as it appears in the prediction.
     Order and BB boundaries are ignored.
-
-    Args:
-        prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
-
-    Returns:
-        Recall as a float in [0, 1]. Returns 1.0 when both are empty.
     """
-    gt_words = _ocr_result_to_words(ground_truth)
-    if len(gt_words) == 0:
-        return 1.0
-    pred_counts = Counter(_ocr_result_to_words(prediction))
-    gt_counts = Counter(gt_words)
-    matched = sum(min(pred_counts[w], gt_counts[w]) for w in gt_counts)
-    return matched / len(gt_words)
+
+    is_bounded = True
+
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        gt_words = _ocr_result_to_words(ground_truth)
+        if len(gt_words) == 0:
+            return 1.0
+        pred_counts = Counter(_ocr_result_to_words(prediction))
+        gt_counts = Counter(gt_words)
+        matched = sum(min(pred_counts[w], gt_counts[w]) for w in gt_counts)
+        return matched / len(gt_words)
 
 
-@bounded_metric
-def word_precision(prediction: OCRResult, ground_truth: OCRResult) -> float:
+class WordPrecision(Metric):
     """Compute the fraction of predicted words found in the ground truth.
 
     Uses bag-of-words matching with multiplicity: each predicted word
     is matched at most as many times as it appears in the GT.
     Order and BB boundaries are ignored.
-
-    Args:
-        prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
-
-    Returns:
-        Precision as a float in [0, 1]. Returns 1.0 when both are empty.
     """
-    pred_words = _ocr_result_to_words(prediction)
-    if len(pred_words) == 0:
-        return 1.0
-    gt_counts = Counter(_ocr_result_to_words(ground_truth))
-    pred_counts = Counter(pred_words)
-    matched = sum(min(pred_counts[w], gt_counts[w]) for w in pred_counts)
-    return matched / len(pred_words)
+
+    is_bounded = True
+
+    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+        pred_words = _ocr_result_to_words(prediction)
+        if len(pred_words) == 0:
+            return 1.0
+        gt_counts = Counter(_ocr_result_to_words(ground_truth))
+        pred_counts = Counter(pred_words)
+        matched = sum(min(pred_counts[w], gt_counts[w]) for w in pred_counts)
+        return matched / len(pred_words)
+
+
+ocr_result_cer = OCRResultCER()
+ocr_result_wer = OCRResultWER()
+word_count_ratio = WordCountRatio()
+word_recall = WordRecall()
+word_precision = WordPrecision()
