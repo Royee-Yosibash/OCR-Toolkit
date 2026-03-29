@@ -14,11 +14,15 @@ from ocr_backbone.ocr_result import OCRResult
 _PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
 _WHITESPACE_RE = re.compile(r"\s+")
 
+METRICS_BOUNDED_LOOKUP: dict[str, bool] = {}
+
 
 class Metric(ABC):
     """Base class for OCR evaluation metrics.
 
     Subclasses must set ``is_bounded`` and implement ``__call__``.
+    Concrete subclasses are automatically registered in
+    ``METRICS_BOUNDED_LOOKUP`` via ``__init_subclass__``.
 
     Attributes:
         is_bounded: True if the metric value is confined to [0, 1],
@@ -26,6 +30,12 @@ class Metric(ABC):
     """
 
     is_bounded: bool
+
+    def __init_subclass__(cls, **kwargs):
+        """Register concrete subclasses in METRICS_BOUNDED_LOOKUP."""
+        super().__init_subclass__(**kwargs)
+        if hasattr(cls, "is_bounded"):
+            METRICS_BOUNDED_LOOKUP[cls.__name__] = cls.is_bounded
 
     @abstractmethod
     def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
