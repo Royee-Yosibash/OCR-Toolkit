@@ -8,7 +8,7 @@ from PIL import Image
 
 from consts import APP_ROOT, IMAGE_EXTENSIONS
 from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.ocr_result import OCRResult
+from evaluation.ocr_ground_truth import OCRGroundTruth
 from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"
@@ -53,17 +53,17 @@ def load_image(image_path: Path) -> np.ndarray:
     return np.array(Image.open(image_path).convert("RGB"))
 
 
-def load_groud_truth(tags_path: Path) -> OCRResult:
-    """Load a ground_truth JSON file as an OCRResult.
+def load_groud_truth(tags_path: Path) -> OCRGroundTruth:
+    """Load a ground_truth JSON file as an OCRGroundTruth.
 
     Args:
         tags_path: Path to the JSON ground_truth file.
 
     Returns:
-        An OCRResult parsed from the JSON file.
+        An OCRGroundTruth parsed from the JSON file.
     """
     data = load_json(tags_path)
-    return OCRResult.from_dict(data)
+    return OCRGroundTruth.from_dict(data)
 
 
 def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
@@ -192,7 +192,7 @@ def validate_dataset() -> None:
 
 def dataset_generator(
     dataset_root: Path | str | None = None,
-) -> Generator[tuple[np.ndarray, OCRResult], None, None]:
+) -> Generator[tuple[np.ndarray, OCRGroundTruth], None, None]:
     """Yield (image, ground_truth) tuples from a dataset directory.
 
     The directory must contain an ``images/`` subfolder with image files
@@ -203,8 +203,8 @@ def dataset_generator(
             built-in ``dataset/`` directory when *None*.
 
     Yields:
-        A tuple of (image, ocr_result) where image is a numpy array
-        (H x W x 3) and ocr_result is the ground-truth OCRResult.
+        A tuple of (image, ground_truth) where image is a numpy array
+        (H x W x 3) and ground_truth is the ground-truth OCRGroundTruth.
     """
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"

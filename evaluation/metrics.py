@@ -9,6 +9,7 @@ from collections.abc import Sequence
 import re
 from collections import Counter
 
+from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
 
 _PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
@@ -38,12 +39,12 @@ class Metric(ABC):
             METRICS_BOUNDED_LOOKUP[cls.__name__] = cls.is_bounded
 
     @abstractmethod
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         """Compute the metric for a prediction/ground-truth pair.
 
         Args:
             prediction: The predicted OCR result.
-            ground_truth: The reference OCR result.
+            ground_truth: The reference ground truth.
 
         Returns:
             The metric value as a float.
@@ -134,7 +135,7 @@ class OCRResultCER(Metric):
 
     is_bounded = False
 
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_text = _ocr_result_to_text(prediction)
         gt_text = _ocr_result_to_text(ground_truth)
         if len(gt_text) == 0:
@@ -152,7 +153,7 @@ class OCRResultWER(Metric):
 
     is_bounded = False
 
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_words = _ocr_result_to_text(prediction).split()
         gt_words = _ocr_result_to_text(ground_truth).split()
         if len(gt_words) == 0:
@@ -170,7 +171,7 @@ class WordCountRatio(Metric):
 
     is_bounded = False
 
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         gt_words = _ocr_result_to_words(ground_truth)
         pred_words = _ocr_result_to_words(prediction)
         if len(gt_words) == 0:
@@ -188,7 +189,7 @@ class WordRecall(Metric):
 
     is_bounded = True
 
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         gt_words = _ocr_result_to_words(ground_truth)
         if len(gt_words) == 0:
             return 1.0
@@ -208,7 +209,7 @@ class WordPrecision(Metric):
 
     is_bounded = True
 
-    def __call__(self, prediction: OCRResult, ground_truth: OCRResult) -> float:
+    def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_words = _ocr_result_to_words(prediction)
         if len(pred_words) == 0:
             return 1.0

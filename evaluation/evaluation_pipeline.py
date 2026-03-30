@@ -27,6 +27,7 @@ from pathlib import Path
 
 import numpy as np
 from evaluation.metrics import Metric, METRICS_BOUNDED_LOOKUP
+from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
@@ -123,14 +124,14 @@ class EvaluationResult:
 
 def _compute_metrics(
     prediction: OCRResult,
-    ground_truth: OCRResult,
+    ground_truth: OCRGroundTruth,
     metrics: list[Metric],
 ) -> dict[str, float]:
     """Run all metric functions on a prediction/ground-truth pair.
 
     Args:
         prediction: The predicted OCR result.
-        ground_truth: The reference OCR result.
+        ground_truth: The reference ground truth.
         metrics: List of metric callables.
 
     Returns:
@@ -141,7 +142,7 @@ def _compute_metrics(
 
 def _build_iterator(
     output_dir: Path,
-    dataset: Iterable[tuple[np.ndarray, OCRResult]] | None,
+    dataset: Iterable[tuple[np.ndarray, OCRGroundTruth]] | None,
     metrics_only: bool,
 ):
     """Build the image iterator for the evaluation loop.
@@ -157,7 +158,7 @@ def _build_iterator(
     if metrics_only:
         saved_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir())
         for i, d in enumerate(saved_dirs):
-            yield i, None, OCRResult.from_dict(load_json(d / GT_FILE))
+            yield i, None, OCRGroundTruth.from_dict(load_json(d / GT_FILE))
     else:
         for image_id, (image, gt) in enumerate(dataset):
             yield image_id, image, gt
@@ -165,7 +166,7 @@ def _build_iterator(
 
 def _score_image(
     image_dir: Path,
-    ground_truth: OCRResult,
+    ground_truth: OCRGroundTruth,
     metrics: list[Metric],
     image_id: int,
     per_image: dict[str, dict[str, dict[int, float]]],
@@ -174,7 +175,7 @@ def _score_image(
 
     Args:
         image_dir: Directory containing OCR subdirectories.
-        ground_truth: Ground truth OCRResult.
+        ground_truth: Ground truth OCRGroundTruth.
         metrics: List of metric callables.
         image_id: Index of the current image.
         per_image: Accumulator dict, mutated in place.
