@@ -210,7 +210,7 @@ def evaluation_pipeline(
             (OCRResult, OCRResult) -> float | int | bool.
         output_dir: Directory where results are persisted.
         dataset: Dataset identifier string. Currently a path to a local
-            directory containing ``images/`` and ``tags/`` subdirectories.
+            directory containing ``images/`` and ``groud_truth/`` subdirectories.
             Required unless metrics_only is True.
         ocrs: List of initialized OCR instances to evaluate. Required
             unless metrics_only is True.

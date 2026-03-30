@@ -1,4 +1,4 @@
-"""Utilities for loading images and tags from the local dataset directory."""
+"""Utilities for loading images and groud_truth from the local dataset directory."""
 
 from collections.abc import Generator
 from pathlib import Path
@@ -13,7 +13,7 @@ from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"
 IMAGES_DIR = DATASET_DIR / "images"
-TAGS_DIR = DATASET_DIR / "tags"
+TAGS_DIR = DATASET_DIR / "ground_truth"
 
 
 def collect_images(path: Path) -> list[Path]:
@@ -54,10 +54,10 @@ def load_image(image_path: Path) -> np.ndarray:
 
 
 def load_tags(tags_path: Path) -> OCRResult:
-    """Load a tags JSON file as an OCRResult.
+    """Load a groud_truth JSON file as an OCRResult.
 
     Args:
-        tags_path: Path to the JSON tags file.
+        tags_path: Path to the JSON groud_truth file.
 
     Returns:
         An OCRResult parsed from the JSON file.
@@ -93,14 +93,14 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
 
 
 def validate_tags(tags_path: Path, image_path: Path) -> None:
-    """Validate a tags JSON file against its corresponding image.
+    """Validate a groud_truth JSON file against its corresponding image.
 
     Checks that every bounding box is structurally valid and that
     coordinates fall within the image dimensions. All errors are
     aggregated and raised together.
 
     Args:
-        tags_path: Path to the JSON tags file.
+        tags_path: Path to the JSON groud_truth file.
         image_path: Path to the corresponding image.
 
     Raises:
@@ -139,11 +139,11 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
 def validate_dataset() -> None:
     """Validate the entire dataset directory.
 
-    Checks that every image has a corresponding tags file and vice
+    Checks that every image has a corresponding groud_truth file and vice
     versa, then validates each tag file against its image.
 
     Raises:
-        FileNotFoundError: If any images are missing tags or tags are
+        FileNotFoundError: If any images are missing groud_truth or groud_truth are
             missing images.
         ValueError: If any tag validation errors are found across the
             dataset. The message contains all errors grouped by stem.
@@ -158,7 +158,7 @@ def validate_dataset() -> None:
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
         raise FileNotFoundError(
-            f"Missing tags for {len(missing_tags)} image(s): "
+            f"Missing groud_truth for {len(missing_tags)} image(s): "
             + ", ".join(missing_tags)
         )
 
@@ -196,7 +196,7 @@ def dataset_generator(
     """Yield (image, ground_truth) tuples from a dataset directory.
 
     The directory must contain an ``images/`` subfolder with image files
-    and a ``tags/`` subfolder with identically-stemmed JSON tag files.
+    and a ``groud_truth/`` subfolder with identically-stemmed JSON tag files.
 
     Args:
         dataset_root: Root directory of the dataset. Defaults to the
@@ -208,7 +208,7 @@ def dataset_generator(
     """
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"
-    tags_dir = root / "tags"
+    tags_dir = root / "groud_truth"
 
     for tags_path in sorted(tags_dir.glob("*.json")):
         stem = tags_path.stem
