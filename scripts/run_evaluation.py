@@ -51,7 +51,7 @@ def main() -> None:
     parser.add_argument(
         "--dataset",
         default=DEFAULT_DATASET,
-        help="Path to a dataset root directory containing images/ and groud_truth/ "
+        help="Path to a dataset root directory containing images/ and ground_truth/ "
              "(default: dataset).",
     )
     parser.add_argument(
