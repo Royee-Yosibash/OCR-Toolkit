@@ -298,6 +298,11 @@
             </div>
 
             <div class="toolbar-section">
+                <label>Tags (comma-separated)</label>
+                <input type="text" id="tagsInput" placeholder="e.g. printed, document">
+            </div>
+
+            <div class="toolbar-section">
                 <label>Output Path</label>
                 <input type="text" id="outputPath" placeholder="~/Downloads/ocr_tags/{filename}.json">
             </div>
@@ -342,6 +347,7 @@
         const filenameDisplay = document.getElementById("filenameDisplay");
         const outputPathInput = document.getElementById("outputPath");
         const jsonInput = document.getElementById("jsonInput");
+        const tagsInput = document.getElementById("tagsInput");
         const ocrModelSelect = document.getElementById("ocrModelSelect");
         const bbListEl = document.getElementById("bbList");
         const emptyState = document.getElementById("emptyState");
@@ -558,6 +564,7 @@
         function clearAll() {
             boundingBoxes = [];
             hoveredBBIndex = -1;
+            tagsInput.value = "";
             renderBBList();
             redraw();
             showStatus("");
@@ -709,6 +716,11 @@
                 return;
             }
 
+            const tags = tagsInput.value
+                .split(",")
+                .map(t => t.trim())
+                .filter(t => t.length > 0);
+
             const payload = {
                 bounding_boxes: boundingBoxes.map(bb => ({
                     coordinates: [
@@ -718,6 +730,7 @@
                     text: bb.text,
                     confidence: 1.0,
                 })),
+                tags: tags,
                 output_path: outputPathInput.value,
                 filename: currentFilename,
             };
@@ -779,6 +792,9 @@
                             text: b.text || "",
                         });
                     });
+                    if (data.tags && Array.isArray(data.tags)) {
+                        tagsInput.value = data.tags.join(", ");
+                    }
                     renderBBList();
                     redraw();
                     showStatus(`Loaded ${boxes.length} BB(s) from ${file.name}`);

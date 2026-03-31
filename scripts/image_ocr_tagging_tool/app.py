@@ -8,9 +8,8 @@ import numpy as np
 from flask import Flask, jsonify, render_template, request
 from PIL import Image
 
+from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
-from ocr_backbone.ocr_config import OCRConfig
-from ocr_backbone.ocr_result import OCRResult
 from utils.json_utils import save_json
 
 
@@ -78,6 +77,7 @@ def create_app() -> Flask:
 
         Expects a JSON body with:
             bounding_boxes: List of bounding box dicts.
+            tags: Optional list of tag strings.
             filename: Original image filename (used to derive output name).
             output_path: Optional path to save the JSON file. Defaults to
                 ~/Downloads/ocr_tags/{filename_stem}.json.
@@ -88,6 +88,7 @@ def create_app() -> Flask:
         try:
             data = request.get_json()
             bounding_boxes = data["bounding_boxes"]
+            tags = data.get("tags", [])
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
@@ -114,7 +115,7 @@ def create_app() -> Flask:
                     save_path = save_path / f"{filename_stem}.json"
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
-            result = OCRResult.from_dict({"bounding_boxes": bounding_boxes})
+            result = OCRGroundTruth.from_dict({"bounding_boxes": bounding_boxes, "tags": tags})
             save_json(save_path, result.to_dict())
 
             return jsonify({"status": "ok", "path": str(save_path)})
