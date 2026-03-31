@@ -74,11 +74,13 @@ class EvaluationResult:
 
     Args:
         per_image: Nested dict of ocr_label -> metric_name -> image_id -> value.
+        image_tags: Dict mapping image_id to the ground truth tags for that image.
         aggregate: Nested dict of ocr_label -> metric_name -> stat_name -> value.
             Stats include mean, std, min, max, median.
     """
 
     per_image: dict[str, dict[str, dict[int, float]]] = field(default_factory=dict)
+    image_tags: dict[int, list[str]] = field(default_factory=dict)
     aggregate: dict[str, dict[str, dict[str, float]]] = field(default_factory=dict, init=False)
 
     def __post_init__(self):
@@ -225,12 +227,14 @@ def evaluation_pipeline(
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     per_image: dict[str, dict[str, dict[int, float]]] = {}
+    image_tags: dict[int, list[str]] = {}
     labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
     for image_id, image, ground_truth in \
         _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
         
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
+        image_tags[image_id] = ground_truth.tags
         if not metrics_only:
             image_dir.mkdir(parents=True, exist_ok=True)
             save_json(image_dir / GT_FILE, ground_truth.to_dict())
@@ -239,6 +243,6 @@ def evaluation_pipeline(
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
-    evaluation_result = EvaluationResult(per_image=per_image)
+    evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
     evaluation_result.save_to_file(output_dir=output_dir)
     return evaluation_result
