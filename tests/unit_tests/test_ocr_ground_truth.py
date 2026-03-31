@@ -83,6 +83,18 @@ class TestOCRGroundTruth(unittest.TestCase):
         )
         self.assertFalse(a.is_close(b))
 
+    def test_tags_lowercased_on_init(self):
+        gt = OCRGroundTruth(tags=["Printed", "ENGLISH", "Mixed"])
+        self.assertEqual(gt.tags, ["printed", "english", "mixed"])
+
+    def test_tags_lowercased_from_dict(self):
+        data = {
+            "bounding_boxes": [],
+            "tags": ["Handwritten", "FRENCH"],
+        }
+        gt = OCRGroundTruth.from_dict(data)
+        self.assertEqual(gt.tags, ["handwritten", "french"])
+
     def test_is_close_bboxes_differ(self):
         a = OCRGroundTruth(
             bounding_boxes=[

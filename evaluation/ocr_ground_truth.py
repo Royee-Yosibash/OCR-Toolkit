@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields as dataclass_fields
 
 from ocr_backbone.ocr_result import OCRResult
 
@@ -14,6 +14,11 @@ class OCRGroundTruth(OCRResult):
     """
 
     tags: list[str] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        """Sort bounding boxes and normalize tags to lowercase."""
+        super().__post_init__()
+        self.tags = [t.lower() for t in self.tags]
 
     def to_dict(self) -> dict:
         """Convert the ground truth to a JSON-serializable dict.
@@ -35,9 +40,11 @@ class OCRGroundTruth(OCRResult):
         Returns:
             An OCRGroundTruth instance.
         """
-        instance = super().from_dict(data)
-        instance.tags = data.get("tags", [])
-        return instance
+        # TODO: change this when we handle nested from_dict()
+        base = super().from_dict(data)
+        kwargs = {f.name: getattr(base, f.name) for f in dataclass_fields(base)}
+        kwargs["tags"] = data.get("tags", [])
+        return cls(**kwargs)
 
     def is_close(self, other: OCRGroundTruth, confidence_tolerance: float = 1e-3) -> bool:
         """Also compares tags on top of the base bounding box comparison.
