@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field, fields as dataclass_fields
+from dataclasses import dataclass, field
 
 from ocr_backbone.ocr_result import OCRResult
 
@@ -41,8 +41,7 @@ class OCRGroundTruth(OCRResult):
             An OCRGroundTruth instance.
         """
         # TODO: change this when we handle nested from_dict()
-        base = super().from_dict(data)
-        kwargs = {f.name: getattr(base, f.name) for f in dataclass_fields(base)}
+        kwargs = super().from_dict(data).to_dict()
         kwargs["tags"] = data.get("tags", [])
         return cls(**kwargs)
 

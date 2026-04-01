@@ -5,9 +5,10 @@ persists results to disk, and produces aggregate statistics. Supports
 re-running metrics on previously saved OCR results without re-running
 inference.
 
-Directory structure created by evaluate::
+Directory structure created by evaluate:
 
     output_dir/
+        aggregate.json
         image_0/
             EasyOCRModule_0/
                 ocr_result.json
@@ -17,7 +18,6 @@ Directory structure created by evaluate::
                 metrics.json
         image_1/
             ...
-        aggregate.json
 """
 
 import logging
@@ -42,30 +42,7 @@ AGGREGATE_RESULTS_FILE = "aggregate.json"
 GT_FILE = "ground_truth.json"
 METRICS_FILE = "metrics.json"
 DEFAULT_CI_LEVELS = (95,)
-
-
-def run_multiple_ocrs_and_save(image: np.ndarray, 
-                               ocrs: list[OCRAbstract], 
-                               labels: list[str], 
-                               save_dir: Path,
-                               overwrite=False):
-    """Run multiple OCR engines on an image and persist each result to disk.
-
-    Args:
-        image: Input image as a numpy array (H x W x C).
-        ocrs: List of initialized OCR engine instances.
-        labels: List of label strings, one per OCR engine, used as
-            subdirectory names under ``save_dir``.
-        save_dir: Directory where per-engine results are saved.
-        overwrite: If True, re-run OCR even when a saved result already
-            exists for that engine.
-    """
-    for ocr, label in zip(ocrs, labels):
-        save_path = save_dir / label
-        if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
-            continue
-        result = ocr.get_text_bb(image=image)
-        save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
+ALL_TAGS_KEY = "all"
 
 
 @dataclass
@@ -73,24 +50,26 @@ class EvaluationResult:
     """Container for evaluation output.
 
     Args:
-        per_image: Nested dict of ocr_label -> metric_name -> image_id -> value.
+        per_image: Nested dict of ocr_id -> metric_name -> image_id -> value.
         image_tags: Dict mapping image_id to the ground truth tags for that image.
-        aggregate: Nested dict of ocr_label -> metric_name -> stat_name -> value.
-            Stats include mean, std, min, max, median.
+        aggregate: Nested dict of tag -> ocr_id -> metric_name -> stats.
+            The key ``"all"`` contains aggregate stats across all images.
+            Each tag key contains stats for images with that tag.
     """
 
     per_image: dict[str, dict[str, dict[int, float]]] = field(default_factory=dict)
     image_tags: dict[int, list[str]] = field(default_factory=dict)
-    aggregate: dict[str, dict[str, dict[str, float]]] = field(default_factory=dict, init=False)
+    aggregate: dict[str, dict[str, dict[str, dict]]] = field(default_factory=dict, init=False)
 
     def __post_init__(self):
         self._compute_aggregate()
 
-    def _compute_aggregate(self,ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS,):
+    def _compute_aggregate(self, ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS):
         """Compute aggregate statistics from per-image results.
 
-        Uses Beta-distribution CIs for bounded metrics and bootstrap CIs
-        for unbounded metrics.
+        Computes stats across all images under the ``"all"`` key, and
+        per-tag stats under each tag key. Uses Beta-distribution CIs for
+        bounded metrics and bootstrap CIs for unbounded metrics.
 
         Args:
             ci_levels: Confidence interval percentages to compute. For each
@@ -99,28 +78,66 @@ class EvaluationResult:
         Returns:
             None
         """
+        all_tags = {tag for tags in self.image_tags.values() for tag in tags}
+        tag_groups = {ALL_TAGS_KEY: set(self.image_tags.keys())}
+        for tag in all_tags:
+            tag_groups[tag] = {
+                img_id for img_id, tags in self.image_tags.items() if tag in tags
+            }
+
         aggregate = {}
-        for ocr_label, metric_dict in self.per_image.items():
-            aggregate[ocr_label] = {}
-            for metric_name, image_scores in metric_dict.items():
-                values = np.array(list(image_scores.values()))
-                is_bounded = METRICS_BOUNDED_LOOKUP.get(metric_name, False)
-                ci_fn = beta_ci if is_bounded else bootstrap_ci
-                ci = {}
-                for level in ci_levels:
-                    ci[str(level)] = ci_fn(values, level)
-                aggregate[ocr_label][metric_name] = {
-                    "mean": float(np.mean(values)),
-                    "ci": ci,
-                    "n": len(values),
-                    "min": float(np.min(values)),
-                    "max": float(np.max(values)),
-                    "median": float(np.median(values)),
-                }
+        for tag_key, image_ids in tag_groups.items():
+            aggregate[tag_key] = {}
+            for ocr_id, metric_dict in self.per_image.items():
+                aggregate[tag_key][ocr_id] = {}
+                for metric_name, image_scores in metric_dict.items():
+                    values = np.array([
+                        v for img_id, v in image_scores.items()
+                        if img_id in image_ids
+                    ])
+                    if len(values):
+                        aggregate[tag_key][ocr_id][metric_name] = self._compute_stats(
+                            values, metric_name, ci_levels,
+                        )
 
         self.aggregate = aggregate
 
-    def save_to_file(self, output_dir: Path):
+    @staticmethod
+    def _compute_stats(
+            values: np.ndarray,
+            metric_name: str,
+            ci_levels: tuple[int, ...],
+    ) -> dict:
+        """Compute summary statistics for a set of metric values.
+
+        Args:
+            values: Array of metric values.
+            metric_name: Name of the metric, used to select the CI method.
+            ci_levels: Confidence interval percentages to compute.
+
+        Returns:
+            A dict with mean, ci, n, min, max, and median.
+        """
+        is_bounded = METRICS_BOUNDED_LOOKUP.get(metric_name, False)
+        ci_fn = beta_ci if is_bounded else bootstrap_ci
+        ci = {}
+        for level in ci_levels:
+            ci[str(level)] = ci_fn(values, level)
+        return {
+            "mean": float(np.mean(values)),
+            "ci": ci,
+            "n": len(values),
+            "min": float(np.min(values)),
+            "max": float(np.max(values)),
+            "median": float(np.median(values)),
+        }
+
+    def save_results_to_file(self, output_dir: Path):
+        """Save aggregate results to a JSON file.
+
+        Args:
+            output_dir: Directory to save the aggregate file in.
+        """
         save_json(output_dir / AGGREGATE_RESULTS_FILE, self.aggregate)
 
 
@@ -194,6 +211,30 @@ def _score_image(
             per_image.setdefault(label, {}).setdefault(metric_name, {})[image_id] = value
 
 
+def run_multiple_ocrs_and_save(image: np.ndarray,
+                               ocrs: list[OCRAbstract],
+                               ocr_ids: list[str],
+                               save_dir: Path,
+                               overwrite=False):
+    """Run multiple OCR engines on an image and persist each result to disk.
+
+    Args:
+        image: Input image as a numpy array (H x W x C).
+        ocrs: List of initialized OCR engine instances.
+        ocr_ids: List of id strings, one per OCR engine, used as
+            subdirectory names under ``save_dir``.
+        save_dir: Directory where per-engine results are saved.
+        overwrite: If True, re-run OCR even when a saved result already
+            exists for that engine.
+    """
+    for ocr, ocr_id in zip(ocrs, ocr_ids):
+        save_path = save_dir / ocr_id
+        if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
+            continue
+        result = ocr.get_text_bb(image=image)
+        save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
+
+
 def evaluation_pipeline(
     metrics: list[Metric],
     output_dir: str | Path,
@@ -238,11 +279,11 @@ def evaluation_pipeline(
         if not metrics_only:
             image_dir.mkdir(parents=True, exist_ok=True)
             save_json(image_dir / GT_FILE, ground_truth.to_dict())
-            run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
+            run_multiple_ocrs_and_save(image=image, ocrs=ocrs, ocr_ids=labels,
                                save_dir=image_dir, overwrite=overwrite)
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
     evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
-    evaluation_result.save_to_file(output_dir=output_dir)
+    evaluation_result.save_results_to_file(output_dir=output_dir)
     return evaluation_result

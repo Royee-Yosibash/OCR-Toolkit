@@ -14,7 +14,7 @@ import argparse
 from pathlib import Path
 
 from ocr_modules import import_all_modules
-from evaluation.evaluation_pipeline import evaluation_pipeline
+from evaluation.evaluation_pipeline import evaluation_pipeline, ALL_TAGS_KEY
 from evaluation.metrics import (
     ocr_result_cer,
     ocr_result_wer,
@@ -79,7 +79,7 @@ def main() -> None:
 
     print(f"\nAggregate results saved to {output_dir}/aggregate.json")
 
-    agg = load_aggregate(output_dir)
+    agg = load_aggregate(output_dir)[ALL_TAGS_KEY]
     plot_metric_comparison(agg, save_path=output_dir / 'metric_comparison.png')
     plot_radar(agg, save_path=output_dir / 'radar.png')
     plot_stat_range(agg, save_path=output_dir / 'stat_range.png')
