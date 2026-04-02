@@ -1,0 +1,77 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          0,
+          4
+        ],
+        [
+          567,
+          210
+        ]
+      ],
+      "text": "in a world",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          537,
+          115
+        ],
+        [
+          741,
+          224
+        ]
+      ],
+      "text": "where",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          733,
+          163
+        ],
+        [
+          1020,
+          266
+        ]
+      ],
+      "text": "you can be",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          272,
+          190
+        ],
+        [
+          1111,
+          485
+        ]
+      ],
+      "text": "BE KIND",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1011,
+          199
+        ],
+        [
+          1189,
+          304
+        ]
+      ],
+      "text": "anything",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "handwriting"
+  ]
+}
