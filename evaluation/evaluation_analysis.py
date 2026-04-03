@@ -4,6 +4,7 @@ Loads aggregate and per-image results produced by the evaluation
 pipeline and generates comparative visualisations across OCR modules.
 """
 
+import logging
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -11,6 +12,8 @@ import numpy as np
 
 from evaluation.evaluation_pipeline import AGGREGATE_RESULTS_FILE
 from utils.json_utils import load_json
+
+logger = logging.getLogger(__name__)
 
 
 def load_aggregate(results_dir: str | Path) -> dict:

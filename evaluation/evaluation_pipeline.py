@@ -62,6 +62,7 @@ class EvaluationResult:
     aggregate: dict[str, dict[str, dict[str, dict]]] = field(default_factory=dict, init=False)
 
     def __post_init__(self):
+        assert self.image_tags, 'image_tags must not be empty'
         self._compute_aggregate()
 
     def _compute_aggregate(self, ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS):
@@ -78,12 +79,25 @@ class EvaluationResult:
         Returns:
             None
         """
+
         all_tags = {tag for tags in self.image_tags.values() for tag in tags}
         tag_groups = {ALL_TAGS_KEY: set(self.image_tags.keys())}
         for tag in all_tags:
             tag_groups[tag] = {
                 img_id for img_id, tags in self.image_tags.items() if tag in tags
             }
+        logger.info(
+            f"Computing aggregate statistics for {len(tag_groups)} tag group(s): {list(tag_groups.keys())}",
+        )
+
+        insufficient_tags = {
+            tag: len(ids) for tag, ids in tag_groups.items() if len(ids) < 2
+        }
+        if insufficient_tags:
+            raise ValueError(
+                f"Tags with fewer than 2 images cannot produce "
+                f"meaningful statistics: {insufficient_tags}"
+            )
 
         aggregate = {}
         for tag_key, image_ids in tag_groups.items():
@@ -101,6 +115,7 @@ class EvaluationResult:
                         )
 
         self.aggregate = aggregate
+        logger.info("Aggregate statistics computed successfully")
 
     @staticmethod
     def _compute_stats(
@@ -206,6 +221,11 @@ def _score_image(
         prediction = OCRResult.from_dict(load_json(ocr_dir / OCR_RESULTS_FILE))
         metrics_dict = _compute_metrics(prediction, ground_truth, metrics)
         save_json(ocr_dir / METRICS_FILE, metrics_dict)
+        logger.debug(
+            "Image %d | %s metrics: %s",
+            image_id, label,
+            {k: f"{v:.4f}" for k, v in metrics_dict.items()},
+        )
 
         for metric_name, value in metrics_dict.items():
             per_image.setdefault(label, {}).setdefault(metric_name, {})[image_id] = value
@@ -230,9 +250,12 @@ def run_multiple_ocrs_and_save(image: np.ndarray,
     for ocr, ocr_id in zip(ocrs, ocr_ids):
         save_path = save_dir / ocr_id
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
+            logger.debug(f"Skipping {ocr_id} -- cached result exists")
             continue
+        logger.info(f"Running OCR engine ")
         result = ocr.get_text_bb(image=image)
         save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
+        logger.info(f"Saved OCR result for {ocr_id} to {save_path}")
 
 
 def evaluation_pipeline(
@@ -271,11 +294,18 @@ def evaluation_pipeline(
     image_tags: dict[int, list[str]] = {}
     labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
+    mode = "metrics-only" if metrics_only else "full"
+    logger.info(
+        "Starting evaluation pipeline (mode=%s, output_dir=%s, ocr_engines=%s)",
+        mode, output_dir, labels,
+    )
+
     for image_id, image, ground_truth in \
         _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
-        
+
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         image_tags[image_id] = ground_truth.tags
+        logger.info(f"Processing image {image_id} (tags={ground_truth.tags})")
         if not metrics_only:
             image_dir.mkdir(parents=True, exist_ok=True)
             save_json(image_dir / GT_FILE, ground_truth.to_dict())
@@ -284,6 +314,9 @@ def evaluation_pipeline(
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
+    logger.info(
+        f"Evaluation loop complete -- scored {len(image_tags)} image(s) across {len(per_image)} OCR engine(s)",
+    )
     evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
     evaluation_result.save_results_to_file(output_dir=output_dir)
     return evaluation_result

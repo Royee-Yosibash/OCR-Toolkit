@@ -11,6 +11,7 @@ Usage::
 """
 
 import argparse
+import logging
 from pathlib import Path
 
 from ocr_modules import import_all_modules
@@ -25,7 +26,7 @@ from evaluation.metrics import (
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
-
+from utils.datasets_handles import DATASET_DIR
 
 ALL_METRICS = [
     ocr_result_cer,
@@ -35,7 +36,7 @@ ALL_METRICS = [
     word_recall,
 ]
 
-DEFAULT_DATASET = "dataset"
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -50,7 +51,7 @@ def main() -> None:
     )
     parser.add_argument(
         "--dataset",
-        default=DEFAULT_DATASET,
+        default=DATASET_DIR,
         help="Path to a dataset root directory containing images/ and ground_truth/ "
              "(default: dataset).",
     )
@@ -61,14 +62,28 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        force=True,
+    )
+
     import_all_modules()
 
+    logger.info(f"Registered OCR modules: {list(OCRAbstract._registry.keys())}")
     ocrs = []
     for name in OCRAbstract._registry:
+        logger.info(f"Instantiating OCR module: {name}")
         ocrs.append(OCRAbstract.from_config(OCRConfig(model_name=name)))
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    logger.info(
+        f"Running evaluation (dataset={args.dataset}, " + \
+        "output_dir={output_dir}," + \
+        f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
+    )
+
     evaluation_pipeline(
         metrics=ALL_METRICS,
         output_dir=output_dir,
@@ -77,12 +92,14 @@ def main() -> None:
         overwrite=True,
     )
 
-    print(f"\nAggregate results saved to {output_dir}/aggregate.json")
+    logger.info(f"Aggregate results saved to {output_dir}")
 
     agg = load_aggregate(output_dir)[ALL_TAGS_KEY]
+    logger.info("Generating plots")
     plot_metric_comparison(agg, save_path=output_dir / 'metric_comparison.png')
     plot_radar(agg, save_path=output_dir / 'radar.png')
     plot_stat_range(agg, save_path=output_dir / 'stat_range.png')
+    logger.info(f"All plots saved to {output_dir}")
 
 
 if __name__ == "__main__":

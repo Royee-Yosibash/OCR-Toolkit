@@ -205,10 +205,13 @@ def dataset_generator(
     Yields:
         A tuple of (image, ground_truth) where image is a numpy array
         (H x W x 3) and ground_truth is the ground-truth OCRGroundTruth.
+        :rtype: Generator[tuple[np.ndarray, OCRGroundTruth], None, None]
     """
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"
     gt_dir = root / "ground_truth"
+    assert images_dir.exists(), "images directory does not exist"
+    assert gt_dir.exists(), "ground truth directory does not exist"
 
     for gt_path in sorted(gt_dir.glob("*.json")):
         stem = gt_path.stem
