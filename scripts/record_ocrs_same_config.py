@@ -43,16 +43,16 @@ def record_with_all_ocr_modules(
     if not images:
         raise IOError(f"No images found at {image_path}")
 
-    ocrs, labels = list(), list()
+    ocrs, ocr_ids = list(), list()
     for name, cls in OCRAbstract._registry.items():
-        labels.append(name)
+        ocr_ids.append(name)
         ocrs.append(OCRAbstract.from_config(config=OCRConfig(model_name=name, **config)))
 
     for img_path in images:
         image = np.array(Image.open(img_path))
         image_save_dir = Path(output_dir) / img_path.stem
         image_save_dir.mkdir(parents=True, exist_ok=True)
-        run_multiple_ocrs_and_save(image=image, ocrs=ocrs, labels=labels, 
+        run_multiple_ocrs_and_save(image=image, ocrs=ocrs, ocr_ids=ocr_ids,
                                    save_dir=image_save_dir, overwrite=True)
         
         # Compute metrics too? we can then join with evaluate....

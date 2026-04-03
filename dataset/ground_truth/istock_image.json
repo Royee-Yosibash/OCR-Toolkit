@@ -3,170 +3,173 @@
     {
       "coordinates": [
         [
-          1412,
-          82
+          445,
+          411
         ],
         [
-          1508,
-          110
+          463,
+          435
         ]
       ],
-      "text": "Jueens Kark",
+      "text": "13",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          1517,
-          84
+          621,
+          423
         ],
         [
-          1657,
-          112
-        ]
-      ],
-      "text": "Warwick Avenue",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          1407,
-          109
-        ],
-        [
-          1648,
-          145
-        ]
-      ],
-      "text": "Edgware Road   Oxford Clrcus",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          1388,
-          158
-        ],
-        [
-          1626,
-          231
-        ]
-      ],
-      "text": "Willesden",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          1612,
-          192
-        ],
-        [
-          1684,
-          229
-        ]
-      ],
-      "text": "Garage",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          1218,
-          252
-        ],
-        [
-          1288,
-          280
-        ]
-      ],
-      "text": "VP 535",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          1916,
-          396
-        ],
-        [
-          2048,
+          723,
           461
         ]
       ],
-      "text": "TAXI",
+      "text": "iStock",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          1018,
-          428
+          451,
+          441
         ],
         [
-          1157,
-          489
+          469,
+          467
         ]
       ],
-      "text": "TAXI",
+      "text": "12",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          1178,
-          646
+          624,
+          460
         ],
         [
-          1269,
-          669
+          772,
+          484
         ]
       ],
-      "text": "GREAT",
+      "text": "Credit: ollinka",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          341,
-          909
+          454,
+          474
+        ],
+        [
+          478,
+          500
+        ]
+      ],
+      "text": "11",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          465,
+          505
+        ],
+        [
+          483,
+          527
+        ]
+      ],
+      "text": "10",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          472,
+          541
+        ],
+        [
+          487,
+          554
+        ]
+      ],
+      "text": "9",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          476,
+          568
         ],
         [
           495,
-          947
+          585
         ]
       ],
-      "text": "LG54 XTF",
+      "text": "8",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          886,
-          958
+          482,
+          598
         ],
         [
-          1104,
-          1006
+          502,
+          617
         ]
       ],
-      "text": "R594 TGC",
+      "text": "7",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          1790,
-          1039
+          491,
+          630
         ],
         [
-          2015,
-          1105
+          507,
+          647
         ]
       ],
-      "text": "LX5I 0BW",
+      "text": "6",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          13,
+          655
+        ],
+        [
+          79,
+          669
+        ]
+      ],
+      "text": "485725200",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          496,
+          663
+        ],
+        [
+          515,
+          676
+        ]
+      ],
+      "text": "5",
       "confidence": 1
     }
+  ],
+  "tags": [
+    "printed_text", "incidental"
   ]
 }

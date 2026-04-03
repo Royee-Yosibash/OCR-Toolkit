@@ -3,170 +3,173 @@
     {
       "coordinates": [
         [
-          445,
-          411
+          1412,
+          82
         ],
         [
-          463,
-          435
+          1508,
+          110
         ]
       ],
-      "text": "13",
+      "text": "Jueens Kark",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          621,
-          423
+          1517,
+          84
         ],
         [
-          723,
+          1657,
+          112
+        ]
+      ],
+      "text": "Warwick Avenue",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1407,
+          109
+        ],
+        [
+          1648,
+          145
+        ]
+      ],
+      "text": "Edgware Road   Oxford Clrcus",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1388,
+          158
+        ],
+        [
+          1626,
+          231
+        ]
+      ],
+      "text": "Willesden",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1612,
+          192
+        ],
+        [
+          1684,
+          229
+        ]
+      ],
+      "text": "Garage",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1218,
+          252
+        ],
+        [
+          1288,
+          280
+        ]
+      ],
+      "text": "VP 535",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1916,
+          396
+        ],
+        [
+          2048,
           461
         ]
       ],
-      "text": "iStock",
+      "text": "TAXI",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          451,
-          441
+          1018,
+          428
         ],
         [
-          469,
-          467
+          1157,
+          489
         ]
       ],
-      "text": "12",
+      "text": "TAXI",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          624,
-          460
+          1178,
+          646
         ],
         [
-          772,
-          484
-        ]
-      ],
-      "text": "Credit: ollinka",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          454,
-          474
-        ],
-        [
-          478,
-          500
-        ]
-      ],
-      "text": "11",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          465,
-          505
-        ],
-        [
-          483,
-          527
-        ]
-      ],
-      "text": "10",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          472,
-          541
-        ],
-        [
-          487,
-          554
-        ]
-      ],
-      "text": "9",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          476,
-          568
-        ],
-        [
-          495,
-          585
-        ]
-      ],
-      "text": "8",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          482,
-          598
-        ],
-        [
-          502,
-          617
-        ]
-      ],
-      "text": "7",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          491,
-          630
-        ],
-        [
-          507,
-          647
-        ]
-      ],
-      "text": "6",
-      "confidence": 1
-    },
-    {
-      "coordinates": [
-        [
-          13,
-          655
-        ],
-        [
-          79,
+          1269,
           669
         ]
       ],
-      "text": "485725200",
+      "text": "GREAT",
       "confidence": 1
     },
     {
       "coordinates": [
         [
-          496,
-          663
+          341,
+          909
         ],
         [
-          515,
-          676
+          495,
+          947
         ]
       ],
-      "text": "5",
+      "text": "LG54 XTF",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          886,
+          958
+        ],
+        [
+          1104,
+          1006
+        ]
+      ],
+      "text": "R594 TGC",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          1790,
+          1039
+        ],
+        [
+          2015,
+          1105
+        ]
+      ],
+      "text": "LX5I 0BW",
       "confidence": 1
     }
+  ],
+  "tags": [
+    "natural_scene_text", "printed_text"
   ]
 }

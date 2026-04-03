@@ -1,4 +1,4 @@
-"""Utilities for loading images and tags from the local dataset directory."""
+"""Utilities for loading images and ground_truth from the local dataset directory."""
 
 from collections.abc import Generator
 from pathlib import Path
@@ -8,12 +8,12 @@ from PIL import Image
 
 from consts import APP_ROOT, IMAGE_EXTENSIONS
 from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.ocr_result import OCRResult
+from evaluation.ocr_ground_truth import OCRGroundTruth
 from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"
 IMAGES_DIR = DATASET_DIR / "images"
-TAGS_DIR = DATASET_DIR / "tags"
+TAGS_DIR = DATASET_DIR / "ground_truth"
 
 
 def collect_images(path: Path) -> list[Path]:
@@ -53,17 +53,17 @@ def load_image(image_path: Path) -> np.ndarray:
     return np.array(Image.open(image_path).convert("RGB"))
 
 
-def load_tags(tags_path: Path) -> OCRResult:
-    """Load a tags JSON file as an OCRResult.
+def load_groud_truth(tags_path: Path) -> OCRGroundTruth:
+    """Load a ground_truth JSON file as an OCRGroundTruth.
 
     Args:
-        tags_path: Path to the JSON tags file.
+        tags_path: Path to the JSON ground_truth file.
 
     Returns:
-        An OCRResult parsed from the JSON file.
+        An OCRGroundTruth parsed from the JSON file.
     """
     data = load_json(tags_path)
-    return OCRResult.from_dict(data)
+    return OCRGroundTruth.from_dict(data)
 
 
 def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
@@ -93,14 +93,14 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
 
 
 def validate_tags(tags_path: Path, image_path: Path) -> None:
-    """Validate a tags JSON file against its corresponding image.
+    """Validate a ground_truth JSON file against its corresponding image.
 
     Checks that every bounding box is structurally valid and that
     coordinates fall within the image dimensions. All errors are
     aggregated and raised together.
 
     Args:
-        tags_path: Path to the JSON tags file.
+        tags_path: Path to the JSON ground_truth file.
         image_path: Path to the corresponding image.
 
     Raises:
@@ -139,11 +139,11 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
 def validate_dataset() -> None:
     """Validate the entire dataset directory.
 
-    Checks that every image has a corresponding tags file and vice
+    Checks that every image has a corresponding ground_truth file and vice
     versa, then validates each tag file against its image.
 
     Raises:
-        FileNotFoundError: If any images are missing tags or tags are
+        FileNotFoundError: If any images are missing ground_truth or ground_truth are
             missing images.
         ValueError: If any tag validation errors are found across the
             dataset. The message contains all errors grouped by stem.
@@ -158,7 +158,7 @@ def validate_dataset() -> None:
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
         raise FileNotFoundError(
-            f"Missing tags for {len(missing_tags)} image(s): "
+            f"Missing ground_truth for {len(missing_tags)} image(s): "
             + ", ".join(missing_tags)
         )
 
@@ -192,26 +192,29 @@ def validate_dataset() -> None:
 
 def dataset_generator(
     dataset_root: Path | str | None = None,
-) -> Generator[tuple[np.ndarray, OCRResult], None, None]:
+) -> Generator[tuple[np.ndarray, OCRGroundTruth], None, None]:
     """Yield (image, ground_truth) tuples from a dataset directory.
 
     The directory must contain an ``images/`` subfolder with image files
-    and a ``tags/`` subfolder with identically-stemmed JSON tag files.
+    and a ``ground_truth/`` subfolder with identically-stemmed JSON tag files.
 
     Args:
         dataset_root: Root directory of the dataset. Defaults to the
             built-in ``dataset/`` directory when *None*.
 
     Yields:
-        A tuple of (image, ocr_result) where image is a numpy array
-        (H x W x 3) and ocr_result is the ground-truth OCRResult.
+        A tuple of (image, ground_truth) where image is a numpy array
+        (H x W x 3) and ground_truth is the ground-truth OCRGroundTruth.
+        :rtype: Generator[tuple[np.ndarray, OCRGroundTruth], None, None]
     """
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"
-    tags_dir = root / "tags"
+    gt_dir = root / "ground_truth"
+    assert images_dir.exists(), "images directory does not exist"
+    assert gt_dir.exists(), "ground truth directory does not exist"
 
-    for tags_path in sorted(tags_dir.glob("*.json")):
-        stem = tags_path.stem
+    for gt_path in sorted(gt_dir.glob("*.json")):
+        stem = gt_path.stem
         image = load_image(_find_image_for_stem(stem, images_dir))
-        tags = load_tags(tags_path)
-        yield image, tags
+        gt = load_groud_truth(gt_path)
+        yield image, gt

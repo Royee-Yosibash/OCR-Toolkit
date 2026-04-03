@@ -27,3 +27,6 @@ jobs:
 
       - name: Run tests
         run: python -m tests.tests_runner
+
+      - name: Run evaluation pipeline
+        run: python -m scripts.run_evaluation

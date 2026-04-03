@@ -17,6 +17,8 @@ class OCRResult:
 
     def __post_init__(self) -> None:
         """Sort bounding boxes in reading order after initialization."""
+        self.bounding_boxes = [BoundingBox.from_dict(bb) if isinstance(bb, dict) else bb
+                               for bb in self.bounding_boxes]
         self.bounding_boxes.sort()
 
     def to_dict(self) -> dict:
@@ -39,11 +41,7 @@ class OCRResult:
         Returns:
             An OCRResult instance.
         """
-        return cls(
-            bounding_boxes=[
-                BoundingBox.from_dict(bb) for bb in data.get("bounding_boxes", [])
-            ],
-        )
+        return cls(**data)
 
     def is_close(self, other: OCRResult, confidence_tolerance: float = 1e-3) -> bool:
         """Check if two OCRResults are equivalent within a confidence tolerance.
