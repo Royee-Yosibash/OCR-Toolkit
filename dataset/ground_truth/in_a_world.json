@@ -45,15 +45,15 @@
     {
       "coordinates": [
         [
-          272,
-          190
+          293,
+          195
         ],
         [
-          1111,
-          485
+          607,
+          466
         ]
       ],
-      "text": "BE KIND",
+      "text": "BE",
       "confidence": 1
     },
     {
@@ -68,6 +68,20 @@
         ]
       ],
       "text": "anything",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          682,
+          249
+        ],
+        [
+          1080,
+          474
+        ]
+      ],
+      "text": "KIND",
       "confidence": 1
     }
   ],
