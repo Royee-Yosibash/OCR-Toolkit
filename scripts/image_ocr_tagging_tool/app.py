@@ -2,6 +2,7 @@
 
 import base64
 import io
+import subprocess
 from pathlib import Path
 
 import numpy as np
@@ -119,6 +120,94 @@ def create_app() -> Flask:
             save_json(save_path, result.to_dict())
 
             return jsonify({"status": "ok", "path": str(save_path)})
+        except KeyError as e:
+            return jsonify({"error": f"Missing required field: {e}"}), 400
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route("/api/browse_directory", methods=["POST"])
+    def browse_directory():
+        """Open a native OS directory picker dialog and return the selected path.
+
+        Uses zenity on Linux. Falls back to an error message if no supported
+        dialog tool is found.
+
+        Returns:
+            JSON response with the selected directory path, or an empty
+            string if the user cancelled.
+        """
+        try:
+            result = subprocess.run(
+                ["zenity", "--file-selection", "--directory",
+                 "--title=Select Output Directory"],
+                capture_output=True, text=True, timeout=120,
+            )
+            chosen = result.stdout.strip() if result.returncode == 0 else ""
+            return jsonify({"path": chosen})
+        except FileNotFoundError:
+            return jsonify({
+                "error": "No directory picker available. "
+                         "Install zenity or type the path manually."
+            }), 500
+
+    @app.route("/api/save_batch", methods=["POST"])
+    def save_batch():
+        """Save tagged bounding boxes for multiple images at once.
+
+        Expects a JSON body with:
+            images: List of dicts, each containing:
+                bounding_boxes: List of bounding box dicts.
+                tags: Optional list of tag strings.
+                filename: Original image filename (used to derive output name).
+            output_path: Optional global path to save the JSON files.
+                Defaults to ~/Downloads/ocr_tags/{filename_stem}.json.
+
+        Returns:
+            JSON response with status and a list of saved paths.
+        """
+        try:
+            data = request.get_json()
+            images = data["images"]
+            output_path = data.get("output_path", "")
+
+            for img_idx, image_entry in enumerate(images):
+                bounding_boxes = image_entry["bounding_boxes"]
+                empty_bbs = [
+                    i for i, bb in enumerate(bounding_boxes)
+                    if not bb.get("text", "").strip()
+                ]
+                if empty_bbs:
+                    indices = ", ".join(str(i + 1) for i in empty_bbs)
+                    filename = image_entry.get("filename", "untitled.png")
+                    return jsonify({
+                        "error": f"Image '{filename}' (index {img_idx}): "
+                                 f"BB(s) #{indices} have no text. "
+                                 f"Fill in or delete them before saving."
+                    }), 400
+
+            paths = []
+            for image_entry in images:
+                bounding_boxes = image_entry["bounding_boxes"]
+                tags = image_entry.get("tags", [])
+                filename = image_entry.get("filename", "untitled.png")
+
+                if not output_path:
+                    filename_stem = Path(filename).stem
+                    save_dir = Path.home() / "Downloads" / "ocr_tags"
+                    save_dir.mkdir(parents=True, exist_ok=True)
+                    save_path = save_dir / f"{filename_stem}.json"
+                else:
+                    save_path = Path(output_path)
+                    if save_path.is_dir() or not save_path.suffix:
+                        filename_stem = Path(filename).stem
+                        save_path = save_path / f"{filename_stem}.json"
+                    save_path.parent.mkdir(parents=True, exist_ok=True)
+
+                result = OCRGroundTruth.from_dict({"bounding_boxes": bounding_boxes, "tags": tags})
+                save_json(save_path, result.to_dict())
+                paths.append(str(save_path))
+
+            return jsonify({"status": "ok", "paths": paths})
         except KeyError as e:
             return jsonify({"error": f"Missing required field: {e}"}), 400
         except Exception as e:

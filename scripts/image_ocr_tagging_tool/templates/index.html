@@ -276,6 +276,73 @@
             font-size: 13px;
             padding: 30px 10px;
         }
+
+        .batch-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .batch-nav .btn {
+            min-width: 60px;
+        }
+
+        .batch-nav .nav-counter {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a9eff;
+        }
+
+        .batch-thumbs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 4px 0;
+            margin-top: 8px;
+        }
+
+        .batch-thumbs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .batch-thumbs::-webkit-scrollbar-thumb {
+            background: #2a2a4a;
+            border-radius: 3px;
+        }
+
+        .batch-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: 2px solid #2a2a4a;
+            object-fit: cover;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.15s;
+        }
+
+        .batch-thumb.active {
+            border-color: #4a9eff;
+        }
+
+        .batch-thumb:hover {
+            border-color: #3a8eef;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
     </style>
 </head>
 <body>
@@ -287,9 +354,27 @@
             <div class="toolbar-header">OCR Tagger</div>
 
             <div class="toolbar-section">
-                <label>Image Upload</label>
-                <input type="file" id="imageInput" accept="image/*">
-                <div class="filename-display" id="filenameDisplay">No image loaded</div>
+                <label>Images</label>
+                <input type="file" id="imageInput" accept="image/*" multiple>
+                <div class="filename-display" id="filenameDisplay">No images loaded</div>
+                <div class="batch-thumbs" id="batchThumbs"></div>
+            </div>
+
+            <div class="toolbar-section hidden" id="navSection">
+                <label>Navigation</label>
+                <div class="batch-nav">
+                    <button class="btn btn-secondary" onclick="navPrev()">Prev</button>
+                    <span class="nav-counter" id="navCounter">0 / 0</span>
+                    <button class="btn btn-secondary" onclick="navNext()">Next</button>
+                </div>
+            </div>
+
+            <div class="toolbar-section">
+                <label>Output Directory</label>
+                <div style="display: flex; gap: 8px; margin-bottom: 6px;">
+                    <input type="text" id="outputPath" placeholder="~/Downloads/ocr_tags/" style="flex:1;">
+                    <button class="btn btn-secondary" style="white-space:nowrap; font-size:12px;" onclick="browseOutputDir()">Browse</button>
+                </div>
             </div>
 
             <div class="toolbar-section">
@@ -300,11 +385,6 @@
             <div class="toolbar-section">
                 <label>Tags (comma-separated)</label>
                 <input type="text" id="tagsInput" placeholder="e.g. printed, document">
-            </div>
-
-            <div class="toolbar-section">
-                <label>Output Path</label>
-                <input type="text" id="outputPath" placeholder="~/Downloads/ocr_tags/{filename}.json">
             </div>
 
             <div class="toolbar-section">
@@ -334,8 +414,9 @@
             <div class="status-msg" id="statusMsg"></div>
 
             <div class="toolbar-footer">
-                <button class="btn btn-primary" id="saveBtn" onclick="saveAll()">Save</button>
-                <button class="btn btn-danger" id="clearBtn" onclick="clearAll()">Clear All</button>
+                <button class="btn btn-primary" onclick="saveCurrent()">Save Current</button>
+                <button class="btn btn-success" onclick="saveAll()">Save All</button>
+                <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
             </div>
         </div>
     </div>
@@ -352,6 +433,9 @@
         const bbListEl = document.getElementById("bbList");
         const emptyState = document.getElementById("emptyState");
         const statusMsg = document.getElementById("statusMsg");
+        const navSection = document.getElementById("navSection");
+        const batchThumbs = document.getElementById("batchThumbs");
+        const navCounter = document.getElementById("navCounter");
 
         let originalImage = null;
         let currentFilename = "";
@@ -363,6 +447,9 @@
         let drawStart = null;
         let currentMouse = null;
         let hoveredBBIndex = -1;
+
+        let loadedImages = [];
+        let imageIndex = 0;
 
         const BB_COLORS = [
             "rgba(74, 158, 255, 0.25)",
@@ -565,6 +652,10 @@
             boundingBoxes = [];
             hoveredBBIndex = -1;
             tagsInput.value = "";
+            if (loadedImages.length > 0) {
+                loadedImages[imageIndex].boundingBoxes = [];
+                loadedImages[imageIndex].tags = "";
+            }
             renderBBList();
             redraw();
             showStatus("");
@@ -710,19 +801,81 @@
                 });
         }
 
-        function saveAll() {
-            if (boundingBoxes.length === 0) {
+        function browseOutputDir() {
+            showStatus("Opening directory picker...");
+            fetch("/api/browse_directory", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus(`Browse error: ${data.error}`);
+                    } else if (data.path) {
+                        outputPathInput.value = data.path;
+                        showStatus("Output directory set");
+                    } else {
+                        showStatus("Directory selection cancelled");
+                    }
+                })
+                .catch(err => {
+                    showStatus(`Browse failed: ${err.message}`);
+                });
+        }
+
+        function saveState() {
+            if (loadedImages.length === 0) return;
+            loadedImages[imageIndex].boundingBoxes = boundingBoxes.map(bb => ({...bb}));
+            loadedImages[imageIndex].tags = tagsInput.value;
+        }
+
+        function loadImage(index) {
+            if (index < 0 || index >= loadedImages.length) return;
+            saveState();
+            imageIndex = index;
+            const entry = loadedImages[imageIndex];
+            originalImage = entry.image;
+            currentFilename = entry.filename;
+            boundingBoxes = entry.boundingBoxes.map(bb => ({...bb}));
+            tagsInput.value = entry.tags || "";
+            hoveredBBIndex = -1;
+            filenameDisplay.textContent = entry.filename;
+            resizeCanvas();
+            renderBBList();
+            updateNavUI();
+            showStatus("");
+        }
+
+        function updateNavUI() {
+            navCounter.textContent = `${imageIndex + 1} / ${loadedImages.length}`;
+            navSection.classList.toggle("hidden", loadedImages.length <= 1);
+            batchThumbs.querySelectorAll(".batch-thumb").forEach((thumb, i) => {
+                thumb.classList.toggle("active", i === imageIndex);
+            });
+        }
+
+        function navPrev() {
+            if (imageIndex > 0) loadImage(imageIndex - 1);
+        }
+
+        function navNext() {
+            if (imageIndex < loadedImages.length - 1) loadImage(imageIndex + 1);
+        }
+
+        function saveCurrent() {
+            saveState();
+            const entry = loadedImages[imageIndex];
+            if (!entry || entry.boundingBoxes.length === 0) {
                 showStatus("No bounding boxes to save");
                 return;
             }
-
-            const tags = tagsInput.value
+            const tags = (entry.tags || "")
                 .split(",")
                 .map(t => t.trim())
                 .filter(t => t.length > 0);
 
             const payload = {
-                bounding_boxes: boundingBoxes.map(bb => ({
+                bounding_boxes: entry.boundingBoxes.map(bb => ({
                     coordinates: [
                         [Math.round(bb.x1), Math.round(bb.y1)],
                         [Math.round(bb.x2), Math.round(bb.y2)],
@@ -732,11 +885,10 @@
                 })),
                 tags: tags,
                 output_path: outputPathInput.value,
-                filename: currentFilename,
+                filename: entry.filename,
             };
 
-            showStatus("Saving...");
-
+            showStatus("Saving current...");
             fetch("/api/save", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -744,6 +896,10 @@
             })
                 .then(r => r.json())
                 .then(data => {
+                    if (data.error) {
+                        showStatus(`Save error: ${data.error}`);
+                        return;
+                    }
                     showStatus(`Saved to: ${data.path || "done"}`);
                 })
                 .catch(err => {
@@ -751,27 +907,97 @@
                 });
         }
 
-        imageInput.addEventListener("change", e => {
-            const file = e.target.files[0];
-            if (!file) return;
-
-            currentFilename = file.name;
-            filenameDisplay.textContent = file.name;
-            boundingBoxes = [];
-            hoveredBBIndex = -1;
-
-            const reader = new FileReader();
-            reader.onload = ev => {
-                const img = new Image();
-                img.onload = () => {
-                    originalImage = img;
-                    resizeCanvas();
-                    renderBBList();
-                    showStatus("");
+        function saveAll() {
+            saveState();
+            const imagesPayload = loadedImages.map(entry => {
+                const tags = (entry.tags || "")
+                    .split(",")
+                    .map(t => t.trim())
+                    .filter(t => t.length > 0);
+                return {
+                    bounding_boxes: entry.boundingBoxes.map(bb => ({
+                        coordinates: [
+                            [Math.round(bb.x1), Math.round(bb.y1)],
+                            [Math.round(bb.x2), Math.round(bb.y2)],
+                        ],
+                        text: bb.text,
+                        confidence: 1.0,
+                    })),
+                    tags: tags,
+                    filename: entry.filename,
                 };
-                img.src = ev.target.result;
+            });
+
+            const payload = {
+                images: imagesPayload,
+                output_path: outputPathInput.value,
             };
-            reader.readAsDataURL(file);
+
+            showStatus("Saving all images...");
+            fetch("/api/save_batch", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus(`Save error: ${data.error}`);
+                        return;
+                    }
+                    showStatus(`Saved ${data.paths.length} file(s)`);
+                })
+                .catch(err => {
+                    showStatus(`Save failed: ${err.message}`);
+                });
+        }
+
+        function renderThumbs() {
+            batchThumbs.innerHTML = "";
+            loadedImages.forEach((entry, i) => {
+                const thumb = document.createElement("img");
+                thumb.className = "batch-thumb" + (i === imageIndex ? " active" : "");
+                thumb.src = entry.dataURL;
+                thumb.title = entry.filename;
+                thumb.addEventListener("click", () => loadImage(i));
+                batchThumbs.appendChild(thumb);
+            });
+        }
+
+        imageInput.addEventListener("change", e => {
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+
+            loadedImages = [];
+            imageIndex = 0;
+            batchThumbs.innerHTML = "";
+            filenameDisplay.textContent = `${files.length} image(s) selected`;
+
+            let loaded = 0;
+            files.forEach((file, i) => {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const img = new Image();
+                    img.onload = () => {
+                        loadedImages[i] = {
+                            image: img,
+                            filename: file.name,
+                            boundingBoxes: [],
+                            tags: "",
+                            dataURL: ev.target.result,
+                        };
+
+                        loaded++;
+                        if (loaded === files.length) {
+                            renderThumbs();
+                            loadImage(0);
+                            showStatus(`Loaded ${files.length} image(s)`);
+                        }
+                    };
+                    img.src = ev.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
         });
 
         jsonInput.addEventListener("change", e => {
