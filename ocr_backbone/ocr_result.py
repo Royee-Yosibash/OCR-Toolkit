@@ -16,8 +16,6 @@ class OCRResult(SerializableClass):
 
     def __post_init__(self) -> None:
         """Sort bounding boxes in reading order after initialization."""
-        self.bounding_boxes = [BoundingBox.from_dict(bb) if isinstance(bb, dict) else bb
-                               for bb in self.bounding_boxes]
         self.bounding_boxes.sort()
 
 
