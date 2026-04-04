@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from utils.serialize_utils import SerializableClass
+
 
 @dataclass
-class BoundingBox:
+class BoundingBox(SerializableClass):
     """Represents a detected text region from an OCR engine.
 
     Args:
@@ -67,27 +69,9 @@ class BoundingBox:
             y_offset: Vertical pixel offset of the sub-image in the original image.
         """
         top_left, bottom_right = self.coordinates
-        new_coords = (
+        self.coordinates = (
             (top_left[0] + x_offset, top_left[1] + y_offset),
             (bottom_right[0] + x_offset, bottom_right[1] + y_offset),
-        )
-        self.coordinates = new_coords
-
-    @classmethod
-    def from_dict(cls, data: dict):
-        """Create a BoundingBox from a dict produced by ``to_dict``.
-
-        Args:
-            data: A dict with coordinates, text, and optionally confidence.
-
-        Returns:
-            A BoundingBox instance.
-        """
-        coords = data["coordinates"]
-        return cls(
-            coordinates=(tuple(coords[0]), tuple(coords[1])),
-            text=data["text"],
-            confidence=data.get("confidence", 0.0),
         )
 
     @classmethod
@@ -125,7 +109,7 @@ class BoundingBox:
             A dict with coordinates, text, and confidence fields.
         """
         return {
-            "coordinates": [list(self.coordinates[0]), list(self.coordinates[1])],
+            "coordinates": self.coordinates,
             "text": self.text,
             "confidence": round(self.confidence, 6),
         }

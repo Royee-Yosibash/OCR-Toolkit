@@ -1,12 +1,11 @@
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 
 from ocr_backbone.bounding_box import BoundingBox
+from utils.serialize_utils import SerializableClass
 
 
 @dataclass
-class OCRResult:
+class OCRResult(SerializableClass):
     """Output of an OCR run on a single image.
 
     Args:
@@ -21,29 +20,8 @@ class OCRResult:
                                for bb in self.bounding_boxes]
         self.bounding_boxes.sort()
 
-    def to_dict(self) -> dict:
-        """Convert the result to a JSON-serializable dict.
 
-        Returns:
-            A dict with a bounding_boxes field containing a list of BB dicts.
-        """
-        return {
-            "bounding_boxes": [bb.to_dict() for bb in self.bounding_boxes],
-        }
-
-    @classmethod
-    def from_dict(cls, data: dict) -> OCRResult:
-        """Create an OCRResult from a dict produced by ``to_dict``.
-
-        Args:
-            data: A dict with a bounding_boxes field.
-
-        Returns:
-            An OCRResult instance.
-        """
-        return cls(**data)
-
-    def is_close(self, other: OCRResult, confidence_tolerance: float = 1e-3) -> bool:
+    def is_close(self, other: 'OCRResult', confidence_tolerance: float = 1e-3) -> bool:
         """Check if two OCRResults are equivalent within a confidence tolerance.
 
         Coordinates and text must match exactly. Confidence values may differ

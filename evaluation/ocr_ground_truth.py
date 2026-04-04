@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 
 from ocr_backbone.ocr_result import OCRResult
@@ -20,32 +18,7 @@ class OCRGroundTruth(OCRResult):
         super().__post_init__()
         self.tags = [t.lower() for t in self.tags]
 
-    def to_dict(self) -> dict:
-        """Convert the ground truth to a JSON-serializable dict.
-
-        Returns:
-            A dict with bounding_boxes and tags fields.
-        """
-        data = super().to_dict()
-        data["tags"] = self.tags
-        return data
-
-    @classmethod
-    def from_dict(cls, data: dict) -> OCRGroundTruth:
-        """Create an OCRGroundTruth from a dict produced by ``to_dict``.
-
-        Args:
-            data: A dict with bounding_boxes and optionally tags fields.
-
-        Returns:
-            An OCRGroundTruth instance.
-        """
-        # TODO: change this when we handle nested from_dict()
-        kwargs = super().from_dict(data).to_dict()
-        kwargs["tags"] = data.get("tags", [])
-        return cls(**kwargs)
-
-    def is_close(self, other: OCRGroundTruth, confidence_tolerance: float = 1e-3) -> bool:
+    def is_close(self, other: 'OCRGroundTruth', confidence_tolerance: float = 1e-3) -> bool:
         """Also compares tags on top of the base bounding box comparison.
 
         Args:
