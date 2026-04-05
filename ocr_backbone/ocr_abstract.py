@@ -1,15 +1,12 @@
 import copy
 from abc import ABC, abstractmethod
-from functools import partial
 
 import numpy as np
 
-import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
-from collections.abc import Callable
 
 
 
@@ -74,47 +71,26 @@ class OCRAbstract(ABC):
 
         """
 
-    @staticmethod
-    def _create_pp_method(pp_method: dict) -> Callable:
-        """Build a preprocessing callable from a method descriptor.
-
-        Args:
-            pp_method: A dict with "name" (function name in
-                image_preprocessing) and optional "kwargs" to bind.
-
-        Returns:
-            A callable that accepts an InputImage as its first argument.
-
-        Raises:
-            AttributeError: If the function name does not exist in
-                image_preprocessing.
-        """
-        func = getattr(image_preprocessing, pp_method["name"])
-        kwargs = pp_method.get("kwargs", {})
-        return partial(func, **kwargs) if kwargs else func
-
     def _preprocess(self, image: np.ndarray, config: OCRConfig) -> list[InputImage]:
         """Run the preprocessing pipeline defined in the config.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            config: The OCR config containing preprocessing steps and grid.
+            config: The OCR config containing preprocessing callables.
 
         Returns:
             A list of InputImage cells ready for OCR inference.
         """
         input_images = [InputImage(image=image)]
 
-        for pp_method in config.preprocess_methods:
-            method = self._create_pp_method(pp_method)
-
+        for method in config.preprocess_methods:
             outputs = []
             for in_img in input_images:
                 res = method(in_img)
                 outputs += res if isinstance(res, list) else [res]
 
             input_images = outputs
-            
+
         return input_images
 
 
