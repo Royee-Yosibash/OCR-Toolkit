@@ -7,6 +7,7 @@ class SerializableClass(ABC):
 
     @classmethod
     def from_dict(cls, raw_dict: dict):
+        # TODO: Make sure init=False is also supported
         """Recursively create an instance from a dict.
 
         Inspects ``cls.__init__`` type hints to discover parameters whose

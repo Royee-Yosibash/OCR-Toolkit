@@ -1,5 +1,7 @@
 import json
+import sys
 import tempfile
+import textwrap
 import unittest
 from pathlib import Path
 
@@ -150,3 +152,42 @@ class TestFromDictPreprocessMethods(unittest.TestCase):
         })
         self.assertEqual(len(config.preprocess_methods), 1)
         self.assertTrue(callable(config.preprocess_methods[0]))
+
+    def test_from_dict_resolves_external_module(self):
+        """Import a preprocessing function from a temporary Python module."""
+        module_src = textwrap.dedent("""\
+            import numpy as np
+            from ocr_backbone.input_image import InputImage
+
+            def halve_height(input_image: InputImage) -> InputImage:
+                img = input_image.image
+                h = img.shape[0] // 2
+                return InputImage(
+                    image=img[:h],
+                    x_offset=input_image.x_offset,
+                    y_offset=input_image.y_offset,
+                )
+        """)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            module_file = Path(tmp_dir) / "custom_pp.py"
+            module_file.write_text(module_src)
+
+            sys.path.insert(0, tmp_dir)
+            try:
+                config = OCRConfig.from_dict({
+                    "model_name": "test",
+                    "preprocess_methods": [
+                        {"name": "custom_pp.halve_height"},
+                    ],
+                })
+
+                self.assertEqual(len(config.preprocess_methods), 1)
+                image = np.zeros((100, 200, 3), dtype=np.uint8)
+                result = config.preprocess_methods[0](InputImage(image=image))
+                self.assertEqual(result.image.shape, (50, 200, 3))
+                self.assertEqual(result.x_offset, 0)
+                self.assertEqual(result.y_offset, 0)
+            finally:
+                sys.path.remove(tmp_dir)
+                sys.modules.pop("custom_pp", None)

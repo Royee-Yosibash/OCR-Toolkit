@@ -1,4 +1,5 @@
 import importlib
+import inspect
 from collections.abc import Callable
 from dataclasses import dataclass, fields, field
 from functools import partial
@@ -6,7 +7,30 @@ from pathlib import Path
 
 import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.input_image import InputImage
 from utils.json_utils import load_json
+from typing import Protocol, runtime_checkable
+
+PPReturnType = InputImage | list[InputImage]
+
+@runtime_checkable
+class PreprocessingProtocol(Protocol):
+    """Protocol that all preprocessing callables must satisfy.
+
+    A conforming function takes an ``InputImage`` as its first positional
+    argument and returns either a single ``InputImage`` or a list of
+    ``InputImage`` objects.
+
+    Example::
+
+        def my_step(input_image: InputImage) -> InputImage:
+            ...
+
+        def my_splitter(input_image: InputImage) -> list[InputImage]:
+            ...
+    """
+
+    def __call__(self, input_image: InputImage) -> PPReturnType: ...
 
 
 @dataclass
@@ -19,17 +43,24 @@ class OCRConfig:
         bb_validator: Optional function that takes a BoundingBox and returns
             True if the bounding box is valid. Invalid bounding boxes are
             discarded after OCR inference.
-        preprocess_methods: A list of preprocessing callables. Each callable
-            accepts an InputImage and returns an InputImage or a list of
-            InputImages. When constructed via ``from_dict``, method
-            descriptors (dicts with "name" and optional "kwargs") are
-            resolved into callables automatically.
+        preprocess_methods: A list of callables conforming to
+            ``PreprocessingProtocol``. When constructed via ``from_dict``,
+            method descriptors (dicts with "name" and optional "kwargs")
+            are resolved into callables automatically.
     """
 
     model_name: str
     model_params: dict = field(default_factory=dict)
     bb_validator: Callable[[BoundingBox], bool] | None = None
-    preprocess_methods: list[Callable] = field(default_factory=list)
+    preprocess_methods: list[PreprocessingProtocol] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        self.validate()
+
+    def validate(self):
+        """Validate all preprocessing methods after construction."""
+        for method in self.preprocess_methods:
+            self._validate_pp_signature(method)
 
     @staticmethod
     def _resolve_pp_method(pp_method: dict) -> Callable:
@@ -54,6 +85,8 @@ class OCRConfig:
                 resolved module.
             ModuleNotFoundError: If the dotted module path cannot be
                 imported.
+                :param pp_method:
+                :return:
         """
         name = pp_method["name"]
         if "." in name:
@@ -64,6 +97,55 @@ class OCRConfig:
             func = getattr(image_preprocessing, name)
         kwargs = pp_method.get("kwargs", {})
         return partial(func, **kwargs) if kwargs else func
+
+    @staticmethod
+    def _validate_pp_signature(method: Callable) -> None:
+        """Validate that a preprocessing callable has a compatible signature.
+
+        The first unbound parameter must be annotated as ``InputImage``
+        and the return must be annotated as ``InputImage``,
+        ``list[InputImage]``, or ``InputImage | list[InputImage]``.
+
+        Args:
+            method: The preprocessing callable to validate.
+
+        Raises:
+            TypeError: If the signature is incompatible or missing
+                required annotations.
+        """
+        sig = inspect.signature(method)
+        params = list(sig.parameters.values())
+
+        if not params:
+            raise TypeError(
+                f"Preprocessing method {method!r} accepts no arguments; "
+                "expected at least one (InputImage)."
+            )
+
+        first_param = params[0]
+        ann = first_param.annotation
+        if ann is inspect.Parameter.empty:
+            raise TypeError(
+                f"Preprocessing method {method!r}: first parameter "
+                "must be annotated as InputImage."
+            )
+        if ann is not InputImage:
+            raise TypeError(
+                f"Preprocessing method {method!r}: first parameter "
+                f"is annotated as {ann!r}, expected InputImage."
+            )
+
+        ret = sig.return_annotation
+        if ret is inspect.Signature.empty:
+            raise TypeError(
+                f"Preprocessing method {method!r}: missing return "
+                "annotation, expected InputImage or list[InputImage]."
+            )
+        if ret not in PPReturnType:
+            raise TypeError(
+                f"Preprocessing method {method!r}: return annotation "
+                f"is {ret!r}, expected InputImage or list[InputImage]."
+            )
 
     def update(self, overrides: dict) -> None:
         """Update config attributes from a dict.
@@ -87,6 +169,7 @@ class OCRConfig:
             else:
                 self.model_params[key] = value
 
+        self.validate()
 
     def to_dict(self) -> dict:
         """Convert the config to a JSON-serializable dict.
