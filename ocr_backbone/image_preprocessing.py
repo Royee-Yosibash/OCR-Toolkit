@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-
 from ocr_backbone.input_image import InputImage
 
 BINARIZE_METHODS = ("adaptive", "otsu")
@@ -82,12 +81,11 @@ def binarize(input_image: InputImage, method: str = "adaptive", block_size: int 
 
 
 def grid_split_image(input_image: InputImage, grid: tuple[int,int])-> list[InputImage]:
-        """Split an image into a grid of sub-images.
+        """Split an InputImage into a grid of sub-images.
 
         Args:
-            image: Input image as a numpy array (H x W x C).
-            rows: Number of rows in the grid.
-            cols: Number of columns in the grid.
+            input_image: The source image to split.
+            grid: A (rows, cols) tuple defining the grid dimensions.
 
         Returns:
             A list (rows x cols) of sub-image InputImages.

@@ -1,16 +1,17 @@
 import copy
+import logging
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from functools import partial
 
 import numpy as np
 
-import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
-from collections.abc import Callable
 
+logger = logging.getLogger(__name__)
 
 
 class OCRAbstract(ABC):
@@ -54,6 +55,7 @@ class OCRAbstract(ABC):
         if model_name not in cls._registry:
             raise ValueError(f"Unknown model: {model_name}")
         instance = cls._registry[model_name](config=config)
+        logger.info("Initialized module %s", model_name)
         return instance
 
     def __init__(self, config: OCRConfig | dict) -> None:
@@ -75,38 +77,47 @@ class OCRAbstract(ABC):
         """
 
     @staticmethod
-    def _create_pp_method(pp_method: dict) -> Callable:
-        """Build a preprocessing callable from a method descriptor.
+    def _pp_method_name(method: Callable) -> str:
+        """Return a human-readable name for a preprocessing callable.
 
         Args:
-            pp_method: A dict with "name" (function name in
-                image_preprocessing) and optional "kwargs" to bind.
+            method: The preprocessing callable.
 
         Returns:
-            A callable that accepts an InputImage as its first argument.
-
-        Raises:
-            AttributeError: If the function name does not exist in
-                image_preprocessing.
+            A string such as ``"binarize"`` or ``"binarize(method='otsu')"``.
         """
-        func = getattr(image_preprocessing, pp_method["name"])
-        kwargs = pp_method.get("kwargs", {})
-        return partial(func, **kwargs) if kwargs else func
+        if isinstance(method, partial):
+            name = method.func.__qualname__
+            if method.keywords:
+                args = ", ".join(f"{k}={v!r}" for k, v in method.keywords.items())
+                return f"{name}({args})"
+            return name
+        return method.__qualname__
 
     def _preprocess(self, image: np.ndarray, config: OCRConfig) -> list[InputImage]:
         """Run the preprocessing pipeline defined in the config.
 
         Args:
             image: Input image as a numpy array (H x W x C).
-            config: The OCR config containing preprocessing steps and grid.
+            config: The OCR config containing preprocessing callables.
 
         Returns:
             A list of InputImage cells ready for OCR inference.
         """
+        step_names = [self._pp_method_name(m) for m in config.preprocess_methods]
+        logger.info(
+            "Preprocessing pipeline: %s",
+            " -> ".join(step_names) if step_names else "(none)",
+        )
+
         input_images = [InputImage(image=image)]
 
-        for pp_method in config.preprocess_methods:
-            method = self._create_pp_method(pp_method)
+        for idx, method in enumerate(config.preprocess_methods):
+            logger.info(
+                "Running preprocessing step %d/%d: %s (%d input image(s))",
+                idx + 1, len(config.preprocess_methods),
+                step_names[idx], len(input_images),
+            )
 
             outputs = []
             for in_img in input_images:
@@ -114,7 +125,12 @@ class OCRAbstract(ABC):
                 outputs += res if isinstance(res, list) else [res]
 
             input_images = outputs
-            
+            logger.debug(
+                "Step %d/%d produced %d image(s)",
+                idx + 1, len(config.preprocess_methods), len(input_images),
+            )
+
+        logger.info("Preprocessing complete: %d image(s) to process", len(input_images))
         return input_images
 
 
@@ -136,14 +152,17 @@ class OCRAbstract(ABC):
         Returns:
             An OCRResult with bounding boxes in original image coordinates.
         """
+        logger.info(f"get_text_bb called with image shape {image.shape}")
         if config_overrides:
+            logger.info(f"Applying config overrides: {list(config_overrides.keys())}")
             config = copy.deepcopy(self.config)
             config.update(config_overrides)
         else:
             config = self.config
 
         cells = self._preprocess(image=image, config=config)
-        
+
+        logger.info("Running OCR on %d cell(s)", len(cells))
         all_bboxes: list[BoundingBox] = []
         for cell in cells:
             cell_result = self._run_single(cell.image, config.model_params)
@@ -153,6 +172,9 @@ class OCRAbstract(ABC):
             all_bboxes += cell_result.bounding_boxes
 
         if config.bb_validator is not None:
+            before = len(all_bboxes)
             all_bboxes = [bb for bb in all_bboxes if config.bb_validator(bb)]
+            logger.info(f"bb_validator filtered {before} -> {len(all_bboxes)} bounding boxes")
 
+        logger.info(f"Returning {len(all_bboxes)} bounding box(es)")
         return OCRResult(bounding_boxes=all_bboxes)
