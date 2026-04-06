@@ -12,6 +12,8 @@ from utils.json_utils import load_json
 from typing import Protocol, runtime_checkable
 
 PPReturnType = InputImage | list[InputImage]
+VALID_PP_RETURN_TYPES = (InputImage, list[InputImage], PPReturnType)
+
 
 @runtime_checkable
 class PreprocessingProtocol(Protocol):
@@ -55,12 +57,36 @@ class OCRConfig:
     preprocess_methods: list[PreprocessingProtocol] = field(default_factory=list)
 
     def __post_init__(self) -> None:
+        """Validate the config immediately after construction."""
         self.validate()
 
-    def validate(self):
-        """Validate all preprocessing methods after construction."""
+    def validate(self) -> None:
+        """Run all validation checks on the current config state.
+
+        Takes a shallow snapshot of every field before running checks and
+        asserts that no field was mutated during validation.
+
+        Raises:
+            TypeError: If a preprocessing callable has an incompatible
+                signature.
+            ValueError: If ``model_name`` is empty or ``bb_validator``
+                is not callable.
+            RuntimeError: If validation itself mutated the config.
+        """
+        snapshot = {f.name: getattr(self, f.name) for f in fields(self)}
+
+        if not isinstance(self.model_name, str) or not self.model_name:
+            raise ValueError(f"model_name must be a non-empty string, got {self.model_name!r}.")
+
+        if self.bb_validator is not None and not callable(self.bb_validator):
+            raise TypeError(f"bb_validator must be callable or None, got {type(self.bb_validator)!r}.")
+
         for method in self.preprocess_methods:
             self._validate_pp_signature(method)
+
+        for f in fields(self):
+            if getattr(self, f.name) is not snapshot[f.name]:
+                raise RuntimeError(f"Config field '{f.name}' was mutated during validation.")
 
     @staticmethod
     def _resolve_pp_method(pp_method: dict) -> Callable:
@@ -69,7 +95,7 @@ class OCRConfig:
         If the name contains a dot it is treated as a fully qualified
         dotted path (e.g. ``"my_package.module.func"``).  The last
         segment is the attribute name and everything before it is the
-        module path that will be dynamically imported.  Otherwise the
+        module path that will be dynamically imported. Otherwise, the
         name is looked up in ``image_preprocessing``.
 
         Args:
@@ -85,8 +111,6 @@ class OCRConfig:
                 resolved module.
             ModuleNotFoundError: If the dotted module path cannot be
                 imported.
-                :param pp_method:
-                :return:
         """
         name = pp_method["name"]
         if "." in name:
@@ -141,7 +165,7 @@ class OCRConfig:
                 f"Preprocessing method {method!r}: missing return "
                 "annotation, expected InputImage or list[InputImage]."
             )
-        if ret not in PPReturnType:
+        if ret not in VALID_PP_RETURN_TYPES:
             raise TypeError(
                 f"Preprocessing method {method!r}: return annotation "
                 f"is {ret!r}, expected InputImage or list[InputImage]."
