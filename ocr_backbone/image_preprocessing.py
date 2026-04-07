@@ -105,3 +105,59 @@ def grid_split_image(input_image: InputImage, grid: tuple[int,int])-> list[Input
                 cells.append(crop_image(input_image, boundaries))
 
         return cells
+
+
+def contour_split_image(input_image: InputImage) -> list[InputImage]:
+    """Split an InputImage into sub-images by detecting natural contour boundaries.
+
+    Converts the image to greyscale, applies Sobel edge detection to find
+    intensity boundaries, then extracts each detected contour region as a
+    separate sub-image. Pixels outside the contour but inside its bounding
+    rectangle are zero-padded.
+
+    Args:
+        input_image: The source image to split.
+
+    Returns:
+        A list of InputImage fragments, one per detected external contour.
+        Each fragment's image is the bounding rectangle of its contour with
+        pixels outside the contour zeroed out. Offsets reflect the fragment's
+        position in the original image coordinate space.
+    """
+    image = input_image.image
+    if len(image.shape) == 3 and image.shape[2] == 3:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        gray = image.squeeze() if len(image.shape) == 3 else image
+
+    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+    magnitude = np.sqrt(sobel_x ** 2 + sobel_y ** 2)
+    magnitude = np.clip(magnitude / magnitude.max() * 255, 0, 255).astype(np.uint8) if magnitude.max() > 0 else magnitude.astype(np.uint8)
+
+    _, binary = cv2.threshold(magnitude, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    fragments = []
+    for contour in contours:
+        x, y, w, h = cv2.boundingRect(contour)
+
+        mask = np.zeros(gray.shape[:2], dtype=np.uint8)
+        cv2.drawContours(mask, [contour], -1, 255, thickness=cv2.FILLED)
+        mask_crop = mask[y:y + h, x:x + w]
+
+        if len(image.shape) == 3:
+            region = image[y:y + h, x:x + w].copy()
+            region[mask_crop == 0] = 0
+        else:
+            region = gray[y:y + h, x:x + w].copy()
+            region[mask_crop == 0] = 0
+
+        fragments.append(InputImage(
+            image=region,
+            x_offset=input_image.x_offset + x,
+            y_offset=input_image.y_offset + y,
+        ))
+
+    return fragments
