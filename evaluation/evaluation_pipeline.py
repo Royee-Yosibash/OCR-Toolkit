@@ -265,6 +265,7 @@ def evaluation_pipeline(
     ocrs: list[OCRAbstract] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
+    labels: list[str] | None = None,
 ) -> EvaluationResult:
     """Run OCR evaluation on a dataset and persist results.
 
@@ -284,15 +285,26 @@ def evaluation_pipeline(
         overwrite: If True, re-run OCR even when saved results exist.
         metrics_only: If True, skip OCR inference and recompute metrics
             from previously saved results.
+        labels: Optional list of display names for each OCR engine, one
+            per entry in ``ocrs``. When None, labels are auto-generated
+            as ``"{ClassName}_{i}"``.
 
     Returns:
         An EvaluationResult with per-image scores and aggregate stats.
+
+    Raises:
+        ValueError: If labels is provided but its length does not match ocrs.
     """
+    if labels is not None and ocrs is not None and len(labels) != len(ocrs):
+        raise ValueError(
+            f"labels length ({len(labels)}) must match ocrs length ({len(ocrs)})."
+        )
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     per_image: dict[str, dict[str, dict[int, float]]] = {}
     image_tags: dict[int, list[str]] = {}
-    labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
+    if labels is None:
+        labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
     mode = "metrics-only" if metrics_only else "full"
     logger.info(
@@ -319,4 +331,5 @@ def evaluation_pipeline(
     )
     evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
     evaluation_result.save_results_to_file(output_dir=output_dir)
+    logger.info(f"Aggregate results saved to {output_dir}")
     return evaluation_result

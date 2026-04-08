@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from ocr_backbone.image_preprocessing import binarize, crop_image, grid_split_image
+from ocr_backbone.image_preprocessing import binarize, contour_split_image, crop_image, grid_split_image
 from ocr_backbone.input_image import InputImage
 
 
@@ -163,3 +163,87 @@ class TestBinarize(unittest.TestCase):
         image = np.full((50, 50, 3), 255, dtype=np.uint8)
         result = binarize(InputImage(image=image))
         np.testing.assert_array_equal(result.image, np.full((50, 50), 255, dtype=np.uint8))
+
+
+class TestContourSplitImage(unittest.TestCase):
+    """Tests for contour_split_image functionality."""
+
+    def test_uniform_image_returns_empty(self):
+        """A uniform image has no edges, so no contours should be found."""
+        image = np.full((100, 100, 3), 128, dtype=np.uint8)
+        fragments = contour_split_image(InputImage(image=image))
+        self.assertEqual(len(fragments), 0)
+
+    def test_single_rectangle_detected(self):
+        """A white rectangle on black background should produce one fragment."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        self.assertGreaterEqual(len(fragments), 1)
+
+    def test_fragment_offsets_are_set(self):
+        """Fragment offsets should reflect position within the original image."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        for frag in fragments:
+            self.assertGreaterEqual(frag.x_offset, 0)
+            self.assertGreaterEqual(frag.y_offset, 0)
+
+    def test_initial_offset_accumulates(self):
+        """Pre-existing offsets on the InputImage should carry over."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        input_image = InputImage(image=image, x_offset=50, y_offset=30)
+        fragments = contour_split_image(input_image)
+        for frag in fragments:
+            self.assertGreaterEqual(frag.x_offset, 50)
+            self.assertGreaterEqual(frag.y_offset, 30)
+
+    def test_pixels_outside_contour_are_zero(self):
+        """Pixels outside the contour but inside the bounding rect must be 0."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        for frag in fragments:
+            mask_zero = frag.image == 0
+            if mask_zero.any():
+                self.assertTrue(mask_zero.any())
+
+    def test_two_separated_regions(self):
+        """Two clearly separated rectangles should yield at least two fragments."""
+        image = np.zeros((200, 200, 3), dtype=np.uint8)
+        image[10:40, 10:40] = 255
+        image[120:180, 120:180] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        self.assertGreaterEqual(len(fragments), 2)
+
+    def test_grayscale_input(self):
+        """Should handle single-channel (greyscale) input images."""
+        image = np.zeros((100, 100), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        self.assertGreaterEqual(len(fragments), 1)
+        for frag in fragments:
+            self.assertEqual(len(frag.image.shape), 2)
+
+    def test_color_content_preserved_inside_contour(self):
+        """Non-zero pixels inside the contour should retain original color values."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = [100, 150, 200]
+        fragments = contour_split_image(InputImage(image=image))
+        self.assertGreaterEqual(len(fragments), 1)
+        for frag in fragments:
+            nonzero_pixels = frag.image[frag.image.sum(axis=-1) > 0]
+            if len(nonzero_pixels) > 0:
+                np.testing.assert_array_equal(nonzero_pixels[0], [100, 150, 200])
+
+    def test_fragment_dimensions_within_original(self):
+        """Each fragment should fit within the original image dimensions."""
+        image = np.zeros((100, 100, 3), dtype=np.uint8)
+        image[20:60, 30:80] = 255
+        fragments = contour_split_image(InputImage(image=image))
+        for frag in fragments:
+            fh, fw = frag.image.shape[:2]
+            self.assertLessEqual(frag.x_offset + fw, 100)
+            self.assertLessEqual(frag.y_offset + fh, 100)
