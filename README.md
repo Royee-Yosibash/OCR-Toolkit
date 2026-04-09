@@ -1,60 +1,62 @@
 # OCR-Toolkit
 
-Choosing the right OCR engine and configuration for a given document type is
+Selecting the optimal OCR engine and configuration for a given input type is
 largely trial and error. Different engines, preprocessing pipelines, and
-parameter choices can produce vastly different results, and there is no
-standard way to measure that difference across a dataset.
+parameter choices can yield vastly different results, yet there is no
+standardized method for quantifying those differences across a dataset.
 
-OCR-Highlight solves this by providing a single simple framework where you can plug
-in any OCR engine, define any image preprocessing pipelines (e.g. grid splitting,
-contour-based segmentation, binarization, and more), and run a reproducible
-evaluation against ground-truth annotations. It computes standard metrics
-(CER, WER, word recall, word precision), generates comparison plots, and
-stores every result so you can iterate on configurations without losing
-previous runs.
+OCR-Toolkit addresses this by providing a unified framework for integrating
+any OCR engine, defining composable image preprocessing pipelines (e.g. grid
+splitting, contour-based segmentation, binarization), and executing
+reproducible evaluations against ground-truth annotations. It computes
+standard metrics (CER, WER, word recall, word precision), generates
+comparison plots, and persists all results to support iterative configuration
+refinement without data loss.
 
-OCR-Toolkit is equal parts a framework for standardizing OCR pipelines and a
-benchmarking tool for measuring their output. Adding a new OCR engine takes a
-single subclass with one method to implement -- the framework handles image
-preprocessing, coordinate remapping, metric computation, and result
+The toolkit serves both as a framework for standardizing OCR pipelines and
+as a benchmarking suite for measuring their output. Integrating a new OCR
+engine requires a single subclass with one method -- the framework handles
+image preprocessing, coordinate remapping, metric computation, and result
 persistence automatically. This makes it practical to onboard any OCR
 solution, whether open-source or proprietary, and immediately benchmark it
-against every other engine on the same dataset. The same applies to
-preprocessing strategies: swap a grid split for a contour-based segmentation,
-point the evaluation at a config file, and get a direct, quantitative answer
-on whether it helps.
+against all other engines on the same dataset. The same principle applies to
+preprocessing strategies: substitute a grid split for a contour-based
+segmentation, reference a configuration file, and obtain a direct,
+quantitative comparison.
 
-The goal is to replace intuition with data. Instead of guessing which engine
-works best for a document type, or whether a preprocessing step improves
-accuracy, you run the pipeline and read the numbers. Confidence intervals,
-per-tag breakdowns, and side-by-side plots make it straightforward to identify
-which combination of engine, preprocessing, and parameters performs best for
-your specific use case.
+The objective is to replace intuition with data. Rather than estimating which
+engine performs best for a given input type, or whether a preprocessing step
+improves accuracy, execute the pipeline and examine the results. Confidence
+intervals, per-tag breakdowns, and side-by-side plots provide clear evidence
+for identifying the optimal combination of engine, preprocessing, and
+parameters for a specific use case.
 
-Use it when you need to:
+### Use Cases
 
 - Compare multiple OCR engines on the same dataset under identical conditions.
-- Measure how a preprocessing step (e.g. contour splitting vs. grid splitting)
-  affects recognition accuracy.
-- Onboard a new OCR engine with minimal boilerplate and immediately benchmark
-  it against existing solutions.
-- Build and maintain ground-truth annotations with the included tagging tool.
-- Make data-driven decisions about OCR configuration instead of relying on
+- Measure the impact of a preprocessing step (e.g. contour splitting vs. grid
+  splitting) on recognition accuracy.
+- Integrate a new OCR engine with minimal boilerplate and immediately
+  benchmark it against existing solutions.
+- Create and maintain ground-truth annotations using the included tagging tool.
+- Make data-driven decisions about OCR configuration rather than relying on
   manual inspection.
 
 ## Features
 
-- **Unified OCR interface** -- plug in any OCR engine by subclassing
-  `OCRAbstract`. Ships with EasyOCR and PaddleOCR modules.
-- **Grid-based inference** -- split images into configurable grids, run OCR
-  per cell, and remap bounding boxes back to original coordinates.
+- **Unified OCR interface** -- integrate any OCR engine by subclassing
+  `OCRAbstract`. Ships with EasyOCR and PaddleOCR implementations.
+- **Robust preprocessing** -- a modular preprocessing layer that supports a
+  wide range of composable operations, both built-in (grid splitting,
+  binarization, contour-based segmentation) and user-supplied. Combine stages
+  to construct the pipeline that fits your input data.
 - **Evaluation pipeline** -- compute CER, WER, word recall, word precision,
   and word count ratio against ground-truth tags, with per-image and aggregate
   results including confidence intervals.
-- **Visualization** -- bar charts, radar plots, and range plots for comparing
-  OCR modules side by side.
+- **Visualization** -- bar charts, radar plots, and range plots for
+  side-by-side comparison of OCR modules.
 - **Tagging tool** -- browser-based UI for creating and editing ground-truth
-  bounding box annotations.
+  bounding-box annotations.
 
 ## Project Structure
 
@@ -88,8 +90,8 @@ pip install -e ".[full]"
 
 ### Run Evaluation
 
-Run all registered OCR modules against the dataset and generate metrics and
-plots:
+Execute all registered OCR modules against the dataset and generate metrics
+and plots:
 
 ```bash
 python -m scripts.run_evaluation [--config config.json] [--dataset dataset] [--output-dir scripts/results]
@@ -99,7 +101,7 @@ Results are saved to the output directory as JSON files and PNG plots.
 
 ### Draw Bounding Boxes
 
-Overlay saved OCR results on an image:
+Overlay persisted OCR results on an image:
 
 ```bash
 python -m scripts.draw_bboxes <image_path> <results_json>
@@ -119,10 +121,11 @@ OCR runs are configured via `OCRConfig`, which can be loaded from a JSON file:
 
 ```json
 {
-    "model_name": "EasyOCRModule",
+    "model_name": "MyOCRModule",
     "model_params": {"languages": ["en"]},
-    "grid_rows": 1,
-    "grid_cols": 1
+    "preprocess_methods": [
+      {"name": "contour_split_image"}
+    ]
 }
 ```
 
@@ -148,18 +151,6 @@ class MyOCRModule(OCRAbstract):
 
 The subclass is auto-registered by class name and becomes available to
 `OCRAbstract.from_config` and the evaluation pipeline.
-
-## Tests
-
-```bash
-python -m pytest tests/
-```
-
-Or via the built-in runner:
-
-```bash
-python -m tests.tests_runner
-```
 
 ## License
 
