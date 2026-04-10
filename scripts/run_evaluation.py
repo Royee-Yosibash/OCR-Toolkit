@@ -18,8 +18,8 @@ import argparse
 import logging
 from pathlib import Path
 
-from ocr_modules import import_all_modules
-from evaluation.evaluation_pipeline import evaluation_pipeline, ALL_TAGS_KEY
+from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
+from evaluation.evaluation_pipeline import ALL_TAGS_KEY, evaluation_pipeline
 from evaluation.metrics import (
     ocr_result_cer,
     ocr_result_wer,
@@ -29,7 +29,7 @@ from evaluation.metrics import (
 )
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
-from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
+from ocr_modules import import_all_modules
 from utils.datasets_handles import DATASET_DIR
 
 ALL_METRICS = [

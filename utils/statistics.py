@@ -70,5 +70,5 @@ def bootstrap_ci(values: np.ndarray, level: int) -> list[float]:
             rng.choice(values, size=len(values), replace=True).mean()
             for _ in range(BOOTSTRAP_N_RESAMPLES)
         ])
-    
+
     return [float(np.percentile(means, lo)), float(np.percentile(means, hi))]

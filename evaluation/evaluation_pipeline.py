@@ -26,12 +26,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
-from evaluation.metrics import Metric, METRICS_BOUNDED_LOOKUP
+
+from evaluation.metrics import METRICS_BOUNDED_LOOKUP, Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
-from utils.json_utils import save_json, load_json
+from utils.json_utils import load_json, save_json
 from utils.statistics import beta_ci, bootstrap_ci
 
 logger = logging.getLogger(__name__)
@@ -252,7 +253,7 @@ def run_multiple_ocrs_and_save(image: np.ndarray,
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
             logger.debug(f"Skipping {ocr_id} -- cached result exists")
             continue
-        logger.info(f"Running OCR engine ")
+        logger.info("Running OCR engine ")
         result = ocr.get_text_bb(image=image)
         save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
         logger.info(f"Saved OCR result for {ocr_id} to {save_path}")

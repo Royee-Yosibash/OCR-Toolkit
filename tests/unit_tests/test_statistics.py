@@ -3,9 +3,9 @@ import unittest
 import numpy as np
 
 from utils.statistics import (
+    BOOTSTRAP_MIN_SAMPLE_SIZE,
     beta_ci,
     bootstrap_ci,
-    BOOTSTRAP_MIN_SAMPLE_SIZE,
 )
 
 

@@ -1,14 +1,14 @@
 import unittest
 
-from ocr_backbone.bounding_box import BoundingBox
-from ocr_backbone.ocr_result import OCRResult
 from evaluation.metrics import (
     OCRResultCER,
     OCRResultWER,
     word_count_ratio,
-    word_recall,
     word_precision,
+    word_recall,
 )
+from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.ocr_result import OCRResult
 
 
 def _make_result(text: str) -> OCRResult:

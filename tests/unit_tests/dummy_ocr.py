@@ -1,8 +1,10 @@
-from ocr_backbone.ocr_abstract import OCRAbstract
+import numpy as np
+
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
-import numpy as np
+
 
 class DummyOCR(OCRAbstract):
     """Returns a single BB covering the full sub-image."""

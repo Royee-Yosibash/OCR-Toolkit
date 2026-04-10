@@ -7,8 +7,8 @@ import numpy as np
 from PIL import Image
 
 from consts import APP_ROOT, IMAGE_EXTENSIONS
-from ocr_backbone.bounding_box import BoundingBox
 from evaluation.ocr_ground_truth import OCRGroundTruth
+from ocr_backbone.bounding_box import BoundingBox
 from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"

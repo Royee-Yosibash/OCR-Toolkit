@@ -1,7 +1,7 @@
 import unittest
 
-from ocr_backbone.bounding_box import BoundingBox
 from evaluation.ocr_ground_truth import OCRGroundTruth
+from ocr_backbone.bounding_box import BoundingBox
 
 
 class TestOCRGroundTruth(unittest.TestCase):

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+
 from ocr_backbone.input_image import InputImage
 
 BINARIZE_METHODS = ("adaptive", "otsu")

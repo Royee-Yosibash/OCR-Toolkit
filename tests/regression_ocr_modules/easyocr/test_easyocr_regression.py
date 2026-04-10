@@ -25,5 +25,5 @@ class TestEasyOCRRegression(unittest.TestCase):
             expected = OCRResult.from_dict(json.load(f))
 
         confidence_tolerance = 0.5 # TODO: This high tolerance is due to different machines giving different outputs. Especially CPU vs GPU
-        self.assertTrue(result.is_close(expected, confidence_tolerance=confidence_tolerance), 
+        self.assertTrue(result.is_close(expected, confidence_tolerance=confidence_tolerance),
                         msg=f"Expected: {expected}\n Result: {result}")

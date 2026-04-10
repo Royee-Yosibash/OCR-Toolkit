@@ -5,8 +5,8 @@ import numpy as np
 
 from ocr_backbone.image_preprocessing import binarize, grid_split_image
 from ocr_backbone.input_image import InputImage
-from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
+from ocr_backbone.ocr_config import OCRConfig
 from tests.unit_tests.dummy_ocr import DummyOCR
 
 

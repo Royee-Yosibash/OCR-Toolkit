@@ -4,10 +4,10 @@ Provides text-level metrics (CER, WER) and word-level bag-of-words
 metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
-from abc import ABC, abstractmethod
-from collections.abc import Sequence
 import re
+from abc import ABC, abstractmethod
 from collections import Counter
+from collections.abc import Sequence
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult

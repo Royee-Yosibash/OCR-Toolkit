@@ -11,7 +11,6 @@ import argparse
 from pathlib import Path
 
 import cv2
-import numpy as np
 
 from ocr_backbone.ocr_result import OCRResult
 from utils.json_utils import load_json

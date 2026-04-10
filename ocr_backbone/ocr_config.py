@@ -1,15 +1,15 @@
 import importlib
 import inspect
 from collections.abc import Callable
-from dataclasses import dataclass, fields, field
+from dataclasses import dataclass, field, fields
 from functools import partial
 from pathlib import Path
+from typing import Protocol, runtime_checkable
 
 import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
 from utils.json_utils import load_json
-from typing import Protocol, runtime_checkable
 
 PPReturnType = InputImage | list[InputImage]
 VALID_PP_RETURN_TYPES = (InputImage, list[InputImage], PPReturnType)
@@ -246,7 +246,7 @@ class OCRConfig:
         Returns:
             An OCRConfig instance.
         """
-        bb_validator = raw_dict.get("bb_validator", None)
+        bb_validator = raw_dict.get("bb_validator")
         if isinstance(bb_validator, str):
             module_path, attr_name = bb_validator.rsplit(":", 1)
             module = importlib.import_module(module_path)
@@ -279,7 +279,7 @@ def load_config(path: str | Path) -> OCRConfig:
     Raises:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
-    """    
+    """
     data = load_json(path)
     return OCRConfig.from_dict(data)
-    
+

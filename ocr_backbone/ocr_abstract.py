@@ -50,7 +50,7 @@ class OCRAbstract(ABC):
         Raises:
             ValueError: If no subclass is registered for the model name.
         """
-    
+
         model_name = config.model_name if isinstance(config, OCRConfig) else config["model_name"]
         if model_name not in cls._registry:
             raise ValueError(f"Unknown model: {model_name}")
@@ -61,7 +61,7 @@ class OCRAbstract(ABC):
     def __init__(self, config: OCRConfig | dict) -> None:
         """Initialize the OCR engine.
         """
-        self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config) 
+        self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config)
 
     @abstractmethod
     def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
@@ -168,7 +168,7 @@ class OCRAbstract(ABC):
             cell_result = self._run_single(cell.image, config.model_params)
             for bb in cell_result.bounding_boxes:
                 bb._remap_bounding_box(cell.x_offset, cell.y_offset)
-            
+
             all_bboxes += cell_result.bounding_boxes
 
         if config.bb_validator is not None:

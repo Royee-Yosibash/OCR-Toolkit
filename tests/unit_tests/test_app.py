@@ -1,6 +1,5 @@
 import json
 import unittest
-from pathlib import Path
 from unittest.mock import patch
 
 from scripts.image_ocr_tagging_tool.app import create_app

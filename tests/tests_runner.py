@@ -1,5 +1,6 @@
-import unittest
 import sys
+import unittest
+
 from consts import APP_ROOT
 
 
