@@ -66,6 +66,18 @@ pip install -e .
 pip install -e ".[full]"
 ```
 
+**Development** (includes ruff, pre-commit, and pytest):
+
+```bash
+pip install -e ".[dev]"
+pre-commit install
+```
+
+All code style is enforced by [Ruff](https://docs.astral.sh/ruff/) via
+pre-commit hooks. After `pre-commit install`, every commit is automatically
+checked (lint + format). The ruff configuration lives in `pyproject.toml`
+under `[tool.ruff]`.
+
 ## Project Structure
 
 ```

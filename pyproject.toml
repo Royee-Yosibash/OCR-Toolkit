@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocr-toolset"
+dynamic = ["version"]
+description = "OCR toolset package that improves performances and allows evaluations for different use cases"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "datasets==4.5.0",
+    "flask>=3.0",
+    "matplotlib>=3.10.0",
+    "numpy==2.4.2",
+    "opencv-python-headless==4.13.0.92",
+    "pillow==12.1.0",
+    "scipy>=1.17.0",
+]
+
+[project.optional-dependencies]
+full = [
+    "easyocr==1.7.2",
+    "paddleocr>=3.4.0",
+    "paddlepaddle==3.2.0",
+]
+dev = [
+    "pre-commit",
+    "ruff>=0.15.0",
+    "pytest",
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "consts.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["ocr_backbone*", "ocr_modules*", "evaluation*", "utils*", "scripts*"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # bugbear
+    "A",   # builtins shadowing
+    "SIM", # simplify
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
