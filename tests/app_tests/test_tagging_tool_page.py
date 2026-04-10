@@ -19,10 +19,23 @@ class _TagCounter(HTMLParser):
         self.close_count = 0
         self.ids = set()
         self.tag_stack = []
-        self.void_elements = frozenset([
-            "area", "base", "br", "col", "embed", "hr", "img", "input",
-            "link", "meta", "source", "track", "wbr",
-        ])
+        self.void_elements = frozenset(
+            [
+                "area",
+                "base",
+                "br",
+                "col",
+                "embed",
+                "hr",
+                "img",
+                "input",
+                "link",
+                "meta",
+                "source",
+                "track",
+                "wbr",
+            ]
+        )
 
     def handle_starttag(self, tag, attrs):
         """Record opening tags, ids, and push non-void tags onto the stack."""
@@ -79,7 +92,8 @@ class TestTaggingToolPageLoads(unittest.TestCase):
         parser = _TagCounter()
         parser.feed(html)
         self.assertEqual(
-            len(parser.tag_stack), 0,
+            len(parser.tag_stack),
+            0,
             f"Unclosed tags remain on stack: {parser.tag_stack}",
         )
 
@@ -102,7 +116,8 @@ class TestTaggingToolUIElements(unittest.TestCase):
             element_id: The DOM id attribute value to search for.
         """
         self.assertIn(
-            f'id="{element_id}"', self.html,
+            f'id="{element_id}"',
+            self.html,
             f"Expected element with id='{element_id}' not found",
         )
 
@@ -113,7 +128,7 @@ class TestTaggingToolUIElements(unittest.TestCase):
         self._assert_id_present("imageInput")
 
     def test_image_input_allows_multiple(self):
-        self.assertIn('multiple', self.html)
+        self.assertIn("multiple", self.html)
 
     def test_filename_display(self):
         self._assert_id_present("filenameDisplay")
@@ -150,7 +165,7 @@ class TestTaggingToolUIElements(unittest.TestCase):
 
     def test_nav_starts_hidden(self):
         idx = self.html.find('id="navSection"')
-        snippet = self.html[max(0, idx - 100):idx]
+        snippet = self.html[max(0, idx - 100) : idx]
         self.assertIn("hidden", snippet)
 
 
@@ -216,7 +231,8 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
         for fn_name in self.REQUIRED_FUNCTIONS:
             with self.subTest(function=fn_name):
                 self.assertIn(
-                    f"function {fn_name}(", self.html,
+                    f"function {fn_name}(",
+                    self.html,
                     f"JS function '{fn_name}' not found in page",
                 )
 
@@ -244,6 +260,7 @@ class TestTaggingToolJavaScriptVariables(unittest.TestCase):
         for var_name in self.REQUIRED_VARIABLES:
             with self.subTest(variable=var_name):
                 self.assertIn(
-                    var_name, self.html,
+                    var_name,
+                    self.html,
                     f"JS variable '{var_name}' not found in page",
                 )

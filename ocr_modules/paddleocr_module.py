@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 try:
     from paddleocr import PaddleOCR
+
     _HAS_PADDLEOCR = True
 except ImportError:
     _HAS_PADDLEOCR = False
@@ -32,6 +33,7 @@ def _gpu_available() -> bool:
     """
     try:
         import paddle
+
         return paddle.device.cuda.device_count() > 0
     except Exception:
         return False
@@ -80,9 +82,7 @@ if _HAS_PADDLEOCR:
                 text_detection_model_name=det_model,
                 text_recognition_model_name=rec_model,
                 device=device,
-                use_doc_orientation_classify=model_params.get(
-                    "use_doc_orientation_classify", False
-                ),
+                use_doc_orientation_classify=model_params.get("use_doc_orientation_classify", False),
                 use_doc_unwarping=model_params.get("use_doc_unwarping", False),
                 use_textline_orientation=model_params.get("use_textline_orientation", False),
             )
@@ -108,15 +108,9 @@ if _HAS_PADDLEOCR:
             """
             if model_params:
                 stored = self.config.model_params
-                diff = {
-                    k: v for k, v in model_params.items()
-                    if stored.get(k) != v
-                }
+                diff = {k: v for k, v in model_params.items() if stored.get(k) != v}
                 if diff:
-                    raise ValueError(
-                        f"PaddleOCR does not support per-run parameter "
-                        f"overrides. Differing keys: {diff}"
-                    )
+                    raise ValueError(f"PaddleOCR does not support per-run parameter overrides. Differing keys: {diff}")
 
             if image.ndim == 2:
                 image = np.stack([image] * 3, axis=-1)
@@ -130,7 +124,7 @@ if _HAS_PADDLEOCR:
                 texts = res["rec_texts"]
                 scores = res["rec_scores"]
 
-                for poly, text, score in zip(polys, texts, scores):
+                for poly, text, score in zip(polys, texts, scores, strict=True):
                     xs = [int(pt[0]) for pt in poly]
                     ys = [int(pt[1]) for pt in poly]
                     bb = BoundingBox(

@@ -16,10 +16,12 @@ class DummyOCR(OCRAbstract):
 
     def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
         h, w = image.shape[:2]
-        return OCRResult(bounding_boxes=[
-            BoundingBox(
-                coordinates=((0, 0), (w, h)),
-                text="dummy",
-                confidence=1.0,
-            )
-        ])
+        return OCRResult(
+            bounding_boxes=[
+                BoundingBox(
+                    coordinates=((0, 0), (w, h)),
+                    text="dummy",
+                    confidence=1.0,
+                )
+            ]
+        )

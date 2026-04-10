@@ -18,7 +18,7 @@ class OCRGroundTruth(OCRResult):
         super().__post_init__()
         self.tags = [t.lower() for t in self.tags]
 
-    def is_close(self, other: 'OCRGroundTruth', confidence_tolerance: float = 1e-3) -> bool:
+    def is_close(self, other: "OCRGroundTruth", confidence_tolerance: float = 1e-3) -> bool:
         """Also compares tags on top of the base bounding box comparison.
 
         Args:

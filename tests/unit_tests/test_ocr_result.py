@@ -5,15 +5,16 @@ from ocr_backbone.ocr_result import OCRResult
 
 
 class TestOCRResult(unittest.TestCase):
-
     def test_default_empty(self):
         result = OCRResult()
         self.assertEqual(result.bounding_boxes, [])
 
     def test_to_dict(self):
-        result = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
+        result = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
         d = result.to_dict()
         self.assertEqual(len(d["bounding_boxes"]), 1)
         self.assertEqual(d["bounding_boxes"][0]["text"], "hi")
@@ -31,10 +32,12 @@ class TestOCRResult(unittest.TestCase):
         self.assertEqual(result.bounding_boxes[1].confidence, 0.0)
 
     def test_roundtrip(self):
-        original = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((1, 2), (10, 20)), text="x", confidence=0.75),
-            BoundingBox(coordinates=((3, 4), (30, 40)), text="y", confidence=0.5),
-        ])
+        original = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((1, 2), (10, 20)), text="x", confidence=0.75),
+                BoundingBox(coordinates=((3, 4), (30, 40)), text="y", confidence=0.5),
+            ]
+        )
         restored = OCRResult.from_dict(original.to_dict())
         self.assertEqual(original, restored)
 
@@ -60,44 +63,62 @@ class TestOCRResult(unittest.TestCase):
         self.assertEqual(result.bounding_boxes[0].text, "first")
 
     def test_is_close_exact(self):
-        a = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
-        b = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
+        a = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
+        b = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
         self.assertTrue(a.is_close(b))
 
     def test_is_close_within_tolerance(self):
-        a = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
-        b = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9005),
-        ])
+        a = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
+        b = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9005),
+            ]
+        )
         self.assertTrue(a.is_close(b))
 
     def test_is_close_exceeds_tolerance(self):
-        a = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
-        b = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.5),
-        ])
+        a = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
+        b = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.5),
+            ]
+        )
         self.assertFalse(a.is_close(b))
 
     def test_is_close_different_text(self):
-        a = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
-        b = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="bye", confidence=0.9),
-        ])
+        a = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
+        b = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="bye", confidence=0.9),
+            ]
+        )
         self.assertFalse(a.is_close(b))
 
     def test_is_close_different_count(self):
-        a = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
-        ])
+        a = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hi", confidence=0.9),
+            ]
+        )
         b = OCRResult(bounding_boxes=[])
         self.assertFalse(a.is_close(b))

@@ -23,9 +23,11 @@ def _make_result(text: str) -> OCRResult:
     """
     if not text:
         return OCRResult()
-    return OCRResult(bounding_boxes=[
-        BoundingBox(coordinates=((0, 0), (10, 10)), text=text),
-    ])
+    return OCRResult(
+        bounding_boxes=[
+            BoundingBox(coordinates=((0, 0), (10, 10)), text=text),
+        ]
+    )
 
 
 class TestOCRResultCER(unittest.TestCase):
@@ -81,31 +83,43 @@ class TestOCRResultWER(unittest.TestCase):
         self.assertFalse(self.metric.is_bounded)
 
     def test_split_bbs_equivalent(self):
-        one_bb = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (20, 10)), text="hello world"),
-        ])
-        two_bbs = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
-            BoundingBox(coordinates=((10, 0), (20, 10)), text="world"),
-        ])
+        one_bb = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (20, 10)), text="hello world"),
+            ]
+        )
+        two_bbs = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
+                BoundingBox(coordinates=((10, 0), (20, 10)), text="world"),
+            ]
+        )
         self.assertAlmostEqual(self.metric(two_bbs, one_bb), 0.0)
 
     def test_special_chars_ignored(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello\nworld"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello\nworld"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
         self.assertAlmostEqual(self.metric(pred, gt), 0.0)
 
     def test_punctuation_ignored(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello, world."),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello, world."),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
         self.assertAlmostEqual(self.metric(pred, gt), 0.0)
 
 
@@ -113,21 +127,29 @@ class TestWordCountRatio(unittest.TestCase):
     """Tests for word_count_ratio."""
 
     def test_equal_counts(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="foo bar"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="foo bar"),
+            ]
+        )
         self.assertAlmostEqual(word_count_ratio(pred, gt), 1.0)
 
     def test_over_detection(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="a b c"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="a b"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="a b c"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="a b"),
+            ]
+        )
         self.assertAlmostEqual(word_count_ratio(pred, gt), 1.5)
 
     def test_both_empty(self):
@@ -145,34 +167,46 @@ class TestWordRecall(unittest.TestCase):
         )
 
     def test_partial(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
         self.assertAlmostEqual(word_recall(pred, gt), 0.5)
 
     def test_split_bbs(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
-            BoundingBox(coordinates=((10, 0), (20, 10)), text="world"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (20, 10)), text="hello world"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
+                BoundingBox(coordinates=((10, 0), (20, 10)), text="world"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (20, 10)), text="hello world"),
+            ]
+        )
         self.assertAlmostEqual(word_recall(pred, gt), 1.0)
 
     def test_both_empty(self):
         self.assertAlmostEqual(word_recall(OCRResult(), OCRResult()), 1.0)
 
     def test_duplicate_words(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello hello"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello hello"),
+            ]
+        )
         self.assertAlmostEqual(word_recall(pred, gt), 0.5)
 
 
@@ -187,12 +221,16 @@ class TestWordPrecision(unittest.TestCase):
         )
 
     def test_extra_words(self):
-        pred = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world foo"),
-        ])
-        gt = OCRResult(bounding_boxes=[
-            BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
-        ])
+        pred = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world foo"),
+            ]
+        )
+        gt = OCRResult(
+            bounding_boxes=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
         self.assertAlmostEqual(word_precision(pred, gt), 2 / 3)
 
     def test_both_empty(self):

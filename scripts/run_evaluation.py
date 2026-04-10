@@ -54,15 +54,15 @@ def evaluate() -> None:
         description="Run OCR evaluation on the dataset.",
     )
     parser.add_argument(
-        "--config", "-c",
+        "--config",
+        "-c",
         help="Path to a JSON config file or a directory of JSON config files. "
-             "Each config specifies a module and its settings to evaluate.",
+        "Each config specifies a module and its settings to evaluate.",
     )
     parser.add_argument(
         "--dataset",
         default=DATASET_DIR,
-        help="Path to a dataset root directory containing images/ and ground_truth/ "
-             "(default: dataset).",
+        help="Path to a dataset root directory containing images/ and ground_truth/ (default: dataset).",
     )
     parser.add_argument(
         "--output-dir",
@@ -106,9 +106,9 @@ def evaluate() -> None:
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     logger.info(
-        f"Running evaluation (dataset={args.dataset}, " + \
-        "output_dir={output_dir}," + \
-        f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
+        f"Running evaluation (dataset={args.dataset}, "
+        + "output_dir={output_dir},"
+        + f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
     )
 
     evaluation_pipeline(
@@ -122,9 +122,9 @@ def evaluate() -> None:
 
     agg = load_aggregate(output_dir)[ALL_TAGS_KEY]
     logger.info("Generating plots")
-    plot_metric_comparison(agg, save_path=output_dir / 'metric_comparison.png')
-    plot_radar(agg, save_path=output_dir / 'radar.png')
-    plot_stat_range(agg, save_path=output_dir / 'stat_range.png')
+    plot_metric_comparison(agg, save_path=output_dir / "metric_comparison.png")
+    plot_radar(agg, save_path=output_dir / "radar.png")
+    plot_stat_range(agg, save_path=output_dir / "stat_range.png")
     logger.info(f"All plots saved to {output_dir}")
 
 

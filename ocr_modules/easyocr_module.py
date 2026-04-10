@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 try:
     import easyocr
+
     _HAS_EASYOCR = True
 except ImportError:
     _HAS_EASYOCR = False

@@ -24,6 +24,8 @@ class TestEasyOCRRegression(unittest.TestCase):
         with open(EXPECTED_DIR / "test_image.json") as f:
             expected = OCRResult.from_dict(json.load(f))
 
-        confidence_tolerance = 0.5 # TODO: This high tolerance is due to different machines giving different outputs. Especially CPU vs GPU
-        self.assertTrue(result.is_close(expected, confidence_tolerance=confidence_tolerance),
-                        msg=f"Expected: {expected}\n Result: {result}")
+        confidence_tolerance = 0.5  # TODO: High tolerance due to CPU/GPU machines giving different outputs. Fix.
+        self.assertTrue(
+            result.is_close(expected, confidence_tolerance=confidence_tolerance),
+            msg=f"Expected: {expected}\n Result: {result}",
+        )

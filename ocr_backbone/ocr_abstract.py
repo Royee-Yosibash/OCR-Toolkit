@@ -59,8 +59,7 @@ class OCRAbstract(ABC):
         return instance
 
     def __init__(self, config: OCRConfig | dict) -> None:
-        """Initialize the OCR engine.
-        """
+        """Initialize the OCR engine."""
         self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config)
 
     @abstractmethod
@@ -115,8 +114,10 @@ class OCRAbstract(ABC):
         for idx, method in enumerate(config.preprocess_methods):
             logger.info(
                 "Running preprocessing step %d/%d: %s (%d input image(s))",
-                idx + 1, len(config.preprocess_methods),
-                step_names[idx], len(input_images),
+                idx + 1,
+                len(config.preprocess_methods),
+                step_names[idx],
+                len(input_images),
             )
 
             outputs = []
@@ -127,12 +128,13 @@ class OCRAbstract(ABC):
             input_images = outputs
             logger.debug(
                 "Step %d/%d produced %d image(s)",
-                idx + 1, len(config.preprocess_methods), len(input_images),
+                idx + 1,
+                len(config.preprocess_methods),
+                len(input_images),
             )
 
         logger.info("Preprocessing complete: %d image(s) to process", len(input_images))
         return input_images
-
 
     def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.

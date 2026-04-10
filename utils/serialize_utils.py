@@ -1,8 +1,7 @@
 import typing
-from abc import ABC
 
 
-class SerializableClass(ABC):
+class SerializableClass:
     """Abstract base class providing recursive serialization to dict."""
 
     @classmethod

@@ -62,18 +62,15 @@ def plot_metric_comparison(
         values = np.array([aggregate[label][m][stat] for m in metrics])
         yerr = None
         if stat == "mean":
-            ci_bounds = [aggregate[label][m].get("ci", {}).get(ci_level)
-                         for m in metrics]
+            ci_bounds = [aggregate[label][m].get("ci", {}).get(ci_level) for m in metrics]
             if all(b is not None for b in ci_bounds):
                 lower = np.array([values[j] - b[0] for j, b in enumerate(ci_bounds)])
                 upper = np.array([b[1] - values[j] for j, b in enumerate(ci_bounds)])
                 yerr = np.array([lower, upper])
-        ax.bar(x + i * width, values, width, label=label, yerr=yerr,
-               capsize=3)
+        ax.bar(x + i * width, values, width, label=label, yerr=yerr, capsize=3)
 
     ax.set_xticks(x + width * (len(labels) - 1) / 2)
-    ax.set_xticklabels([_format_metric_name(m) for m in metrics], rotation=30,
-                       ha="right")
+    ax.set_xticklabels([_format_metric_name(m) for m in metrics], rotation=30, ha="right")
     ax.set_ylabel(stat.capitalize())
     ax.set_title(f"OCR Module Comparison ({stat})")
     ax.legend()
@@ -147,21 +144,24 @@ def plot_stat_range(
     labels = list(aggregate.keys())
     metrics = list(next(iter(aggregate.values())).keys())
 
-    fig, axes = plt.subplots(1, len(metrics), figsize=(4 * len(metrics), 5),
-                             sharey=False)
+    fig, axes = plt.subplots(1, len(metrics), figsize=(4 * len(metrics), 5), sharey=False)
     if len(metrics) == 1:
         axes = [axes]
 
-    for ax, metric in zip(axes, metrics):
-        means = [aggregate[l][metric]["mean"] for l in labels]
-        mins = [aggregate[l][metric]["min"] for l in labels]
-        maxs = [aggregate[l][metric]["max"] for l in labels]
+    for ax, metric in zip(axes, metrics, strict=True):
+        means = [aggregate[label][metric]["mean"] for label in labels]
+        mins = [aggregate[label][metric]["min"] for label in labels]
+        maxs = [aggregate[label][metric]["max"] for label in labels]
 
         x = np.arange(len(labels))
-        ax.errorbar(x, means,
-                    yerr=[np.array(means) - np.array(mins),
-                          np.array(maxs) - np.array(means)],
-                    fmt="o", capsize=5, capthick=2)
+        ax.errorbar(
+            x,
+            means,
+            yerr=[np.array(means) - np.array(mins), np.array(maxs) - np.array(means)],
+            fmt="o",
+            capsize=5,
+            capthick=2,
+        )
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=8)
         ax.set_title(_format_metric_name(metric), fontsize=10)
@@ -189,17 +189,13 @@ def summary_table(aggregate: dict, stat: str = "mean") -> str:
     metrics = list(next(iter(aggregate.values())).keys())
 
     col_width = max(len(_format_metric_name(m)) for m in metrics) + 2
-    label_width = max(len(l) for l in labels) + 2
+    label_width = max(len(label) for label in labels) + 2
 
-    header = " " * label_width + "".join(
-        _format_metric_name(m).rjust(col_width) for m in metrics
-    )
+    header = " " * label_width + "".join(_format_metric_name(m).rjust(col_width) for m in metrics)
     lines = [header, "-" * len(header)]
 
     for label in labels:
-        row = label.ljust(label_width) + "".join(
-            f"{aggregate[label][m][stat]:.4f}".rjust(col_width) for m in metrics
-        )
+        row = label.ljust(label_width) + "".join(f"{aggregate[label][m][stat]:.4f}".rjust(col_width) for m in metrics)
         lines.append(row)
 
     return "\n".join(lines)

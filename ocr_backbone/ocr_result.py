@@ -18,8 +18,7 @@ class OCRResult(SerializableClass):
         """Sort bounding boxes in reading order after initialization."""
         self.bounding_boxes.sort()
 
-
-    def is_close(self, other: 'OCRResult', confidence_tolerance: float = 1e-3) -> bool:
+    def is_close(self, other: "OCRResult", confidence_tolerance: float = 1e-3) -> bool:
         """Check if two OCRResults are equivalent within a confidence tolerance.
 
         Coordinates and text must match exactly. Confidence values may differ
@@ -34,7 +33,7 @@ class OCRResult(SerializableClass):
         """
         if len(self.bounding_boxes) != len(other.bounding_boxes):
             return False
-        for a, b in zip(self.bounding_boxes, other.bounding_boxes):
+        for a, b in zip(self.bounding_boxes, other.bounding_boxes, strict=True):
             if a.coordinates != b.coordinates:
                 return False
             if a.text != b.text:

@@ -142,28 +142,22 @@ class OCRConfig:
 
         if not params:
             raise TypeError(
-                f"Preprocessing method {method!r} accepts no arguments; "
-                "expected at least one (InputImage)."
+                f"Preprocessing method {method!r} accepts no arguments; expected at least one (InputImage)."
             )
 
         first_param = params[0]
         ann = first_param.annotation
         if ann is inspect.Parameter.empty:
-            raise TypeError(
-                f"Preprocessing method {method!r}: first parameter "
-                "must be annotated as InputImage."
-            )
+            raise TypeError(f"Preprocessing method {method!r}: first parameter must be annotated as InputImage.")
         if ann is not InputImage:
             raise TypeError(
-                f"Preprocessing method {method!r}: first parameter "
-                f"is annotated as {ann!r}, expected InputImage."
+                f"Preprocessing method {method!r}: first parameter is annotated as {ann!r}, expected InputImage."
             )
 
         ret = sig.return_annotation
         if ret is inspect.Signature.empty:
             raise TypeError(
-                f"Preprocessing method {method!r}: missing return "
-                "annotation, expected InputImage or list[InputImage]."
+                f"Preprocessing method {method!r}: missing return annotation, expected InputImage or list[InputImage]."
             )
         if ret not in VALID_PP_RETURN_TYPES:
             raise TypeError(
@@ -185,10 +179,7 @@ class OCRConfig:
         for key, value in overrides.items():
             if key in valid_names:
                 if key == "preprocess_methods":
-                    value = [
-                        self._resolve_pp_method(m) if isinstance(m, dict) else m
-                        for m in value
-                    ]
+                    value = [self._resolve_pp_method(m) if isinstance(m, dict) else m for m in value]
                 setattr(self, key, value)
             else:
                 self.model_params[key] = value
@@ -253,10 +244,7 @@ class OCRConfig:
             bb_validator = getattr(module, attr_name)
 
         raw_pp = raw_dict.get("preprocess_methods", [])
-        preprocess_methods = [
-            cls._resolve_pp_method(m) if isinstance(m, dict) else m
-            for m in raw_pp
-        ]
+        preprocess_methods = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
 
         return cls(
             model_name=raw_dict["model_name"],
@@ -264,7 +252,6 @@ class OCRConfig:
             bb_validator=bb_validator,
             preprocess_methods=preprocess_methods,
         )
-
 
 
 def load_config(path: str | Path) -> OCRConfig:
@@ -282,4 +269,3 @@ def load_config(path: str | Path) -> OCRConfig:
     """
     data = load_json(path)
     return OCRConfig.from_dict(data)
-

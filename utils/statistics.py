@@ -58,17 +58,15 @@ def bootstrap_ci(values: np.ndarray, level: int) -> list[float]:
 
     if len(values) < BOOTSTRAP_MIN_SAMPLE_SIZE:
         logger.info(
-            "Sample size %d is below %d -- using percentile CI "
-            "instead of bootstrap.",
+            "Sample size %d is below %d -- using percentile CI instead of bootstrap.",
             len(values),
             BOOTSTRAP_MIN_SAMPLE_SIZE,
         )
         means = values
     else:
         rng = np.random.default_rng(42)
-        means = np.array([
-            rng.choice(values, size=len(values), replace=True).mean()
-            for _ in range(BOOTSTRAP_N_RESAMPLES)
-        ])
+        means = np.array(
+            [rng.choice(values, size=len(values), replace=True).mean() for _ in range(BOOTSTRAP_N_RESAMPLES)]
+        )
 
     return [float(np.percentile(means, lo)), float(np.percentile(means, hi))]

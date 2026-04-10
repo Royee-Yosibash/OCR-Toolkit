@@ -6,7 +6,6 @@ from scripts.image_ocr_tagging_tool.app import create_app
 
 
 class TestSaveBatchEndpoint(unittest.TestCase):
-
     def setUp(self):
         self.app = create_app()
         self.app.config["TESTING"] = True

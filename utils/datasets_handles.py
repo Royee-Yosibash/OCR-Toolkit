@@ -31,10 +31,7 @@ def collect_images(path: Path) -> list[Path]:
         ValueError: If the path is a file with an unsupported extension.
     """
     if path.is_dir():
-        images = sorted(
-            p for p in path.iterdir()
-            if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS
-        )
+        images = sorted(p for p in path.iterdir() if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS)
         return images
     if path.suffix.lower() not in IMAGE_EXTENSIONS:
         raise ValueError(f"Unsupported image format: {path.suffix}")
@@ -83,12 +80,9 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
     """
     if images_dir is None:
         images_dir = IMAGES_DIR
-    matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS
-               if (images_dir / f"{stem}{ext}").exists()]
+    matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS if (images_dir / f"{stem}{ext}").exists()]
     if not matches:
-        raise FileNotFoundError(
-            f"No image found for stem '{stem}' in {images_dir}"
-        )
+        raise FileNotFoundError(f"No image found for stem '{stem}' in {images_dir}")
     return matches[0]
 
 
@@ -124,16 +118,10 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
 
         (x1, y1), (x2, y2) = bb.coordinates
         if x1 < 0 or y1 < 0 or x2 > img_w or y2 > img_h:
-            errors.append(
-                f"{prefix}: coordinates ({x1},{y1})-({x2},{y2}) "
-                f"exceed image bounds ({img_w}x{img_h})"
-            )
+            errors.append(f"{prefix}: coordinates ({x1},{y1})-({x2},{y2}) exceed image bounds ({img_w}x{img_h})")
 
     if errors:
-        raise ValueError(
-            f"Validation failed for {tags_path.name} "
-            f"({len(errors)} error(s)):\n" + "\n".join(errors)
-        )
+        raise ValueError(f"Validation failed for {tags_path.name} ({len(errors)} error(s)):\n" + "\n".join(errors))
 
 
 def validate_dataset() -> None:
@@ -157,17 +145,11 @@ def validate_dataset() -> None:
 
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
-        raise FileNotFoundError(
-            f"Missing ground_truth for {len(missing_tags)} image(s): "
-            + ", ".join(missing_tags)
-        )
+        raise FileNotFoundError(f"Missing ground_truth for {len(missing_tags)} image(s): " + ", ".join(missing_tags))
 
     missing_images = sorted(tag_stems - image_stems)
     if missing_images:
-        raise FileNotFoundError(
-            f"Missing images for {len(missing_images)} tag(s): "
-            + ", ".join(missing_images)
-        )
+        raise FileNotFoundError(f"Missing images for {len(missing_images)} tag(s): " + ", ".join(missing_images))
 
     all_errors: dict[str, list[str]] = {}
     for tags_path in sorted(TAGS_DIR.glob("*.json")):
@@ -184,10 +166,7 @@ def validate_dataset() -> None:
             lines.append(f"{stem}:")
             for err in all_errors[stem]:
                 lines.append(f"  {err}")
-        raise ValueError(
-            f"Validation errors in {len(all_errors)} file(s):\n"
-            + "\n".join(lines)
-        )
+        raise ValueError(f"Validation errors in {len(all_errors)} file(s):\n" + "\n".join(lines))
 
 
 def dataset_generator(
