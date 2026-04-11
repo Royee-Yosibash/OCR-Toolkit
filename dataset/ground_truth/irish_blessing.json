@@ -1,0 +1,77 @@
+{
+  "bounding_boxes": [
+    {
+      "coordinates": [
+        [
+          62,
+          171
+        ],
+        [
+          855,
+          229
+        ]
+      ],
+      "text": "May the saddest day of your future be no",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          59,
+          224
+        ],
+        [
+          857,
+          273
+        ]
+      ],
+      "text": "worse than the happiest day of your past.",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          47,
+          269
+        ],
+        [
+          875,
+          319
+        ]
+      ],
+      "text": "And may the most you wish for be the least",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          34,
+          318
+        ],
+        [
+          283,
+          364
+        ]
+      ],
+      "text": "that you get",
+      "confidence": 1
+    },
+    {
+      "coordinates": [
+        [
+          460,
+          362
+        ],
+        [
+          730,
+          456
+        ]
+      ],
+      "text": "Irish Blessing",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "handwriting"
+  ]
+}
