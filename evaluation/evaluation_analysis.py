@@ -141,10 +141,9 @@ def plot_radar(
     ax.set_ylim(0, 1.05)
     ax.set_title(f"OCR Radar Chart ({stat})", y=1.08)
     ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
-    fig.tight_layout()
 
     if save_path:
-        fig.savefig(save_path, dpi=150)
+        fig.savefig(save_path, dpi=150, bbox_inches="tight")
 
     return fig
 
