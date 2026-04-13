@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from evaluation.evaluation_pipeline import AGGREGATE_RESULTS_FILE
+from evaluation.metrics import metric_class_display_name
 from utils.json_utils import load_json
 
 logger = logging.getLogger(__name__)
@@ -70,7 +71,7 @@ def plot_metric_comparison(
         ax.bar(x + i * width, values, width, label=label, yerr=yerr, capsize=3)
 
     ax.set_xticks(x + width * (len(labels) - 1) / 2)
-    ax.set_xticklabels([_format_metric_name(m) for m in metrics], rotation=30, ha="right")
+    ax.set_xticklabels([metric_class_display_name(m) for m in metrics], rotation=30, ha="right")
     ax.set_ylabel(stat.capitalize())
     ax.set_title(f"OCR Module Comparison ({stat})")
     ax.legend()
@@ -116,7 +117,27 @@ def plot_radar(
         ax.fill(angles, values, alpha=0.15)
 
     ax.set_xticks(angles[:-1])
-    ax.set_xticklabels([_format_metric_name(m) for m in metrics], size=9)
+    ax.set_xticklabels([])
+
+    label_radius = 1.18
+    display_names = [metric_class_display_name(m) for m in metrics]
+    for angle, name in zip(angles[:-1], display_names):
+        angle_deg = np.degrees(angle)
+        rotation = angle_deg - 90 if angle_deg <= 180 else angle_deg + 90
+        ha = "center"
+        if not (np.isclose(angle, 0) or np.isclose(angle, np.pi)):
+            ha = "left" if 0 < angle < np.pi else "right"
+        ax.text(
+            angle,
+            label_radius,
+            name,
+            size=9,
+            ha=ha,
+            va="center",
+            rotation=rotation,
+            rotation_mode="anchor",
+        )
+
     ax.set_ylim(0, 1.05)
     ax.set_title(f"OCR Radar Chart ({stat})", y=1.08)
     ax.legend(loc="upper right", bbox_to_anchor=(1.3, 1.1))
@@ -164,7 +185,7 @@ def plot_stat_range(
         )
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=8)
-        ax.set_title(_format_metric_name(metric), fontsize=10)
+        ax.set_title(metric_class_display_name(metric), fontsize=10)
 
     fig.suptitle("Metric Ranges (min / mean / max)", fontsize=13)
     fig.tight_layout()
@@ -188,10 +209,10 @@ def summary_table(aggregate: dict, stat: str = "mean") -> str:
     labels = list(aggregate.keys())
     metrics = list(next(iter(aggregate.values())).keys())
 
-    col_width = max(len(_format_metric_name(m)) for m in metrics) + 2
+    col_width = max(len(metric_class_display_name(m)) for m in metrics) + 2
     label_width = max(len(label) for label in labels) + 2
 
-    header = " " * label_width + "".join(_format_metric_name(m).rjust(col_width) for m in metrics)
+    header = " " * label_width + "".join(metric_class_display_name(m).rjust(col_width) for m in metrics)
     lines = [header, "-" * len(header)]
 
     for label in labels:
@@ -200,16 +221,3 @@ def summary_table(aggregate: dict, stat: str = "mean") -> str:
 
     return "\n".join(lines)
 
-
-def _format_metric_name(name: str) -> str:
-    # TODO: Add to metric under __name__
-    """Convert a snake_case metric function name to a readable label.
-
-    Args:
-        name: The raw metric name (e.g. ``ocr_result_cer``).
-
-    Returns:
-        Human-readable label (e.g. ``CER``).
-    """
-    name = name.removeprefix("ocr_result_")
-    return name.upper().replace("_", " ")

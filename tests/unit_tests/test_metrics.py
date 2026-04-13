@@ -1,8 +1,8 @@
 import unittest
 
 from evaluation.metrics import (
-    OCRResultCER,
-    OCRResultWER,
+    CharacterErrorRate,
+    WordErrorRate,
     word_count_ratio,
     word_precision,
     word_recall,
@@ -31,10 +31,10 @@ def _make_result(text: str) -> OCRResult:
 
 
 class TestOCRResultCER(unittest.TestCase):
-    """Tests for OCRResultCER."""
+    """Tests for CharacterErrorRate."""
 
     def setUp(self):
-        self.metric = OCRResultCER()
+        self.metric = CharacterErrorRate()
 
     def test_identical(self):
         self.assertAlmostEqual(self.metric(_make_result("hello"), _make_result("hello")), 0.0)
@@ -59,10 +59,10 @@ class TestOCRResultCER(unittest.TestCase):
 
 
 class TestOCRResultWER(unittest.TestCase):
-    """Tests for OCRResultWER."""
+    """Tests for WordErrorRate."""
 
     def setUp(self):
-        self.metric = OCRResultWER()
+        self.metric = WordErrorRate()
 
     def test_identical(self):
         self.assertAlmostEqual(self.metric(_make_result("hello world"), _make_result("hello world")), 0.0)
