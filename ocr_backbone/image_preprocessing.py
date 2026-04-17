@@ -1,7 +1,10 @@
+from collections.abc import Callable
+
 import cv2
 import numpy as np
 
 from ocr_backbone.input_image import InputImage
+from utils.binarize import otsu_binarize
 
 BINARIZE_METHODS = ("adaptive", "otsu")
 
@@ -42,7 +45,7 @@ def binarize(input_image: InputImage, method: str = "adaptive", block_size: int 
         input_image: The source image to binarize.
         method: Thresholding method. "adaptive" for Gaussian adaptive
             thresholding, "otsu" for global Otsu's threshold.
-        block_size: Size of the pixel neighbourhood used for adaptive
+        block_size: Size of the pixel neighborhood used for adaptive
             thresholding. Must be an odd integer greater than 1.
             Ignored when method is "otsu".
         constant: Constant subtracted from the adaptive threshold mean.
@@ -109,16 +112,10 @@ def grid_split_image(input_image: InputImage, grid: tuple[int, int]) -> list[Inp
     return cells
 
 
-CONTOUR_BINARIZE_METHODS = ("otsu", "fixed", "adaptive")
-
-
 def contour_split_image(
     input_image: InputImage,
     sobel_ksize: int = 3,
-    binarize_method: str = "otsu",
-    fixed_threshold: int = 127,
-    adaptive_block_size: int = 11,
-    adaptive_constant: int = 2,
+    binarize_fn: Callable[[np.ndarray], np.ndarray] | None = None,
 ) -> list[InputImage]:
     """Split an InputImage into sub-images by detecting natural contour boundaries.
 
@@ -131,31 +128,20 @@ def contour_split_image(
         input_image: The source image to split.
         sobel_ksize: Aperture size for the Sobel operator. Must be 1, 3, 5,
             or 7.
-        binarize_method: Method used to binarize the Sobel edge magnitude map.
-            "otsu" for automatic Otsu thresholding, "fixed" for a manual
-            threshold value, "adaptive" for Gaussian adaptive thresholding.
-        fixed_threshold: Threshold value used when binarize_method is "fixed".
-            Pixels with edge magnitude above this value are set to 255.
-            Ignored for other methods.
-        adaptive_block_size: Size of the pixel neighbourhood for adaptive
-            thresholding. Must be an odd integer greater than 1. Ignored
-            when binarize_method is not "adaptive".
-        adaptive_constant: Constant subtracted from the adaptive threshold
-            mean. Ignored when binarize_method is not "adaptive".
+        binarize_fn: A callable that accepts a single-channel uint8 magnitude
+            image and returns a binary uint8 image. When None, Otsu's
+            automatic thresholding is used. Users can supply any function,
+            lambda, or functools.partial to customise binarization.
 
     Returns:
         A list of InputImage fragments, one per detected external contour.
         Each fragment's image is the bounding rectangle of its contour with
         pixels outside the contour zeroed out. Offsets reflect the fragment's
         position in the original image coordinate space.
-
-    Raises:
-        ValueError: If binarize_method is not one of the supported methods.
     """
-    if binarize_method not in CONTOUR_BINARIZE_METHODS:
-        raise ValueError(
-            f"Unknown binarize_method '{binarize_method}'. Supported: {CONTOUR_BINARIZE_METHODS}."
-        )
+
+    if binarize_fn is None:
+        binarize_fn = otsu_binarize
 
     image = input_image.image
     if len(image.shape) == 3 and image.shape[2] == 3:
@@ -172,14 +158,7 @@ def contour_split_image(
         else magnitude.astype(np.uint8)
     )
 
-    if binarize_method == "otsu":
-        _, binary = cv2.threshold(magnitude, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    elif binarize_method == "fixed":
-        _, binary = cv2.threshold(magnitude, fixed_threshold, 255, cv2.THRESH_BINARY)
-    else:
-        binary = cv2.adaptiveThreshold(
-            magnitude, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, adaptive_block_size, adaptive_constant
-        )
+    binary = binarize_fn(magnitude)
 
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
