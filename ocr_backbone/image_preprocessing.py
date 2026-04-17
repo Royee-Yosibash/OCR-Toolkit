@@ -109,7 +109,17 @@ def grid_split_image(input_image: InputImage, grid: tuple[int, int]) -> list[Inp
     return cells
 
 
-def contour_split_image(input_image: InputImage) -> list[InputImage]:
+CONTOUR_BINARIZE_METHODS = ("otsu", "fixed", "adaptive")
+
+
+def contour_split_image(
+    input_image: InputImage,
+    sobel_ksize: int = 3,
+    binarize_method: str = "otsu",
+    fixed_threshold: int = 127,
+    adaptive_block_size: int = 11,
+    adaptive_constant: int = 2,
+) -> list[InputImage]:
     """Split an InputImage into sub-images by detecting natural contour boundaries.
 
     Converts the image to greyscale, applies Sobel edge detection to find
@@ -119,21 +129,42 @@ def contour_split_image(input_image: InputImage) -> list[InputImage]:
 
     Args:
         input_image: The source image to split.
+        sobel_ksize: Aperture size for the Sobel operator. Must be 1, 3, 5,
+            or 7.
+        binarize_method: Method used to binarize the Sobel edge magnitude map.
+            "otsu" for automatic Otsu thresholding, "fixed" for a manual
+            threshold value, "adaptive" for Gaussian adaptive thresholding.
+        fixed_threshold: Threshold value used when binarize_method is "fixed".
+            Pixels with edge magnitude above this value are set to 255.
+            Ignored for other methods.
+        adaptive_block_size: Size of the pixel neighbourhood for adaptive
+            thresholding. Must be an odd integer greater than 1. Ignored
+            when binarize_method is not "adaptive".
+        adaptive_constant: Constant subtracted from the adaptive threshold
+            mean. Ignored when binarize_method is not "adaptive".
 
     Returns:
         A list of InputImage fragments, one per detected external contour.
         Each fragment's image is the bounding rectangle of its contour with
         pixels outside the contour zeroed out. Offsets reflect the fragment's
         position in the original image coordinate space.
+
+    Raises:
+        ValueError: If binarize_method is not one of the supported methods.
     """
+    if binarize_method not in CONTOUR_BINARIZE_METHODS:
+        raise ValueError(
+            f"Unknown binarize_method '{binarize_method}'. Supported: {CONTOUR_BINARIZE_METHODS}."
+        )
+
     image = input_image.image
     if len(image.shape) == 3 and image.shape[2] == 3:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     else:
         gray = image.squeeze() if len(image.shape) == 3 else image
 
-    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
-    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+    sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_ksize)
+    sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_ksize)
     magnitude = np.sqrt(sobel_x**2 + sobel_y**2)
     magnitude = (
         (np.clip(magnitude / magnitude.max() * 255, 0, 255).astype(np.uint8))
@@ -141,7 +172,14 @@ def contour_split_image(input_image: InputImage) -> list[InputImage]:
         else magnitude.astype(np.uint8)
     )
 
-    _, binary = cv2.threshold(magnitude, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    if binarize_method == "otsu":
+        _, binary = cv2.threshold(magnitude, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    elif binarize_method == "fixed":
+        _, binary = cv2.threshold(magnitude, fixed_threshold, 255, cv2.THRESH_BINARY)
+    else:
+        binary = cv2.adaptiveThreshold(
+            magnitude, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, adaptive_block_size, adaptive_constant
+        )
 
     contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
