@@ -1,5 +1,6 @@
-import unittest
 import sys
+import unittest
+
 from consts import APP_ROOT
 
 
@@ -10,10 +11,7 @@ def run_all_tests():
     """
 
     loader = unittest.TestLoader()
-    suite = loader.discover(
-        start_dir=APP_ROOT,
-        pattern="test_*.py"
-    )
+    suite = loader.discover(start_dir=APP_ROOT, pattern="test_*.py")
 
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)

@@ -11,7 +11,6 @@ import argparse
 from pathlib import Path
 
 import cv2
-import numpy as np
 
 from ocr_backbone.ocr_result import OCRResult
 from utils.json_utils import load_json
@@ -58,8 +57,14 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
         text_y = min(text_y, image.shape[0] - 1)
 
         cv2.putText(
-            image, label, (text_x, text_y),
-            FONT, FONT_SCALE, color, FONT_THICKNESS, cv2.LINE_AA,
+            image,
+            label,
+            (text_x, text_y),
+            FONT,
+            FONT_SCALE,
+            color,
+            FONT_THICKNESS,
+            cv2.LINE_AA,
         )
 
     img_path = Path(image_path)
@@ -70,9 +75,7 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
 
 def main() -> None:
     """Parse arguments and draw bounding boxes."""
-    parser = argparse.ArgumentParser(
-        description="Draw bounding boxes on an image from saved OCR results."
-    )
+    parser = argparse.ArgumentParser(description="Draw bounding boxes on an image from saved OCR results.")
     parser.add_argument("image_path", help="Path to the input image.")
     parser.add_argument("results_json", help="Path to the saved OCR results JSON.")
     args = parser.parse_args()

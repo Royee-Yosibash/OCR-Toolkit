@@ -28,22 +28,14 @@ class BoundingBox(SerializableClass):
 
     def __post_init__(self) -> None:
         """Validates that coordinates are well-formed."""
-        if len(self.coordinates) != 2 or any(
-            len(point) != 2 for point in self.coordinates
-        ):
-            raise ValueError(
-                "coordinates must contain exactly two (x, y) pairs: "
-                "(top_left, bottom_right)."
-            )
+        if len(self.coordinates) != 2 or any(len(point) != 2 for point in self.coordinates):
+            raise ValueError("coordinates must contain exactly two (x, y) pairs: (top_left, bottom_right).")
         all_values = [v for point in self.coordinates for v in point]
         if not all(isinstance(v, int) for v in all_values):
             raise ValueError("All coordinate values must be integers.")
         top_left, bottom_right = self.coordinates
         if top_left[0] > bottom_right[0] or top_left[1] > bottom_right[1]:
-            raise ValueError(
-                f"top_left {top_left} must be above and to the left of "
-                f"bottom_right {bottom_right}."
-            )
+            raise ValueError(f"top_left {top_left} must be above and to the left of bottom_right {bottom_right}.")
 
     def __lt__(self, other: object) -> bool:
         """Compare bounding boxes by top-left position (y then x).
@@ -75,9 +67,7 @@ class BoundingBox(SerializableClass):
         )
 
     @classmethod
-    def from_pixel_list(
-        cls, pixels: list[tuple[int, int]], text: str = "", confidence: float = 0.0
-        ):
+    def from_pixel_list(cls, pixels: list[tuple[int, int]], text: str = "", confidence: float = 0.0):
         """Create a BoundingBox from a list of pixel coordinates.
 
         Computes the axis-aligned bounding box that encloses all given pixels.
@@ -95,7 +85,7 @@ class BoundingBox(SerializableClass):
         """
         if not pixels:
             raise ValueError("Pixel list must not be empty.")
-        xs, ys = zip(*pixels)
+        xs, ys = zip(*pixels, strict=True)
         return cls(
             coordinates=((min(xs), min(ys)), (max(xs), max(ys))),
             text=text,
@@ -123,7 +113,5 @@ class BoundingBox(SerializableClass):
         """
         top_left, bottom_right = self.coordinates
         return [
-            (x, y)
-            for y in range(top_left[1], bottom_right[1] + 1)
-            for x in range(top_left[0], bottom_right[0] + 1)
+            (x, y) for y in range(top_left[1], bottom_right[1] + 1) for x in range(top_left[0], bottom_right[0] + 1)
         ]

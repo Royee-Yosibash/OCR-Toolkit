@@ -4,13 +4,11 @@ from utils.serialize_utils import SerializableClass
 
 
 class Inner(SerializableClass):
-
     def __init__(self, value: int):
         self.value = value
 
 
 class Outer(SerializableClass):
-
     def __init__(
         self,
         name: str,
@@ -25,7 +23,6 @@ class Outer(SerializableClass):
 
 
 class TestSerializableClass(unittest.TestCase):
-
     def test_simple_to_dict(self):
         obj = Inner(42)
         self.assertEqual(obj.to_dict(), {"value": 42})

@@ -7,3 +7,4 @@ sandbox*
 # Except these
 !.gitignore
 !.github/
+!.pre-commit-config.yaml

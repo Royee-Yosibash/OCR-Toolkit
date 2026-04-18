@@ -26,12 +26,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
-from evaluation.metrics import Metric, METRICS_BOUNDED_LOOKUP
+
+from evaluation.metrics import METRICS_BOUNDED_LOOKUP, Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 from utils.datasets_handles import dataset_generator
-from utils.json_utils import save_json, load_json
+from utils.json_utils import load_json, save_json
 from utils.statistics import beta_ci, bootstrap_ci
 
 logger = logging.getLogger(__name__)
@@ -62,7 +63,7 @@ class EvaluationResult:
     aggregate: dict[str, dict[str, dict[str, dict]]] = field(default_factory=dict, init=False)
 
     def __post_init__(self):
-        assert self.image_tags, 'image_tags must not be empty'
+        assert self.image_tags, "image_tags must not be empty"
         self._compute_aggregate()
 
     def _compute_aggregate(self, ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS):
@@ -83,21 +84,14 @@ class EvaluationResult:
         all_tags = {tag for tags in self.image_tags.values() for tag in tags}
         tag_groups = {ALL_TAGS_KEY: set(self.image_tags.keys())}
         for tag in all_tags:
-            tag_groups[tag] = {
-                img_id for img_id, tags in self.image_tags.items() if tag in tags
-            }
+            tag_groups[tag] = {img_id for img_id, tags in self.image_tags.items() if tag in tags}
         logger.info(
             f"Computing aggregate statistics for {len(tag_groups)} tag group(s): {list(tag_groups.keys())}",
         )
 
-        insufficient_tags = {
-            tag: len(ids) for tag, ids in tag_groups.items() if len(ids) < 2
-        }
+        insufficient_tags = {tag: len(ids) for tag, ids in tag_groups.items() if len(ids) < 2}
         if insufficient_tags:
-            raise ValueError(
-                f"Tags with fewer than 2 images cannot produce "
-                f"meaningful statistics: {insufficient_tags}"
-            )
+            raise ValueError(f"Tags with fewer than 2 images cannot produce meaningful statistics: {insufficient_tags}")
 
         aggregate = {}
         for tag_key, image_ids in tag_groups.items():
@@ -105,13 +99,12 @@ class EvaluationResult:
             for ocr_id, metric_dict in self.per_image.items():
                 aggregate[tag_key][ocr_id] = {}
                 for metric_name, image_scores in metric_dict.items():
-                    values = np.array([
-                        v for img_id, v in image_scores.items()
-                        if img_id in image_ids
-                    ])
+                    values = np.array([v for img_id, v in image_scores.items() if img_id in image_ids])
                     if len(values):
                         aggregate[tag_key][ocr_id][metric_name] = self._compute_stats(
-                            values, metric_name, ci_levels,
+                            values,
+                            metric_name,
+                            ci_levels,
                         )
 
         self.aggregate = aggregate
@@ -119,9 +112,9 @@ class EvaluationResult:
 
     @staticmethod
     def _compute_stats(
-            values: np.ndarray,
-            metric_name: str,
-            ci_levels: tuple[int, ...],
+        values: np.ndarray,
+        metric_name: str,
+        ci_levels: tuple[int, ...],
     ) -> dict:
         """Compute summary statistics for a set of metric values.
 
@@ -223,7 +216,8 @@ def _score_image(
         save_json(ocr_dir / METRICS_FILE, metrics_dict)
         logger.debug(
             "Image %d | %s metrics: %s",
-            image_id, label,
+            image_id,
+            label,
             {k: f"{v:.4f}" for k, v in metrics_dict.items()},
         )
 
@@ -231,11 +225,9 @@ def _score_image(
             per_image.setdefault(label, {}).setdefault(metric_name, {})[image_id] = value
 
 
-def run_multiple_ocrs_and_save(image: np.ndarray,
-                               ocrs: list[OCRAbstract],
-                               ocr_ids: list[str],
-                               save_dir: Path,
-                               overwrite=False):
+def run_multiple_ocrs_and_save(
+    image: np.ndarray, ocrs: list[OCRAbstract], ocr_ids: list[str], save_dir: Path, overwrite=False
+):
     """Run multiple OCR engines on an image and persist each result to disk.
 
     Args:
@@ -247,12 +239,12 @@ def run_multiple_ocrs_and_save(image: np.ndarray,
         overwrite: If True, re-run OCR even when a saved result already
             exists for that engine.
     """
-    for ocr, ocr_id in zip(ocrs, ocr_ids):
+    for ocr, ocr_id in zip(ocrs, ocr_ids, strict=True):
         save_path = save_dir / ocr_id
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
             logger.debug(f"Skipping {ocr_id} -- cached result exists")
             continue
-        logger.info(f"Running OCR engine ")
+        logger.info("Running OCR engine ")
         result = ocr.get_text_bb(image=image)
         save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
         logger.info(f"Saved OCR result for {ocr_id} to {save_path}")
@@ -265,6 +257,7 @@ def evaluation_pipeline(
     ocrs: list[OCRAbstract] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
+    labels: list[str] | None = None,
 ) -> EvaluationResult:
     """Run OCR evaluation on a dataset and persist results.
 
@@ -284,33 +277,41 @@ def evaluation_pipeline(
         overwrite: If True, re-run OCR even when saved results exist.
         metrics_only: If True, skip OCR inference and recompute metrics
             from previously saved results.
+        labels: Optional list of display names for each OCR engine, one
+            per entry in ``ocrs``. When None, labels are auto-generated
+            as ``"{ClassName}_{i}"``.
 
     Returns:
         An EvaluationResult with per-image scores and aggregate stats.
+
+    Raises:
+        ValueError: If labels is provided but its length does not match ocrs.
     """
+    if labels is not None and ocrs is not None and len(labels) != len(ocrs):
+        raise ValueError(f"labels length ({len(labels)}) must match ocrs length ({len(ocrs)}).")
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     per_image: dict[str, dict[str, dict[int, float]]] = {}
     image_tags: dict[int, list[str]] = {}
-    labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
+    if labels is None:
+        labels = [f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
     mode = "metrics-only" if metrics_only else "full"
     logger.info(
         "Starting evaluation pipeline (mode=%s, output_dir=%s, ocr_engines=%s)",
-        mode, output_dir, labels,
+        mode,
+        output_dir,
+        labels,
     )
 
-    for image_id, image, ground_truth in \
-        _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
-
+    for image_id, image, ground_truth in _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         image_tags[image_id] = ground_truth.tags
         logger.info(f"Processing image {image_id} (tags={ground_truth.tags})")
         if not metrics_only:
             image_dir.mkdir(parents=True, exist_ok=True)
             save_json(image_dir / GT_FILE, ground_truth.to_dict())
-            run_multiple_ocrs_and_save(image=image, ocrs=ocrs, ocr_ids=labels,
-                               save_dir=image_dir, overwrite=overwrite)
+            run_multiple_ocrs_and_save(image=image, ocrs=ocrs, ocr_ids=labels, save_dir=image_dir, overwrite=overwrite)
 
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
@@ -319,4 +320,5 @@ def evaluation_pipeline(
     )
     evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
     evaluation_result.save_results_to_file(output_dir=output_dir)
+    logger.info(f"Aggregate results saved to {output_dir}")
     return evaluation_result

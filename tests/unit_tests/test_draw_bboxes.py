@@ -1,4 +1,5 @@
 import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -12,7 +13,6 @@ class TestDrawBboxes(unittest.TestCase):
     """Tests for the draw_bboxes script."""
 
     def test_draw_bboxes_creates_output(self):
-        import tempfile
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             image = np.zeros((100, 200, 3), dtype=np.uint8)

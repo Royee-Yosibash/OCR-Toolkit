@@ -5,8 +5,8 @@ import numpy as np
 
 from ocr_backbone.image_preprocessing import binarize, grid_split_image
 from ocr_backbone.input_image import InputImage
-from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_abstract import OCRAbstract
+from ocr_backbone.ocr_config import OCRConfig
 from tests.unit_tests.dummy_ocr import DummyOCR
 
 
@@ -93,10 +93,12 @@ class TestOCR(unittest.TestCase):
 
     def test_unknown_preprocess_method_raises(self):
         with self.assertRaises(AttributeError):
-            OCRConfig.from_dict({
-                "model_name": "dummy",
-                "preprocess_methods": [{"name": "nonexistent_func"}],
-            })
+            OCRConfig.from_dict(
+                {
+                    "model_name": "dummy",
+                    "preprocess_methods": [{"name": "nonexistent_func"}],
+                }
+            )
 
 
 class TestValidatePPSignature(unittest.TestCase):
@@ -105,45 +107,53 @@ class TestValidatePPSignature(unittest.TestCase):
     def test_valid_annotated_function(self):
         def good(img: InputImage) -> InputImage:
             return img
+
         OCRConfig._validate_pp_signature(good)
 
     def test_valid_list_return(self):
         def good(img: InputImage) -> list[InputImage]:
             return [img]
+
         OCRConfig._validate_pp_signature(good)
 
     def test_valid_union_return(self):
         def good(img: InputImage) -> InputImage | list[InputImage]:
             return img
+
         OCRConfig._validate_pp_signature(good)
 
     def test_unannotated_first_param_raises(self):
         def bad(img):
             return img
+
         with self.assertRaises(TypeError):
             OCRConfig._validate_pp_signature(bad)
 
     def test_missing_return_annotation_raises(self):
         def bad(img: InputImage):
             return img
+
         with self.assertRaises(TypeError):
             OCRConfig._validate_pp_signature(bad)
 
     def test_wrong_first_param_annotation_raises(self):
         def bad(img: np.ndarray) -> InputImage:
             return InputImage(image=img)
+
         with self.assertRaises(TypeError):
             OCRConfig._validate_pp_signature(bad)
 
     def test_wrong_return_annotation_raises(self):
         def bad(img: InputImage) -> np.ndarray:
             return img.image
+
         with self.assertRaises(TypeError):
             OCRConfig._validate_pp_signature(bad)
 
     def test_no_params_raises(self):
         def bad() -> InputImage:
             return InputImage(image=np.zeros((1, 1)))
+
         with self.assertRaises(TypeError):
             OCRConfig._validate_pp_signature(bad)
 

@@ -93,16 +93,10 @@ def create_app() -> Flask:
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
-            empty_bbs = [
-                i for i, bb in enumerate(bounding_boxes)
-                if not bb.get("text", "").strip()
-            ]
+            empty_bbs = [i for i, bb in enumerate(bounding_boxes) if not bb.get("text", "").strip()]
             if empty_bbs:
                 indices = ", ".join(str(i + 1) for i in empty_bbs)
-                return jsonify({
-                    "error": f"BB(s) #{indices} have no text. "
-                             f"Fill in or delete them before saving."
-                }), 400
+                return jsonify({"error": f"BB(s) #{indices} have no text. Fill in or delete them before saving."}), 400
 
             if not output_path:
                 filename_stem = Path(filename).stem
@@ -138,17 +132,15 @@ def create_app() -> Flask:
         """
         try:
             result = subprocess.run(
-                ["zenity", "--file-selection", "--directory",
-                 "--title=Select Output Directory"],
-                capture_output=True, text=True, timeout=120,
+                ["zenity", "--file-selection", "--directory", "--title=Select Output Directory"],
+                capture_output=True,
+                text=True,
+                timeout=120,
             )
             chosen = result.stdout.strip() if result.returncode == 0 else ""
             return jsonify({"path": chosen})
         except FileNotFoundError:
-            return jsonify({
-                "error": "No directory picker available. "
-                         "Install zenity or type the path manually."
-            }), 500
+            return jsonify({"error": "No directory picker available. Install zenity or type the path manually."}), 500
 
     @app.route("/api/save_batch", methods=["POST"])
     def save_batch():
@@ -172,18 +164,17 @@ def create_app() -> Flask:
 
             for img_idx, image_entry in enumerate(images):
                 bounding_boxes = image_entry["bounding_boxes"]
-                empty_bbs = [
-                    i for i, bb in enumerate(bounding_boxes)
-                    if not bb.get("text", "").strip()
-                ]
+                empty_bbs = [i for i, bb in enumerate(bounding_boxes) if not bb.get("text", "").strip()]
                 if empty_bbs:
                     indices = ", ".join(str(i + 1) for i in empty_bbs)
                     filename = image_entry.get("filename", "untitled.png")
-                    return jsonify({
-                        "error": f"Image '{filename}' (index {img_idx}): "
-                                 f"BB(s) #{indices} have no text. "
-                                 f"Fill in or delete them before saving."
-                    }), 400
+                    return jsonify(
+                        {
+                            "error": f"Image '{filename}' (index {img_idx}): "
+                            f"BB(s) #{indices} have no text. "
+                            f"Fill in or delete them before saving."
+                        }
+                    ), 400
 
             paths = []
             for image_entry in images:

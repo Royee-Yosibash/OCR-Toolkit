@@ -4,10 +4,10 @@ Provides text-level metrics (CER, WER) and word-level bag-of-words
 metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
-from abc import ABC, abstractmethod
-from collections.abc import Sequence
 import re
+from abc import ABC, abstractmethod
 from collections import Counter
+from collections.abc import Sequence
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
@@ -16,27 +16,33 @@ _PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
 _WHITESPACE_RE = re.compile(r"\s+")
 
 METRICS_BOUNDED_LOOKUP: dict[str, bool] = {}
+METRICS_DISPLAY_NAME_LOOKUP: dict[str, str] = {}
 
 
 class Metric(ABC):
     """Base class for OCR evaluation metrics.
 
-    Subclasses must set ``is_bounded`` and implement ``__call__``.
-    Concrete subclasses are automatically registered in
-    ``METRICS_BOUNDED_LOOKUP`` via ``__init_subclass__``.
+    Subclasses must set ``is_bounded`` and ``display_name``, and implement
+    ``__call__``.  Concrete subclasses are automatically registered in
+    ``METRICS_BOUNDED_LOOKUP`` and ``METRICS_DISPLAY_NAME_LOOKUP`` via
+    ``__init_subclass__``.
 
     Attributes:
         is_bounded: True if the metric value is confined to [0, 1],
             False if it can exceed that range.
+        display_name: Human-readable label used in plots and reports.
     """
 
     is_bounded: bool
+    display_name: str
 
     def __init_subclass__(cls, **kwargs):
-        """Register concrete subclasses in METRICS_BOUNDED_LOOKUP."""
+        """Register concrete subclasses in METRICS_BOUNDED_LOOKUP and METRICS_DISPLAY_NAME_LOOKUP."""
         super().__init_subclass__(**kwargs)
         if hasattr(cls, "is_bounded"):
             METRICS_BOUNDED_LOOKUP[cls.__name__] = cls.is_bounded
+        if hasattr(cls, "display_name"):
+            METRICS_DISPLAY_NAME_LOOKUP[cls.__name__] = cls.display_name
 
     @abstractmethod
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
@@ -126,7 +132,7 @@ def _ocr_result_to_words(result: OCRResult) -> list[str]:
     return _ocr_result_to_text(result).split()
 
 
-class OCRResultCER(Metric):
+class CharacterErrorRate(Metric):
     """Compute the Character Error Rate over full concatenated text of two OCRResults.
 
     CER = levenshtein_distance(prediction, ground_truth) / len(ground_truth).
@@ -134,6 +140,7 @@ class OCRResultCER(Metric):
     """
 
     is_bounded = False
+    display_name = "Character Error Rate"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_text = _ocr_result_to_text(prediction)
@@ -143,7 +150,7 @@ class OCRResultCER(Metric):
         return _levenshtein_distance(pred_text, gt_text) / len(gt_text)
 
 
-class OCRResultWER(Metric):
+class WordErrorRate(Metric):
     """Compute the Word Error Rate over full concatenated text of two OCRResults.
 
     Splits both texts on whitespace and computes the Levenshtein distance
@@ -152,6 +159,7 @@ class OCRResultWER(Metric):
     """
 
     is_bounded = False
+    display_name = "Word Error Rate"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_words = _ocr_result_to_text(prediction).split()
@@ -170,6 +178,7 @@ class WordCountRatio(Metric):
     """
 
     is_bounded = False
+    display_name = "Word Count Ratio"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         gt_words = _ocr_result_to_words(ground_truth)
@@ -188,6 +197,7 @@ class WordRecall(Metric):
     """
 
     is_bounded = True
+    display_name = "Word Recall"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         gt_words = _ocr_result_to_words(ground_truth)
@@ -208,6 +218,7 @@ class WordPrecision(Metric):
     """
 
     is_bounded = True
+    display_name = "Word Precision"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_words = _ocr_result_to_words(prediction)
@@ -219,8 +230,23 @@ class WordPrecision(Metric):
         return matched / len(pred_words)
 
 
-ocr_result_cer = OCRResultCER()
-ocr_result_wer = OCRResultWER()
+def metric_class_display_name(name: str) -> str:
+    """Convert a metric class name to a human-readable label.
+
+    Uses the ``display_name`` registered by each Metric subclass when
+    available, otherwise falls back to title-casing the class name.
+
+    Args:
+        name: The metric class name (e.g. ``CharacterErrorRate``).
+
+    Returns:
+        Human-readable label (e.g. ``Character Error Rate``).
+    """
+    return METRICS_DISPLAY_NAME_LOOKUP.get(name, name)
+
+
+ocr_result_cer = CharacterErrorRate()
+ocr_result_wer = WordErrorRate()
 word_count_ratio = WordCountRatio()
 word_recall = WordRecall()
 word_precision = WordPrecision()

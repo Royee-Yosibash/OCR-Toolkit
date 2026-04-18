@@ -1,11 +1,10 @@
 import unittest
 
-from ocr_backbone.bounding_box import BoundingBox
 from evaluation.ocr_ground_truth import OCRGroundTruth
+from ocr_backbone.bounding_box import BoundingBox
 
 
 class TestOCRGroundTruth(unittest.TestCase):
-
     def test_default_empty(self):
         gt = OCRGroundTruth()
         self.assertEqual(gt.bounding_boxes, [])

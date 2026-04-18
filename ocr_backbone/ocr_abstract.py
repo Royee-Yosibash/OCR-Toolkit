@@ -50,7 +50,7 @@ class OCRAbstract(ABC):
         Raises:
             ValueError: If no subclass is registered for the model name.
         """
-    
+
         model_name = config.model_name if isinstance(config, OCRConfig) else config["model_name"]
         if model_name not in cls._registry:
             raise ValueError(f"Unknown model: {model_name}")
@@ -59,9 +59,8 @@ class OCRAbstract(ABC):
         return instance
 
     def __init__(self, config: OCRConfig | dict) -> None:
-        """Initialize the OCR engine.
-        """
-        self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config) 
+        """Initialize the OCR engine."""
+        self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config)
 
     @abstractmethod
     def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
@@ -115,8 +114,10 @@ class OCRAbstract(ABC):
         for idx, method in enumerate(config.preprocess_methods):
             logger.info(
                 "Running preprocessing step %d/%d: %s (%d input image(s))",
-                idx + 1, len(config.preprocess_methods),
-                step_names[idx], len(input_images),
+                idx + 1,
+                len(config.preprocess_methods),
+                step_names[idx],
+                len(input_images),
             )
 
             outputs = []
@@ -127,12 +128,13 @@ class OCRAbstract(ABC):
             input_images = outputs
             logger.debug(
                 "Step %d/%d produced %d image(s)",
-                idx + 1, len(config.preprocess_methods), len(input_images),
+                idx + 1,
+                len(config.preprocess_methods),
+                len(input_images),
             )
 
         logger.info("Preprocessing complete: %d image(s) to process", len(input_images))
         return input_images
-
 
     def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
@@ -168,7 +170,7 @@ class OCRAbstract(ABC):
             cell_result = self._run_single(cell.image, config.model_params)
             for bb in cell_result.bounding_boxes:
                 bb._remap_bounding_box(cell.x_offset, cell.y_offset)
-            
+
             all_bboxes += cell_result.bounding_boxes
 
         if config.bb_validator is not None:

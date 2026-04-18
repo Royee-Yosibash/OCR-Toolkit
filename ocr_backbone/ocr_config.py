@@ -1,15 +1,15 @@
 import importlib
 import inspect
 from collections.abc import Callable
-from dataclasses import dataclass, fields, field
+from dataclasses import dataclass, field, fields
 from functools import partial
 from pathlib import Path
+from typing import Protocol, runtime_checkable
 
 import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
 from utils.json_utils import load_json
-from typing import Protocol, runtime_checkable
 
 PPReturnType = InputImage | list[InputImage]
 VALID_PP_RETURN_TYPES = (InputImage, list[InputImage], PPReturnType)
@@ -142,28 +142,22 @@ class OCRConfig:
 
         if not params:
             raise TypeError(
-                f"Preprocessing method {method!r} accepts no arguments; "
-                "expected at least one (InputImage)."
+                f"Preprocessing method {method!r} accepts no arguments; expected at least one (InputImage)."
             )
 
         first_param = params[0]
         ann = first_param.annotation
         if ann is inspect.Parameter.empty:
-            raise TypeError(
-                f"Preprocessing method {method!r}: first parameter "
-                "must be annotated as InputImage."
-            )
+            raise TypeError(f"Preprocessing method {method!r}: first parameter must be annotated as InputImage.")
         if ann is not InputImage:
             raise TypeError(
-                f"Preprocessing method {method!r}: first parameter "
-                f"is annotated as {ann!r}, expected InputImage."
+                f"Preprocessing method {method!r}: first parameter is annotated as {ann!r}, expected InputImage."
             )
 
         ret = sig.return_annotation
         if ret is inspect.Signature.empty:
             raise TypeError(
-                f"Preprocessing method {method!r}: missing return "
-                "annotation, expected InputImage or list[InputImage]."
+                f"Preprocessing method {method!r}: missing return annotation, expected InputImage or list[InputImage]."
             )
         if ret not in VALID_PP_RETURN_TYPES:
             raise TypeError(
@@ -185,10 +179,7 @@ class OCRConfig:
         for key, value in overrides.items():
             if key in valid_names:
                 if key == "preprocess_methods":
-                    value = [
-                        self._resolve_pp_method(m) if isinstance(m, dict) else m
-                        for m in value
-                    ]
+                    value = [self._resolve_pp_method(m) if isinstance(m, dict) else m for m in value]
                 setattr(self, key, value)
             else:
                 self.model_params[key] = value
@@ -246,17 +237,14 @@ class OCRConfig:
         Returns:
             An OCRConfig instance.
         """
-        bb_validator = raw_dict.get("bb_validator", None)
+        bb_validator = raw_dict.get("bb_validator")
         if isinstance(bb_validator, str):
             module_path, attr_name = bb_validator.rsplit(":", 1)
             module = importlib.import_module(module_path)
             bb_validator = getattr(module, attr_name)
 
         raw_pp = raw_dict.get("preprocess_methods", [])
-        preprocess_methods = [
-            cls._resolve_pp_method(m) if isinstance(m, dict) else m
-            for m in raw_pp
-        ]
+        preprocess_methods = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
 
         return cls(
             model_name=raw_dict["model_name"],
@@ -264,7 +252,6 @@ class OCRConfig:
             bb_validator=bb_validator,
             preprocess_methods=preprocess_methods,
         )
-
 
 
 def load_config(path: str | Path) -> OCRConfig:
@@ -279,7 +266,6 @@ def load_config(path: str | Path) -> OCRConfig:
     Raises:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
-    """    
+    """
     data = load_json(path)
     return OCRConfig.from_dict(data)
-    

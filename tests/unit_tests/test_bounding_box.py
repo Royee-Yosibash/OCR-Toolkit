@@ -4,7 +4,6 @@ from ocr_backbone.bounding_box import BoundingBox
 
 
 class TestBoundingBox(unittest.TestCase):
-
     def test_valid_creation(self):
         bbox = BoundingBox(
             coordinates=((0, 0), (10, 10)),
