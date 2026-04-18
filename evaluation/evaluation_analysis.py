@@ -219,4 +219,3 @@ def summary_table(aggregate: dict, stat: str = "mean") -> str:
         lines.append(row)
 
     return "\n".join(lines)
-

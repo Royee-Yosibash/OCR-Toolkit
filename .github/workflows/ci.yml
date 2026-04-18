@@ -7,20 +7,24 @@ on:
     branches: [main]
 
 jobs:
-  syntax-and-formatting:
+  syntax-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/ruff-action@v3
         with:
           args: check
+
+  formatting-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: astral-sh/ruff-action@v3
         with:
           args: format --check
 
   test:
     runs-on: ubuntu-latest
-    needs: syntax-and-formatting
 
     strategy:
       matrix:
