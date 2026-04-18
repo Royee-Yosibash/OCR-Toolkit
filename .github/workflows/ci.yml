@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  syntax-and-formatting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: syntax-and-formatting
 
     strategy:
       matrix:
