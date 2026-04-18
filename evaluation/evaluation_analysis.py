@@ -121,7 +121,7 @@ def plot_radar(
 
     label_radius = 1.18
     display_names = [metric_class_display_name(m) for m in metrics]
-    for angle, name in zip(angles[:-1], display_names):
+    for angle, name in zip(angles[:-1], display_names, strict=True):
         angle_deg = np.degrees(angle)
         rotation = angle_deg - 90 if angle_deg <= 180 else angle_deg + 90
         ha = "center"
