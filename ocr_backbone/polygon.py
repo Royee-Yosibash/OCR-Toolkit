@@ -56,6 +56,17 @@ class Polygon(SerializableClass):
         oy, ox = other._top_left_vertex()[1], other._top_left_vertex()[0]
         return (sy, sx) < (oy, ox)
 
+    def remap_coordinates(self, x_offset: int, y_offset: int) -> None:
+        """Translate all vertices by the given offsets.
+
+        Args:
+            x_offset: Horizontal pixel offset to add.
+            y_offset: Vertical pixel offset to add.
+        """
+        self.coordinates = tuple(
+            (x + x_offset, y + y_offset) for x, y in self.coordinates
+        )
+
     def to_dict(self) -> dict:
         raw_dict = super().to_dict()
         raw_dict["confidence"] = round(self.confidence, 6)

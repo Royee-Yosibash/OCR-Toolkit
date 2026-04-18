@@ -36,19 +36,6 @@ class BoundingBox(Polygon):
         if top_left[0] > bottom_right[0] or top_left[1] > bottom_right[1]:
             raise ValueError(f"top_left {top_left} must be above and to the left of bottom_right {bottom_right}.")
 
-    def _remap_bounding_box(self, x_offset: int, y_offset: int):
-        """Remap a bounding box from sub-image coordinates to original image coordinates.
-
-        Args:
-            x_offset: Horizontal pixel offset of the sub-image in the original image.
-            y_offset: Vertical pixel offset of the sub-image in the original image.
-        """
-        top_left, bottom_right = self.coordinates
-        self.coordinates = (
-            (top_left[0] + x_offset, top_left[1] + y_offset),
-            (bottom_right[0] + x_offset, bottom_right[1] + y_offset),
-        )
-
     @classmethod
     def from_pixel_list(cls, pixels: list[tuple[int, int]], text: str = "", confidence: float = 0.0):
         """Create a BoundingBox from a list of pixel coordinates.
