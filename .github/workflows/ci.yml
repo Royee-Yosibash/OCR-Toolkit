@@ -23,6 +23,28 @@ jobs:
         with:
           args: format --check
 
+  version-bump-check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check version was bumped
+        run: |
+          PR_VERSION=$(python3 -c "import json; print(json.load(open('release_data.json'))['version'])")
+          MAIN_VERSION=$(git show origin/main:release_data.json | python3 -c "import json,sys; print(json.load(sys.stdin)['version'])")
+          echo "PR version: $PR_VERSION"
+          echo "Main version: $MAIN_VERSION"
+          python3 -c "
+          from packaging.version import Version
+          pr, main = Version('$PR_VERSION'), Version('$MAIN_VERSION')
+          if pr <= main:
+              raise SystemExit(f'Version must be bumped. PR={pr} <= main={main}')
+          print(f'Version bump OK: {main} -> {pr}')
+          "
+
   unit-tests-and-evaluation:
     runs-on: ubuntu-latest
     steps:
