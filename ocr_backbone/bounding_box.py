@@ -29,9 +29,8 @@ class BoundingBox(Polygon):
         """Validates that coordinates form a proper axis-aligned rectangle."""
         if len(self.coordinates) != 2 or any(len(point) != 2 for point in self.coordinates):
             raise ValueError("coordinates must contain exactly two (x, y) pairs: (top_left, bottom_right).")
-        all_values = [v for point in self.coordinates for v in point]
-        if not all(isinstance(v, int) for v in all_values):
-            raise ValueError("All coordinate values must be integers.")
+
+        self._coordinates_verification()
         top_left, bottom_right = self.coordinates
         if top_left[0] > bottom_right[0] or top_left[1] > bottom_right[1]:
             raise ValueError(f"top_left {top_left} must be above and to the left of bottom_right {bottom_right}.")

@@ -1,6 +1,6 @@
 import unittest
 
-from utils.serialize_utils import SerializableClass, TYPE_KEY
+from utils.serialize_utils import TYPE_KEY, SerializableClass
 
 
 class Inner(SerializableClass):

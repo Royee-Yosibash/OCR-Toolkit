@@ -1,54 +1,82 @@
 import typing
 
+TYPE_KEY = "_type"
+
 
 class SerializableClass:
-    """Abstract base class providing recursive serialization to dict."""
+    """Abstract base class providing recursive serialization to dict.
+
+    Subclasses are automatically registered via ``__init_subclass__`` and
+    can be looked up by their fully qualified class path. The ``to_dict``
+    method embeds a ``_type`` key so that ``from_dict`` can reconstruct
+    the correct subclass without dynamic imports.
+    """
+
+    # TODO: Make sure init=False is also supported
+
+    _registry: dict[str, type] = {}
+
+    def __init_subclass__(cls, **kwargs):
+        """Register every subclass by its class name.
+
+        Raises:
+            ValueError: If a class with the same name is already registered.
+        """
+        super().__init_subclass__(**kwargs)
+        name = cls.__name__
+        if name in cls._registry and cls._registry[name] is not cls:
+            raise ValueError(
+                f"Duplicate SerializableClass name: '{name}' is already registered to {cls._registry[name]!r}."
+            )
+        cls._registry[name] = cls
+
+    @classmethod
+    def _resolve_class(cls, type_name: str) -> type:
+        """Look up a registered subclass by its class name.
+
+        Args:
+            type_name: The class name (e.g. ``BoundingBox``).
+
+        Returns:
+            The registered class.
+
+        Raises:
+            KeyError: If no subclass with that name has been registered.
+        """
+        if type_name not in cls._registry:
+            raise KeyError(f"Unknown serializable type: '{type_name}'. Registered types: {list(cls._registry.keys())}")
+        return cls._registry[type_name]
 
     @classmethod
     def from_dict(cls, raw_dict: dict):
-        # TODO: Make sure init=False is also supported
         """Recursively create an instance from a dict.
 
-        Inspects ``cls.__init__`` type hints to discover parameters whose
-        types expose a ``from_dict`` classmethod (or generic containers
-        like ``list[T]`` / ``dict[K, T]`` where ``T`` exposes one).
-        Matching dict values are deserialized recursively before being
-        passed to the constructor.
+        If the dict contains a ``_type`` key, the corresponding registered
+        class is used for instantiation. Otherwise the calling class is used.
 
         Args:
             raw_dict: A dict as produced by ``to_dict``.
 
         Returns:
-            An instance of ``cls``.
+            An instance of the appropriate class.
         """
-        hints = typing.get_type_hints(cls.__init__)
+        target_cls = cls._resolve_class(raw_dict[TYPE_KEY]) if TYPE_KEY in raw_dict else cls
+        hints = typing.get_type_hints(target_cls.__init__)
         hints.pop("return", None)
         deserialized = {}
         for key, value in raw_dict.items():
+            if key == TYPE_KEY:
+                continue
             hint = hints.get(key)
             deserialized[key] = cls._deserialize_value(value, hint)
-        return cls(**deserialized)
-
-    @staticmethod
-    def _resolve_serializable(hint):
-        """Return the class for a type hint if it has a from_dict classmethod, or None.
-
-        Args:
-            hint: A type annotation to inspect.
-
-        Returns:
-            The class if it exposes a ``from_dict`` classmethod, else None.
-        """
-        try:
-            if isinstance(hint, type) and callable(getattr(hint, "from_dict", None)):
-                return hint
-        except TypeError:
-            pass
-        return None
+        return target_cls(**deserialized)
 
     @classmethod
     def _deserialize_value(cls, value, hint):
         """Recursively deserialize a single value using its type hint.
+
+        If the value is a dict containing a ``_type`` key, the type is
+        resolved from the registry regardless of the hint.
 
         Args:
             value: The raw value from the dict.
@@ -57,6 +85,9 @@ class SerializableClass:
         Returns:
             The deserialized value.
         """
+        if isinstance(value, dict) and TYPE_KEY in value:
+            return cls.from_dict(value)
+
         if hint is None:
             return value
 
@@ -82,17 +113,36 @@ class SerializableClass:
 
         return value
 
+    @staticmethod
+    def _resolve_serializable(hint):
+        """Return the class for a type hint if it has a from_dict classmethod, or None.
+
+        Args:
+            hint: A type annotation to inspect.
+
+        Returns:
+            The class if it exposes a ``from_dict`` classmethod, else None.
+        """
+        try:
+            if isinstance(hint, type) and callable(getattr(hint, "from_dict", None)):
+                return hint
+        except TypeError:
+            pass
+        return None
+
     def to_dict(self) -> dict:
         """Recursively convert the instance to a dict.
 
-        Builds a dict from ``self.__dict__`` and recursively converts any
-        nested value that exposes a ``to_dict`` method.  Iterables (list,
-        tuple, set) and dict values are traversed element-wise.
+        Embeds a ``_type`` key with the fully qualified class path so
+        that ``from_dict`` can reconstruct the correct type.
 
         Returns:
             A plain dict representation of the instance.
         """
-        return {key: self._serialize_value(value) for key, value in self.__dict__.items()}
+        data = {TYPE_KEY: type(self).__name__}
+        for key, value in self.__dict__.items():
+            data[key] = self._serialize_value(value)
+        return data
 
     @staticmethod
     def _serialize_value(value):

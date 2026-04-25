@@ -28,9 +28,18 @@ class Polygon(SerializableClass):
             raise ValueError("A polygon must have at least 3 vertices.")
         if any(len(point) != 2 for point in self.coordinates):
             raise ValueError("Each vertex must be an (x, y) pair.")
+
+        self._coordinates_verification()
+
+    def _coordinates_verification(self):
         all_values = [v for point in self.coordinates for v in point]
         if not all(isinstance(v, int) for v in all_values):
-            raise ValueError("All vertex coordinate values must be integers.")
+            raise ValueError("All coordinate values must be integers.")
+
+        for crds in self.coordinates:
+            if (crds[0] < 0) or (crds[1] < 0):
+                raise ValueError("All coordinates values must be positive.")
+
 
     def _top_left_vertex(self) -> tuple[int, int]:
         """Return the topmost vertex, breaking ties by leftmost.
