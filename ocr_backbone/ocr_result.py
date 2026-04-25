@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.polygon import Polygon
 from utils.serialize_utils import SerializableClass
 
 
@@ -9,14 +9,15 @@ class OCRResult(SerializableClass):
     """Output of an OCR run on a single image.
 
     Args:
-        bounding_boxes: List of detected text regions.
+        detections: List of detected text regions. Each entry is either a
+            Polygon (3+ vertices) or a BoundingBox (exactly 2 vertices).
     """
 
-    bounding_boxes: list[BoundingBox] = field(default_factory=list)
+    detections: list[Polygon] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        """Sort bounding boxes in reading order after initialization."""
-        self.bounding_boxes.sort()
+        """Sort detections in reading order after initialization."""
+        self.detections.sort()
 
     def is_close(self, other: "OCRResult", confidence_tolerance: float = 1e-3) -> bool:
         """Check if two OCRResults are equivalent within a confidence tolerance.
@@ -31,9 +32,9 @@ class OCRResult(SerializableClass):
         Returns:
             True if the results match within the tolerance.
         """
-        if len(self.bounding_boxes) != len(other.bounding_boxes):
+        if len(self.detections) != len(other.detections):
             return False
-        for a, b in zip(self.bounding_boxes, other.bounding_boxes, strict=True):
+        for a, b in zip(self.detections, other.detections, strict=True):
             if a.coordinates != b.coordinates:
                 return False
             if a.text != b.text:

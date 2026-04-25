@@ -108,17 +108,18 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
     img = Image.open(image_path)
     img_w, img_h = img.size
 
-    for i, bb_data in enumerate(data["bounding_boxes"]):
-        prefix = f"BB #{i + 1}"
+    for i, det_data in enumerate(data["detections"]):
+        prefix = f"Detection #{i + 1}"
+        # TODO: What if in the future we use polygons? add dynamic import?
         try:
-            bb = BoundingBox.from_dict(bb_data)
+            bb = BoundingBox.from_dict(det_data)
         except (ValueError, KeyError, TypeError) as e:
-            errors.append(f"{prefix}: invalid bounding box: {e}")
+            errors.append(f"{prefix}: invalid detection: {e}")
             continue
 
-        (x1, y1), (x2, y2) = bb.coordinates
-        if x1 < 0 or y1 < 0 or x2 > img_w or y2 > img_h:
-            errors.append(f"{prefix}: coordinates ({x1},{y1})-({x2},{y2}) exceed image bounds ({img_w}x{img_h})")
+        for crds in bb.coordinates:
+            if crds[0] > img_w or crds[1] > img_h:
+                errors.append(f"{prefix}: coordinates ({crds[0]},{crds[1]}) exceed image bounds ({img_w}x{img_h})")
 
     if errors:
         raise ValueError(f"Validation failed for {tags_path.name} ({len(errors)} error(s)):\n" + "\n".join(errors))

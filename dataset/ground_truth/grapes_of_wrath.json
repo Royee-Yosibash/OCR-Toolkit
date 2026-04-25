@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "printed_text",
+    "structured"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "Chapter One",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "T",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "O THE red country and part of the gray country of",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "Oklahoma, the last rains Came gently, and they did",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "not cut the scarred earth. The plows crossed and",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +91,8 @@
         ]
       ],
       "text": "recrossed the rivulet marks. The last rains lifted the corn",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +106,8 @@
         ]
       ],
       "text": "quickly and scattered weed colonies and grass along the sides",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +121,8 @@
         ]
       ],
       "text": "of the roads so that the gray country and the dark red coun-",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +136,8 @@
         ]
       ],
       "text": "try began to disappear under cover. In the last part",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +151,8 @@
         ]
       ],
       "text": "of May the sky grew and the clouds had hung in",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +166,8 @@
         ]
       ],
       "text": "high puffs for so long in the spring were dissipated. The sun",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +181,8 @@
         ]
       ],
       "text": "flared down on the growing corn day line after day until a line",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +196,8 @@
         ]
       ],
       "text": "of brown spread along the edge of each green bayonet. The",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +211,8 @@
         ]
       ],
       "text": "clouds appeared, and went away, and in a while they did not",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +226,8 @@
         ]
       ],
       "text": "try any more. The weeds grew darker green to protect them-",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +241,8 @@
         ]
       ],
       "text": "selves, and they did not spread any more. The surface of the",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +256,8 @@
         ]
       ],
       "text": "earth crusted, a thin hard crust, and as the skv became pale,",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,10 +271,9 @@
         ]
       ],
       "text": "so the earth became pale pink in the red country and white",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "printed_text", "structured"
-  ]
+  "_type": "OCRGroundTruth"
 }

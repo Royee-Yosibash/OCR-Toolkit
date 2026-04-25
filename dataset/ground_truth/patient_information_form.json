@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "printed_text",
+    "structured"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "Patient Information Form",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "Name :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "Date :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "Describe Problem :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "When did your problem start? :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +91,8 @@
         ]
       ],
       "text": "Cause of Current Problem :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +106,8 @@
         ]
       ],
       "text": "Work injury",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +121,8 @@
         ]
       ],
       "text": "Gradual onset",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +136,8 @@
         ]
       ],
       "text": "Car Accident",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +151,8 @@
         ]
       ],
       "text": "Other",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +166,8 @@
         ]
       ],
       "text": "Did this Problem require Surgery :",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +181,8 @@
         ]
       ],
       "text": "Yes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +196,8 @@
         ]
       ],
       "text": "Yes Date of Surgery",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +211,8 @@
         ]
       ],
       "text": "No",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +226,8 @@
         ]
       ],
       "text": "Past Medical History",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +241,8 @@
         ]
       ],
       "text": "Do you have a history of the following problems?",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +256,8 @@
         ]
       ],
       "text": "Breathing Problems",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,7 +271,8 @@
         ]
       ],
       "text": "Stroke",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -264,7 +286,8 @@
         ]
       ],
       "text": "Depression",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -278,7 +301,8 @@
         ]
       ],
       "text": "Pregnant",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -292,7 +316,8 @@
         ]
       ],
       "text": "Bone/joint Problems",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -306,7 +331,8 @@
         ]
       ],
       "text": "Bowel/Bladder",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -320,7 +346,8 @@
         ]
       ],
       "text": "Kidney Problems",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -334,7 +361,8 @@
         ]
       ],
       "text": "History of heavy alcohol use",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -348,7 +376,8 @@
         ]
       ],
       "text": "Heart Problems",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -362,7 +391,8 @@
         ]
       ],
       "text": "Do you have a history of the following problems?",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -376,7 +406,8 @@
         ]
       ],
       "text": "Current Wound/Skin Problems",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -390,7 +421,8 @@
         ]
       ],
       "text": "Gallbladder/Liver",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -404,7 +436,8 @@
         ]
       ],
       "text": "Electrical implants",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -418,7 +451,8 @@
         ]
       ],
       "text": "Smoking",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -432,7 +466,8 @@
         ]
       ],
       "text": "Pacemaker",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -446,7 +481,8 @@
         ]
       ],
       "text": "Tumor/Cancer",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -460,7 +496,8 @@
         ]
       ],
       "text": "Anxiety attacks",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -474,7 +511,8 @@
         ]
       ],
       "text": "Headaches",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -488,7 +526,8 @@
         ]
       ],
       "text": "Sleep Apnea",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -502,7 +541,8 @@
         ]
       ],
       "text": "Diabetes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -516,7 +556,8 @@
         ]
       ],
       "text": "No Surgeries",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -530,7 +571,8 @@
         ]
       ],
       "text": "Surgeries/Hospitalizations",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -544,7 +586,8 @@
         ]
       ],
       "text": "Year",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -558,7 +601,8 @@
         ]
       ],
       "text": "Complications",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -572,7 +616,8 @@
         ]
       ],
       "text": "No Medication",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -586,7 +631,8 @@
         ]
       ],
       "text": "Medications Please list Medications that you are taking:",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -600,7 +646,8 @@
         ]
       ],
       "text": "Medication(s)",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -614,7 +661,8 @@
         ]
       ],
       "text": "Dose",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -628,7 +676,8 @@
         ]
       ],
       "text": "Reason for Medication",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -642,7 +691,8 @@
         ]
       ],
       "text": "No Known allergies",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -656,7 +706,8 @@
         ]
       ],
       "text": "Allergies",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -670,7 +721,8 @@
         ]
       ],
       "text": "No",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -684,7 +736,8 @@
         ]
       ],
       "text": "Latex",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -698,7 +751,8 @@
         ]
       ],
       "text": "Yes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -712,7 +766,8 @@
         ]
       ],
       "text": "No",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -726,7 +781,8 @@
         ]
       ],
       "text": "Yes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -740,7 +796,8 @@
         ]
       ],
       "text": "lodine",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -754,7 +811,8 @@
         ]
       ],
       "text": "Bromine",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -768,7 +826,8 @@
         ]
       ],
       "text": "Yes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -782,7 +841,8 @@
         ]
       ],
       "text": "No",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -796,7 +856,8 @@
         ]
       ],
       "text": "Other",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -810,7 +871,8 @@
         ]
       ],
       "text": "Do you have any religious/cultural views that will affect your treatment?",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -824,7 +886,8 @@
         ]
       ],
       "text": "No",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -838,7 +901,8 @@
         ]
       ],
       "text": "Yes",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -852,7 +916,8 @@
         ]
       ],
       "text": "Additional comment(Reading or Memory Problem)",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -866,7 +931,8 @@
         ]
       ],
       "text": "Signature",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -880,10 +946,9 @@
         ]
       ],
       "text": "Date",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "printed_text", "structured"
-  ]
+  "_type": "OCRGroundTruth"
 }

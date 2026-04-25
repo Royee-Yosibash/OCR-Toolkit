@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "printed_text",
+    "incidental"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "gettyimages",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "Credit: Hulton Archive",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,10 +46,9 @@
         ]
       ],
       "text": "3163253",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "printed_text",  "incidental"
-  ]
+  "_type": "OCRGroundTruth"
 }

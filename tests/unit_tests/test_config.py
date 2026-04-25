@@ -1,4 +1,3 @@
-import json
 import sys
 import tempfile
 import textwrap
@@ -10,6 +9,7 @@ import numpy as np
 from ocr_backbone.image_preprocessing import binarize
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig, load_config
+from utils.json_utils import save_json
 
 
 class TestOCRConfig(unittest.TestCase):
@@ -26,17 +26,17 @@ class TestOCRConfig(unittest.TestCase):
 
     def test_load_config(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
-            config_file = Path(tmp_dir) / "config.json"
-            config_file.write_text(json.dumps({"model_name": "easyocr", "model_params": {"threshold": 0.5}}))
-            config = load_config(config_file)
+            config_file_path = Path(tmp_dir) / "config.json"
+            save_json(config_file_path, {"model_name": "easyocr", "model_params": {"threshold": 0.5}})
+            config = load_config(config_file_path)
             self.assertEqual(config.model_name, "easyocr")
             self.assertEqual(config.model_params["threshold"], 0.5)
 
     def test_load_config_missing_params(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
-            config_file = Path(tmp_dir) / "config.json"
-            config_file.write_text(json.dumps({"model_name": "easyocr"}))
-            config = load_config(config_file)
+            config_file_path = Path(tmp_dir) / "config.json"
+            save_json(config_file_path, {"model_name": "easyocr"})
+            config = load_config(config_file_path)
             self.assertEqual(config.model_params, {})
 
     def test_load_config_file_not_found(self):
@@ -45,10 +45,10 @@ class TestOCRConfig(unittest.TestCase):
 
     def test_load_config_missing_model_name(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
-            config_file = Path(tmp_dir) / "config.json"
-            config_file.write_text(json.dumps({"model_params": {}}))
+            config_file_path = Path(tmp_dir) / "config.json"
+            save_json(config_file_path, {"model_params": {}})
             with self.assertRaises(KeyError):
-                load_config(config_file)
+                load_config(config_file_path)
 
 
 class TestResolvePPMethod(unittest.TestCase):

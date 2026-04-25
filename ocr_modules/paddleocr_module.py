@@ -134,4 +134,4 @@ if _HAS_PADDLEOCR:
                     )
                     bboxes.append(bb)
 
-            return OCRResult(bounding_boxes=bboxes)
+            return OCRResult(detections=bboxes)

@@ -42,9 +42,8 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
     """
     image = cv2.imread(image_path)
     ocr_result = OCRResult.from_dict(load_json(Path(results_path)))
-    bboxes = ocr_result.bounding_boxes
 
-    for i, bb in enumerate(bboxes):
+    for i, bb in enumerate(ocr_result.detections):
         color = BOX_COLORS[i % len(BOX_COLORS)]
         top_left, bottom_right = bb.coordinates
         cv2.rectangle(image, top_left, bottom_right, color, BOX_THICKNESS)

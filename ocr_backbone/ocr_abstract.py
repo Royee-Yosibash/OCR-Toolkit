@@ -6,10 +6,10 @@ from functools import partial
 
 import numpy as np
 
-from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from ocr_backbone.polygon import Polygon
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class OCRAbstract(ABC):
     """Abstract base class for OCR engines.
 
     Handles splitting an image into a grid of sub-images, running OCR on each
-    cell, and remapping the resulting bounding boxes back to the original
+    cell, and remapping the resulting detections back to the original
     image coordinates.
 
     Subclasses must implement ``__init__`` to set up the underlying engine
@@ -140,7 +140,7 @@ class OCRAbstract(ABC):
         """Run OCR over a grid of sub-images and return all detected text regions.
 
         Splits the image into a grid defined by the stored config, runs
-        ``_run_single`` on each cell, and remaps the bounding boxes back to
+        ``_run_single`` on each cell, and remaps the detections back to
         the original image coordinate space.
 
         Any keys in ``config_overrides`` are merged into ``model_params``
@@ -152,7 +152,7 @@ class OCRAbstract(ABC):
                 applied only for this run.
 
         Returns:
-            An OCRResult with bounding boxes in original image coordinates.
+            An OCRResult with detections in original image coordinates.
         """
         logger.info(f"get_text_bb called with image shape {image.shape}")
         if config_overrides:
@@ -165,18 +165,18 @@ class OCRAbstract(ABC):
         cells = self._preprocess(image=image, config=config)
 
         logger.info("Running OCR on %d cell(s)", len(cells))
-        all_bboxes: list[BoundingBox] = []
+        all_detections: list[Polygon] = []
         for cell in cells:
             cell_result = self._run_single(cell.image, config.model_params)
-            for bb in cell_result.bounding_boxes:
-                bb._remap_bounding_box(cell.x_offset, cell.y_offset)
+            for detection in cell_result.detections:
+                detection.remap_coordinates(cell.x_offset, cell.y_offset)
 
-            all_bboxes += cell_result.bounding_boxes
+            all_detections += cell_result.detections
 
-        if config.bb_validator is not None:
-            before = len(all_bboxes)
-            all_bboxes = [bb for bb in all_bboxes if config.bb_validator(bb)]
-            logger.info(f"bb_validator filtered {before} -> {len(all_bboxes)} bounding boxes")
+        if config.detection_validator is not None:
+            before = len(all_detections)
+            all_detections = [det for det in all_detections if config.detection_validator(det)]
+            logger.info(f"detection_validator filtered {before} -> {len(all_detections)} detections")
 
-        logger.info(f"Returning {len(all_bboxes)} bounding box(es)")
-        return OCRResult(bounding_boxes=all_bboxes)
+        logger.info(f"Returning {len(all_detections)} detection(s)")
+        return OCRResult(detections=all_detections)

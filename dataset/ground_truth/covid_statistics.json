@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "printed_text",
+    "structured"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "COVID-19 cases, country level trends",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "Sort by percent change",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "Sort by latest value",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "Align axis scales",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "Nicaragua",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +91,8 @@
         ]
       ],
       "text": "Armenia",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +106,8 @@
         ]
       ],
       "text": "Serbia",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +121,8 @@
         ]
       ],
       "text": "Reported COVID-19 cases",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +136,8 @@
         ]
       ],
       "text": "Reported COVID-19 cases",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +151,8 @@
         ]
       ],
       "text": "Reported COVID-19 cases",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +166,8 @@
         ]
       ],
       "text": "",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +181,8 @@
         ]
       ],
       "text": "200",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +196,8 @@
         ]
       ],
       "text": "300",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +211,8 @@
         ]
       ],
       "text": "150",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +226,8 @@
         ]
       ],
       "text": "",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +241,8 @@
         ]
       ],
       "text": "200",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +256,8 @@
         ]
       ],
       "text": "100",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,7 +271,8 @@
         ]
       ],
       "text": "",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -264,7 +286,8 @@
         ]
       ],
       "text": "100",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -278,7 +301,8 @@
         ]
       ],
       "text": "",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -292,7 +316,8 @@
         ]
       ],
       "text": "1",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -306,7 +331,8 @@
         ]
       ],
       "text": "5",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -320,7 +346,8 @@
         ]
       ],
       "text": "2",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -334,7 +361,8 @@
         ]
       ],
       "text": "4 May",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -348,7 +376,8 @@
         ]
       ],
       "text": "4 May",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -362,7 +391,8 @@
         ]
       ],
       "text": "4 May",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -376,7 +406,8 @@
         ]
       ],
       "text": "1 Oct",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -390,7 +421,8 @@
         ]
       ],
       "text": "1 Oct",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -404,7 +436,8 @@
         ]
       ],
       "text": "1 Oct",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -418,7 +451,8 @@
         ]
       ],
       "text": "8 Feb",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -432,7 +466,8 @@
         ]
       ],
       "text": "8 Feb",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -446,7 +481,8 @@
         ]
       ],
       "text": "8 Feb",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -460,7 +496,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -474,7 +511,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -488,7 +526,8 @@
         ]
       ],
       "text": "2026",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -502,7 +541,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -516,7 +556,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -530,7 +571,8 @@
         ]
       ],
       "text": "2026",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -544,7 +586,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -558,7 +601,8 @@
         ]
       ],
       "text": "2025",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -572,10 +616,9 @@
         ]
       ],
       "text": "2026",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "printed_text", "structured"
-  ]
+  "_type": "OCRGroundTruth"
 }

@@ -1,4 +1,3 @@
-import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -7,6 +6,7 @@ import cv2
 import numpy as np
 
 from scripts.draw_bboxes import draw_bboxes
+from utils.json_utils import save_json
 
 
 class TestDrawBboxes(unittest.TestCase):
@@ -20,13 +20,13 @@ class TestDrawBboxes(unittest.TestCase):
             cv2.imwrite(str(image_path), image)
 
             results = {
-                "bounding_boxes": [
-                    {"coordinates": [[10, 10], [50, 30]], "text": "hello", "confidence": 0.95},
-                    {"coordinates": [[60, 50], [150, 80]], "text": "world", "confidence": 0.8},
+                "detections": [
+                    {"_type": "BoundingBox", "coordinates": [[10, 10], [50, 30]], "text": "hello", "confidence": 0.95},
+                    {"_type": "BoundingBox", "coordinates": [[60, 50], [150, 80]], "text": "world", "confidence": 0.8},
                 ]
             }
             results_path = tmp_path / "results.json"
-            results_path.write_text(json.dumps(results))
+            save_json(results_path, results)
 
             output = draw_bboxes(str(image_path), str(results_path))
             output_path = Path(output)

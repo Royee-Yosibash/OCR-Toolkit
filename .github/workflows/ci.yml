@@ -23,20 +23,48 @@ jobs:
         with:
           args: format --check
 
-  test:
+  version-bump-check:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    strategy:
-      matrix:
-        python-version: ["3.12"]
+      - name: Check version and date were bumped
+        run: |
+          PR_VERSION=$(python3 -c "import json; print(json.load(open('release_data.json'))['version'])")
+          PR_DATE=$(python3 -c "import json; print(json.load(open('release_data.json'))['release_date'])")
+          MAIN_VERSION=$(git show origin/main:release_data.json | python3 -c "import json,sys; print(json.load(sys.stdin)['version'])")
+          MAIN_DATE=$(git show origin/main:release_data.json | python3 -c "import json,sys; print(json.load(sys.stdin)['release_date'])")
+          echo "PR version: $PR_VERSION (date: $PR_DATE)"
+          echo "Main version: $MAIN_VERSION (date: $MAIN_DATE)"
+          python3 -c "
+          from datetime import datetime
+          from packaging.version import Version
 
+          pr_ver, main_ver = Version('$PR_VERSION'), Version('$MAIN_VERSION')
+          if pr_ver <= main_ver:
+              raise SystemExit(f'Version must be bumped. PR={pr_ver} <= main={main_ver}')
+
+          pr_date = datetime.strptime('$PR_DATE', '%Y-%m-%d')
+          main_date = datetime.strptime('$MAIN_DATE', '%Y-%m-%d')
+          if pr_date <= main_date:
+              raise SystemExit(f'Release date must be bumped. PR=$PR_DATE <= main=$MAIN_DATE')
+
+          print(f'Version bump OK: {main_ver} -> {pr_ver}')
+          print(f'Date bump OK: $MAIN_DATE -> $PR_DATE')
+          "
+
+  unit-tests-and-evaluation:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.12"
 
       - name: Install package
         run: pip install -e ".[full]"

@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "natural_scene_text",
+    "incidental"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "STAND",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "FERGUSON",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "ALEX",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "SIR",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "STRETFORD END",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +91,8 @@
         ]
       ],
       "text": "MADE POSSIBLE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +106,8 @@
         ]
       ],
       "text": "SIR EALX 26 YEARS",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +121,8 @@
         ]
       ],
       "text": "ONE LOVE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +136,8 @@
         ]
       ],
       "text": "STRETFORD END",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +151,8 @@
         ]
       ],
       "text": "MUFC",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +166,8 @@
         ]
       ],
       "text": "CHES",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +181,8 @@
         ]
       ],
       "text": "S",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +196,8 @@
         ]
       ],
       "text": "T",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +211,8 @@
         ]
       ],
       "text": "R",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +226,8 @@
         ]
       ],
       "text": "ET",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +241,8 @@
         ]
       ],
       "text": "FORD",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +256,8 @@
         ]
       ],
       "text": "MAN",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,7 +271,8 @@
         ]
       ],
       "text": "UNITE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -264,7 +286,8 @@
         ]
       ],
       "text": "END",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -278,7 +301,8 @@
         ]
       ],
       "text": "FA CUP",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -292,10 +316,9 @@
         ]
       ],
       "text": "7",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "natural_scene_text", "incidental"
-  ]
+  "_type": "OCRGroundTruth"
 }

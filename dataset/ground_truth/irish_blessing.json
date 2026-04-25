@@ -1,5 +1,8 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "handwriting"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +15,8 @@
         ]
       ],
       "text": "May the saddest day of your future be no",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +30,8 @@
         ]
       ],
       "text": "worse than the happiest day of your past.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +45,8 @@
         ]
       ],
       "text": "And may the most you wish for be the least",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +60,8 @@
         ]
       ],
       "text": "that you get",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,10 +75,9 @@
         ]
       ],
       "text": "Irish Blessing",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "handwriting"
-  ]
+  "_type": "OCRGroundTruth"
 }

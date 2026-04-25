@@ -55,4 +55,4 @@ if _HAS_EASYOCR:
                     confidence=score,
                 )
                 bboxes.append(bb)
-            return OCRResult(bounding_boxes=bboxes)
+            return OCRResult(detections=bboxes)

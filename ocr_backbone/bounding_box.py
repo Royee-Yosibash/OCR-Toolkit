@@ -1,11 +1,14 @@
 from dataclasses import dataclass
 
-from utils.serialize_utils import SerializableClass
+from ocr_backbone.polygon import Polygon
 
 
 @dataclass
-class BoundingBox(SerializableClass):
-    """Represents a detected text region from an OCR engine.
+class BoundingBox(Polygon):
+    """Represents a detected text region as an axis-aligned rectangle.
+
+    A specialization of Polygon constrained to exactly two (x, y) pairs
+    representing the top-left and bottom-right corners.
 
     Args:
         coordinates: A tuple of two (x, y) integer pairs: (top_left,
@@ -13,8 +16,6 @@ class BoundingBox(SerializableClass):
             bottom_right is the lower-right corner. Values represent pixel
             positions and must be integers. top_left values must be less
             than or equal to the corresponding bottom_right values.
-        text: The recognized text within the bounding box.
-        confidence: Confidence score of the detection, in range [0, 1].
 
     Raises:
         ValueError: If coordinates does not contain exactly two points, if
@@ -23,48 +24,16 @@ class BoundingBox(SerializableClass):
     """
 
     coordinates: tuple[tuple[int, int], tuple[int, int]]
-    text: str
-    confidence: float = 0.0
 
     def __post_init__(self) -> None:
-        """Validates that coordinates are well-formed."""
+        """Validates that coordinates form a proper axis-aligned rectangle."""
         if len(self.coordinates) != 2 or any(len(point) != 2 for point in self.coordinates):
             raise ValueError("coordinates must contain exactly two (x, y) pairs: (top_left, bottom_right).")
-        all_values = [v for point in self.coordinates for v in point]
-        if not all(isinstance(v, int) for v in all_values):
-            raise ValueError("All coordinate values must be integers.")
+
+        self._coordinates_verification()
         top_left, bottom_right = self.coordinates
         if top_left[0] > bottom_right[0] or top_left[1] > bottom_right[1]:
             raise ValueError(f"top_left {top_left} must be above and to the left of bottom_right {bottom_right}.")
-
-    def __lt__(self, other: object) -> bool:
-        """Compare bounding boxes by top-left position (y then x).
-
-        Args:
-            other: Another BoundingBox to compare against.
-
-        Returns:
-            True if this bounding box comes before ``other`` in
-            top-to-bottom, left-to-right reading order.
-        """
-        if not isinstance(other, BoundingBox):
-            return NotImplemented
-        self_tl = self.coordinates[0]
-        other_tl = other.coordinates[0]
-        return (self_tl[1], self_tl[0]) < (other_tl[1], other_tl[0])
-
-    def _remap_bounding_box(self, x_offset: int, y_offset: int):
-        """Remap a bounding box from sub-image coordinates to original image coordinates.
-
-        Args:
-            x_offset: Horizontal pixel offset of the sub-image in the original image.
-            y_offset: Vertical pixel offset of the sub-image in the original image.
-        """
-        top_left, bottom_right = self.coordinates
-        self.coordinates = (
-            (top_left[0] + x_offset, top_left[1] + y_offset),
-            (bottom_right[0] + x_offset, bottom_right[1] + y_offset),
-        )
 
     @classmethod
     def from_pixel_list(cls, pixels: list[tuple[int, int]], text: str = "", confidence: float = 0.0):
@@ -91,18 +60,6 @@ class BoundingBox(SerializableClass):
             text=text,
             confidence=confidence,
         )
-
-    def to_dict(self) -> dict:
-        """Convert the bounding box to a JSON-serializable dict.
-
-        Returns:
-            A dict with coordinates, text, and confidence fields.
-        """
-        return {
-            "coordinates": self.coordinates,
-            "text": self.text,
-            "confidence": round(self.confidence, 6),
-        }
 
     def to_pixel_list(self) -> list[tuple[int, int]]:
         """Return all pixel coordinates contained in the bounding box.
