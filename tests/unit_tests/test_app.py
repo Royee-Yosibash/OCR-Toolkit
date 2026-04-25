@@ -31,12 +31,12 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         payload = {
             "images": [
                 {
-                    "bounding_boxes": [self._make_bb("a")],
+                    "detections": [self._make_bb("a")],
                     "tags": ["printed"],
                     "filename": "img1.png",
                 },
                 {
-                    "bounding_boxes": [self._make_bb("b")],
+                    "detections": [self._make_bb("b")],
                     "tags": [],
                     "filename": "img2.png",
                 },
@@ -57,11 +57,11 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         payload = {
             "images": [
                 {
-                    "bounding_boxes": [self._make_bb("ok")],
+                    "detections": [self._make_bb("ok")],
                     "filename": "good.png",
                 },
                 {
-                    "bounding_boxes": [self._make_bb("")],
+                    "detections": [self._make_bb("")],
                     "filename": "bad.png",
                 },
             ],
@@ -91,7 +91,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         payload = {
             "images": [
                 {
-                    "bounding_boxes": [self._make_bb("x")],
+                    "detections": [self._make_bb("x")],
                     "filename": "pic.png",
                 },
             ],

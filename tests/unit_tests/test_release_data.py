@@ -1,12 +1,13 @@
 import json
 import re
 import unittest
-from pathlib import Path
+from datetime import datetime
 
 from consts import APP_ROOT
 
 RELEASE_DATA_PATH = APP_ROOT / "release_data.json"
 SEMVER_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:(?:rc|alpha|beta)\d+)?$")
+ISO_DATE_FORMAT = "%Y-%m-%d"
 
 
 class TestReleaseData(unittest.TestCase):
@@ -32,3 +33,11 @@ class TestReleaseData(unittest.TestCase):
         for part in parts:
             value = int(part)
             self.assertGreaterEqual(value, 0, f"Negative version segment: {value}")
+
+    def test_release_date_is_valid_iso8601(self):
+        """Verifies that the release_date is a valid ISO 8601 date (YYYY-MM-DD)."""
+        date_str = self.data["release_date"]
+        try:
+            datetime.strptime(date_str, ISO_DATE_FORMAT)
+        except ValueError:
+            self.fail(f"Invalid ISO 8601 date format: {date_str}. Expected YYYY-MM-DD.")

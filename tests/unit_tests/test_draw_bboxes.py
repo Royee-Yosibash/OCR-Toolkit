@@ -20,7 +20,7 @@ class TestDrawBboxes(unittest.TestCase):
             cv2.imwrite(str(image_path), image)
 
             results = {
-                "bounding_boxes": [
+                "detections": [
                     {"coordinates": [[10, 10], [50, 30]], "text": "hello", "confidence": 0.95},
                     {"coordinates": [[60, 50], [150, 80]], "text": "world", "confidence": 0.8},
                 ]
