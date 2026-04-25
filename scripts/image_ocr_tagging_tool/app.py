@@ -77,7 +77,7 @@ def create_app() -> Flask:
         """Save tagged bounding boxes to a JSON file.
 
         Expects a JSON body with:
-            bounding_boxes: List of bounding box dicts.
+            detections: List of detection dicts.
             tags: Optional list of tag strings.
             filename: Original image filename (used to derive output name).
             output_path: Optional path to save the JSON file. Defaults to
@@ -88,15 +88,17 @@ def create_app() -> Flask:
         """
         try:
             data = request.get_json()
-            bounding_boxes = data["bounding_boxes"]
+            bounding_boxes = data["detections"]
             tags = data.get("tags", [])
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
-            empty_bbs = [i for i, bb in enumerate(bounding_boxes) if not bb.get("text", "").strip()]
-            if empty_bbs:
-                indices = ", ".join(str(i + 1) for i in empty_bbs)
-                return jsonify({"error": f"BB(s) #{indices} have no text. Fill in or delete them before saving."}), 400
+            empty_indices = [i for i, det in enumerate(bounding_boxes) if not det.get("text", "").strip()]
+            if empty_indices:
+                indices = ", ".join(str(i + 1) for i in empty_indices)
+                return jsonify(
+                    {"error": f"Detection(s) #{indices} have no text. Fill in or delete them before saving."}
+                ), 400
 
             if not output_path:
                 filename_stem = Path(filename).stem
@@ -110,7 +112,7 @@ def create_app() -> Flask:
                     save_path = save_path / f"{filename_stem}.json"
                 save_path.parent.mkdir(parents=True, exist_ok=True)
 
-            result = OCRGroundTruth.from_dict({"bounding_boxes": bounding_boxes, "tags": tags})
+            result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
             save_json(save_path, result.to_dict())
 
             return jsonify({"status": "ok", "path": str(save_path)})
@@ -148,7 +150,7 @@ def create_app() -> Flask:
 
         Expects a JSON body with:
             images: List of dicts, each containing:
-                bounding_boxes: List of bounding box dicts.
+                detections: List of detection dicts.
                 tags: Optional list of tag strings.
                 filename: Original image filename (used to derive output name).
             output_path: Optional global path to save the JSON files.
@@ -163,10 +165,10 @@ def create_app() -> Flask:
             output_path = data.get("output_path", "")
 
             for img_idx, image_entry in enumerate(images):
-                bounding_boxes = image_entry["bounding_boxes"]
-                empty_bbs = [i for i, bb in enumerate(bounding_boxes) if not bb.get("text", "").strip()]
-                if empty_bbs:
-                    indices = ", ".join(str(i + 1) for i in empty_bbs)
+                detections = image_entry["detections"]
+                empty_indices = [i for i, det in enumerate(detections) if not det.get("text", "").strip()]
+                if empty_indices:
+                    indices = ", ".join(str(i + 1) for i in empty_indices)
                     filename = image_entry.get("filename", "untitled.png")
                     return jsonify(
                         {
@@ -178,7 +180,7 @@ def create_app() -> Flask:
 
             paths = []
             for image_entry in images:
-                bounding_boxes = image_entry["bounding_boxes"]
+                bounding_boxes = image_entry["detections"]
                 tags = image_entry.get("tags", [])
                 filename = image_entry.get("filename", "untitled.png")
 
@@ -194,7 +196,7 @@ def create_app() -> Flask:
                         save_path = save_path / f"{filename_stem}.json"
                     save_path.parent.mkdir(parents=True, exist_ok=True)
 
-                result = OCRGroundTruth.from_dict({"bounding_boxes": bounding_boxes, "tags": tags})
+                result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
                 save_json(save_path, result.to_dict())
                 paths.append(str(save_path))
 

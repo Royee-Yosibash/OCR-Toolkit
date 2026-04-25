@@ -1,5 +1,8 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "handwriting"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +15,8 @@
         ]
       ],
       "text": "PEACE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +30,8 @@
         ]
       ],
       "text": "IS",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +45,8 @@
         ]
       ],
       "text": "WAR",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +60,8 @@
         ]
       ],
       "text": "SLAVERY",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +75,8 @@
         ]
       ],
       "text": "IS",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +90,8 @@
         ]
       ],
       "text": "FREEDOM",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +105,8 @@
         ]
       ],
       "text": "STRENGTH.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +120,8 @@
         ]
       ],
       "text": "IGNORANCE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,10 +135,9 @@
         ]
       ],
       "text": "IS",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "handwriting"
-  ]
+  "_type": "OCRGroundTruth"
 }

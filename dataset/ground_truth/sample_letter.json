@@ -1,5 +1,8 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "handwriting"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +15,8 @@
         ]
       ],
       "text": "Hi, I hope this note finds you in good",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +30,8 @@
         ]
       ],
       "text": "spirits",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +45,8 @@
         ]
       ],
       "text": "I always hoped that I would be",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +60,8 @@
         ]
       ],
       "text": "able to teach my children the important",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +75,8 @@
         ]
       ],
       "text": "things in life so that they would be",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +90,8 @@
         ]
       ],
       "text": "good people.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +105,8 @@
         ]
       ],
       "text": "My daughter is a personal trainer",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +120,8 @@
         ]
       ],
       "text": "and recently she was offering me",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +135,8 @@
         ]
       ],
       "text": "advice about excercising",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +150,8 @@
         ]
       ],
       "text": "\"Dad\" she said \"as you get",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +165,8 @@
         ]
       ],
       "text": "older there are two things that",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +180,8 @@
         ]
       ],
       "text": "you have to focus on; staying",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +195,8 @@
         ]
       ],
       "text": "flexible and keeping your sense",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +210,8 @@
         ]
       ],
       "text": "of balance\".",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +225,8 @@
         ]
       ],
       "text": "It ooccured to me afterwards that",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +240,8 @@
         ]
       ],
       "text": "my daughter was teaching me the",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +255,8 @@
         ]
       ],
       "text": "important things in life! I'll Try.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,7 +270,8 @@
         ]
       ],
       "text": "Alan",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -264,10 +285,9 @@
         ]
       ],
       "text": "Take Care.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "handwriting"
-  ]
+  "_type": "OCRGroundTruth"
 }

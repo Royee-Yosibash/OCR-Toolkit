@@ -63,9 +63,7 @@ class Polygon(SerializableClass):
             x_offset: Horizontal pixel offset to add.
             y_offset: Vertical pixel offset to add.
         """
-        self.coordinates = tuple(
-            (x + x_offset, y + y_offset) for x, y in self.coordinates
-        )
+        self.coordinates = tuple((x + x_offset, y + y_offset) for x, y in self.coordinates)
 
     def to_dict(self) -> dict:
         raw_dict = super().to_dict()

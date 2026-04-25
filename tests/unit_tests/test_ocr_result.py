@@ -22,8 +22,8 @@ class TestOCRResult(unittest.TestCase):
     def test_from_dict(self):
         data = {
             "detections": [
-                {"coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
-                {"coordinates": [[1, 1], [3, 3]], "text": "b"},
+                {"_type": "BoundingBox", "coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
+                {"_type": "BoundingBox", "coordinates": [[1, 1], [3, 3]], "text": "b"},
             ]
         }
         result = OCRResult.from_dict(data)
@@ -55,8 +55,8 @@ class TestOCRResult(unittest.TestCase):
     def test_from_dict_sorts(self):
         data = {
             "detections": [
-                {"coordinates": [[0, 10], [5, 15]], "text": "second"},
-                {"coordinates": [[0, 0], [5, 5]], "text": "first"},
+                {"_type": "BoundingBox", "coordinates": [[0, 10], [5, 15]], "text": "second"},
+                {"_type": "BoundingBox", "coordinates": [[0, 0], [5, 5]], "text": "first"},
             ]
         }
         result = OCRResult.from_dict(data)

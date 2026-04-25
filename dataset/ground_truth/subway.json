@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "natural_scene_text",
+    "incidental"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "East Side\n & Brooklyn",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "To Rockaway Pkwy\n Canarsie\n all times",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "L",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "8105",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "CANARSIE",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,10 +91,9 @@
         ]
       ],
       "text": "1318\n 72",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "natural_scene_text", "incidental"
-  ]
+  "_type": "OCRGroundTruth"
 }

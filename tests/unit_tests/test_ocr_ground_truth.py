@@ -24,7 +24,7 @@ class TestOCRGroundTruth(unittest.TestCase):
     def test_from_dict_with_tags(self):
         data = {
             "detections": [
-                {"coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
+                {"_type": "BoundingBox", "coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
             ],
             "tags": ["printed"],
         }
@@ -36,7 +36,7 @@ class TestOCRGroundTruth(unittest.TestCase):
     def test_from_dict_missing_tags(self):
         data = {
             "detections": [
-                {"coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
+                {"_type": "BoundingBox", "coordinates": [[0, 0], [5, 5]], "text": "a", "confidence": 0.5},
             ],
         }
         gt = OCRGroundTruth.from_dict(data)
