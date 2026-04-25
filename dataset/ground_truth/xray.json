@@ -107,7 +107,7 @@
       ],
       "text": "NGT",
       "confidence": 1,
-      "_type": "oBoundingBox"
+      "_type": "BoundingBox"
     }
   ],
   "_type": "OCRGroundTruth"

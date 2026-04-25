@@ -44,7 +44,7 @@ class SerializableClass:
             KeyError: If no subclass with that name has been registered.
         """
         if type_name not in cls._registry:
-            raise KeyError(f"Unknown serializable type: '{type_name}'. Registered types: {list(cls._registry.keys())}")
+            raise KeyError(f"Unknown serializable type: '{type_name}'")
         return cls._registry[type_name]
 
     @classmethod
