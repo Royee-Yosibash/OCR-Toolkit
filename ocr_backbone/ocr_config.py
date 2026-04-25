@@ -7,8 +7,8 @@ from pathlib import Path
 from typing import Protocol, runtime_checkable
 
 import ocr_backbone.image_preprocessing as image_preprocessing
-from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.input_image import InputImage
+from ocr_backbone.polygon import Polygon
 from utils.json_utils import load_json
 
 PPReturnType = InputImage | list[InputImage]
@@ -42,9 +42,9 @@ class OCRConfig:
     Args:
         model_name: Name of the OCR model to use.
         model_params: Model-specific runtime parameters.
-        bb_validator: Optional function that takes a BoundingBox and returns
-            True if the bounding box is valid. Invalid bounding boxes are
-            discarded after OCR inference.
+        detection_validator: Optional function that validated detection and returns
+            True if the detection is valid. Invalid detections are discarded after
+            OCR inference.
         preprocess_methods: A list of callables conforming to
             ``PreprocessingProtocol``. When constructed via ``from_dict``,
             method descriptors (dicts with "name" and optional "kwargs")
@@ -53,7 +53,7 @@ class OCRConfig:
 
     model_name: str
     model_params: dict = field(default_factory=dict)
-    bb_validator: Callable[[BoundingBox], bool] | None = None
+    detection_validator: Callable[[Polygon], bool] | None = None
     preprocess_methods: list[PreprocessingProtocol] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -69,7 +69,7 @@ class OCRConfig:
         Raises:
             TypeError: If a preprocessing callable has an incompatible
                 signature.
-            ValueError: If ``model_name`` is empty or ``bb_validator``
+            ValueError: If ``model_name`` is empty or ``detection_validator``
                 is not callable.
             RuntimeError: If validation itself mutated the config.
         """
@@ -78,8 +78,8 @@ class OCRConfig:
         if not isinstance(self.model_name, str) or not self.model_name:
             raise ValueError(f"model_name must be a non-empty string, got {self.model_name!r}.")
 
-        if self.bb_validator is not None and not callable(self.bb_validator):
-            raise TypeError(f"bb_validator must be callable or None, got {type(self.bb_validator)!r}.")
+        if self.detection_validator is not None and not callable(self.detection_validator):
+            raise TypeError(f"detection_validator must be callable or None, got {type(self.detection_validator)!r}.")
 
         for method in self.preprocess_methods:
             self._validate_pp_signature(method)
@@ -189,7 +189,7 @@ class OCRConfig:
     def to_dict(self) -> dict:
         """Convert the config to a JSON-serializable dict.
 
-        ``bb_validator`` is stored as a ``"module.path:function_name"``
+        ``detection_validator`` is stored as a ``"module.path:function_name"``
         string when present, so the dict can be round-tripped through JSON.
         Each preprocessing callable is serialized back to a dict with
         ``"name"`` as a fully qualified dotted path.
@@ -212,17 +212,17 @@ class OCRConfig:
             "model_params": self.model_params,
             "preprocess_methods": serialized_pp,
         }
-        if self.bb_validator is not None:
-            module = self.bb_validator.__module__
-            qualname = self.bb_validator.__qualname__
-            data["bb_validator"] = f"{module}:{qualname}"
+        if self.detection_validator is not None:
+            module = self.detection_validator.__module__
+            qualname = self.detection_validator.__qualname__
+            data["detection_validator"] = f"{module}:{qualname}"
         return data
 
     @classmethod
     def from_dict(cls, raw_dict: dict):
         """Create an OCRConfig from a plain dict.
 
-        ``bb_validator`` may be a callable or a dotted-path string in the
+        ``detection_validator`` may be a callable or a dotted-path string in the
         form ``"module.path:function_name"``. Strings are dynamically
         imported.
 
@@ -231,17 +231,17 @@ class OCRConfig:
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
-                ``model_params``, ``bb_validator``, and
+                ``model_params``, ``detection_validator``, and
                 ``preprocess_methods``.
 
         Returns:
             An OCRConfig instance.
         """
-        bb_validator = raw_dict.get("bb_validator")
-        if isinstance(bb_validator, str):
-            module_path, attr_name = bb_validator.rsplit(":", 1)
+        detection_validator = raw_dict.get("detection_validator")
+        if isinstance(detection_validator, str):
+            module_path, attr_name = detection_validator.rsplit(":", 1)
             module = importlib.import_module(module_path)
-            bb_validator = getattr(module, attr_name)
+            detection_validator = getattr(module, attr_name)
 
         raw_pp = raw_dict.get("preprocess_methods", [])
         preprocess_methods = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
@@ -249,7 +249,7 @@ class OCRConfig:
         return cls(
             model_name=raw_dict["model_name"],
             model_params=raw_dict.get("model_params", {}),
-            bb_validator=bb_validator,
+            detection_validator=detection_validator,
             preprocess_methods=preprocess_methods,
         )
 
