@@ -1,6 +1,6 @@
 import unittest
 
-from utils.serialize_utils import SerializableClass
+from utils.serialize_utils import SerializableClass, TYPE_KEY
 
 
 class Inner(SerializableClass):
@@ -22,26 +22,36 @@ class Outer(SerializableClass):
         self.mapping = mapping or {}
 
 
+INNER_TYPE = "Inner"
+OUTER_TYPE = "Outer"
+
+
 class TestSerializableClass(unittest.TestCase):
     def test_simple_to_dict(self):
         obj = Inner(42)
-        self.assertEqual(obj.to_dict(), {"value": 42})
+        self.assertEqual(obj.to_dict(), {TYPE_KEY: INNER_TYPE, "value": 42})
 
     def test_nested_to_dict(self):
         obj = Outer(name="test", inner=Inner(7))
         result = obj.to_dict()
         self.assertEqual(result["name"], "test")
-        self.assertEqual(result["inner"], {"value": 7})
+        self.assertEqual(result["inner"], {TYPE_KEY: INNER_TYPE, "value": 7})
 
     def test_list_of_serializable(self):
         obj = Outer(name="x", inner=Inner(1), items=[Inner(2), Inner(3)])
         result = obj.to_dict()
-        self.assertEqual(result["items"], [{"value": 2}, {"value": 3}])
+        self.assertEqual(
+            result["items"],
+            [
+                {TYPE_KEY: INNER_TYPE, "value": 2},
+                {TYPE_KEY: INNER_TYPE, "value": 3},
+            ],
+        )
 
     def test_dict_of_serializable(self):
         obj = Outer(name="x", inner=Inner(0), mapping={"a": Inner(10)})
         result = obj.to_dict()
-        self.assertEqual(result["mapping"], {"a": {"value": 10}})
+        self.assertEqual(result["mapping"], {"a": {TYPE_KEY: INNER_TYPE, "value": 10}})
 
     def test_plain_values_unchanged(self):
         obj = Outer(name="hello", inner=Inner(1), items=[1, "two", 3.0])

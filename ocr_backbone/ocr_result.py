@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 
-from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.polygon import Polygon
 from utils.serialize_utils import SerializableClass
 

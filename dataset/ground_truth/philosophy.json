@@ -1,5 +1,9 @@
 {
-  "bounding_boxes": [
+  "tags": [
+    "printed_text",
+    "structured"
+  ],
+  "detections": [
     {
       "coordinates": [
         [
@@ -12,7 +16,8 @@
         ]
       ],
       "text": "Philosophy",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -26,7 +31,8 @@
         ]
       ],
       "text": "240 languages",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -40,7 +46,8 @@
         ]
       ],
       "text": "View history",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -54,7 +61,8 @@
         ]
       ],
       "text": "Article",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -68,7 +76,8 @@
         ]
       ],
       "text": "Talk",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -82,7 +91,8 @@
         ]
       ],
       "text": "Read",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -96,7 +106,8 @@
         ]
       ],
       "text": "View source",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -110,7 +121,8 @@
         ]
       ],
       "text": "Tools",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -124,7 +136,8 @@
         ]
       ],
       "text": "From Wikipedia, the free encyclopedia",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -138,7 +151,8 @@
         ]
       ],
       "text": "For other uses, see Philosophy (disambiguation).",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -152,7 +166,8 @@
         ]
       ],
       "text": "Philosophy (from Ancient Greek philosophia lit 'love of wisdom') is a systematic study of",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -166,7 +181,8 @@
         ]
       ],
       "text": "general and fundamental questions concerning topics like existence, knowledge , mind,",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -180,7 +196,8 @@
         ]
       ],
       "text": "reason, language, and value. It is a rational and critical inquiry that reflects on its",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -194,7 +211,8 @@
         ]
       ],
       "text": "methods and assumptions",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -208,7 +226,8 @@
         ]
       ],
       "text": "Historically; many of the individual sciences, such as physics and psychology, formed",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -222,7 +241,8 @@
         ]
       ],
       "text": "part of philosophy. However, they are considered separate academic disciplines in the",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -236,7 +256,8 @@
         ]
       ],
       "text": "modern sense of the term. Influential traditions in the history of philosophy include",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -250,7 +271,8 @@
         ]
       ],
       "text": "Western, Arabic-Persian, Indian, and Chinese philosophy. Western philosophy originated",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -264,7 +286,8 @@
         ]
       ],
       "text": "in Ancient Greece and covers a wide area of philosophical subfields.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -278,7 +301,8 @@
         ]
       ],
       "text": "A central topic in",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -292,7 +316,8 @@
         ]
       ],
       "text": "Arabic-Persian philosophy is the relation between reason and revelation. Indian",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -306,7 +331,8 @@
         ]
       ],
       "text": "philosophy combines the spiritual problem of how to reach enlightenment with the",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -320,7 +346,8 @@
         ]
       ],
       "text": "exploration of the nature of reality and the ways of arriving at knowledge. Chinese",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -334,7 +361,8 @@
         ]
       ],
       "text": "philosophy focuses principally on practical issues about right social conduct, government;",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -348,7 +376,8 @@
         ]
       ],
       "text": "and self-cultivation.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -362,7 +391,8 @@
         ]
       ],
       "text": "The statue The Thinker by Auguste",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -376,7 +406,8 @@
         ]
       ],
       "text": "Major branches of philosophy are epistemology, ethics, logic, and metaphysics.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -390,7 +421,8 @@
         ]
       ],
       "text": "Rodin is a symbol of philosophical",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -404,7 +436,8 @@
         ]
       ],
       "text": "Epistemology studies what knowledge is and how to acquire it. Ethics investigates moral",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -418,7 +451,8 @@
         ]
       ],
       "text": "[1]",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -432,7 +466,8 @@
         ]
       ],
       "text": "thought.",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     },
     {
       "coordinates": [
@@ -446,10 +481,9 @@
         ]
       ],
       "text": "principles and what constitutes right conduct. Logic is the study of correct reasoning and",
-      "confidence": 1
+      "confidence": 1,
+      "_type": "BoundingBox"
     }
   ],
-  "tags": [
-    "printed_text", "structured"
-  ]
+  "_type": "OCRGroundTruth"
 }

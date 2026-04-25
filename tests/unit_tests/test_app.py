@@ -21,6 +21,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
             A bounding box dict with coordinates, text, and confidence.
         """
         return {
+            "_type": "BoundingBox",
             "coordinates": [[0, 0], [10, 10]],
             "text": text,
             "confidence": 0.9,

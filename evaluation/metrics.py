@@ -108,15 +108,15 @@ def _normalize_text(text: str) -> str:
 
 
 def _ocr_result_to_text(result: OCRResult) -> str:
-    """Concatenate and normalize all BB texts from an OCRResult.
+    """Concatenate and normalize all detection texts from an OCRResult.
 
     Args:
         result: An OCRResult with sorted bounding boxes.
 
     Returns:
-        Normalized space-separated string of all BB texts.
+        Normalized space-separated string of all detection texts.
     """
-    raw = " ".join(bb.text for bb in result.bounding_boxes)
+    raw = " ".join(det.text for det in result.detections)
     return _normalize_text(raw)
 
 

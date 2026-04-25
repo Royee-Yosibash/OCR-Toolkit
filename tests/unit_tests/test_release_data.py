@@ -1,9 +1,9 @@
-import json
 import re
 import unittest
 from datetime import datetime
 
 from consts import APP_ROOT
+from utils.json_utils import load_json
 
 RELEASE_DATA_PATH = APP_ROOT / "release_data.json"
 SEMVER_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:(?:rc|alpha|beta)\d+)?$")
@@ -14,8 +14,7 @@ class TestReleaseData(unittest.TestCase):
     """Tests for release_data.json structure and version validity."""
 
     def setUp(self):
-        with open(RELEASE_DATA_PATH) as f:
-            self.data = json.load(f)
+        self.data = load_json(RELEASE_DATA_PATH)
 
     def test_required_keys_exist(self):
         """Verifies that all required keys are present in release_data.json."""
