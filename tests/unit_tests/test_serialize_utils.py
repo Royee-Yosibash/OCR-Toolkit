@@ -8,6 +8,12 @@ class Inner(SerializableClass):
         self.value = value
 
 
+class InnerChild(Inner):
+    def __init__(self, value: int, extra: str = ""):
+        super().__init__(value)
+        self.extra = extra
+
+
 class Outer(SerializableClass):
     def __init__(
         self,
@@ -114,6 +120,46 @@ class TestSerializableClass(unittest.TestCase):
             mapping={"k": Inner(8)},
         )
         restored = Outer.from_dict(original.to_dict())
+        self.assertEqual(restored.to_dict(), original.to_dict())
+
+
+class TestCreate(unittest.TestCase):
+    def test_create_from_base_class(self):
+        data = {TYPE_KEY: "Inner", "value": 42}
+        obj = SerializableClass.create(data)
+        self.assertIsInstance(obj, Inner)
+        self.assertEqual(obj.value, 42)
+
+    def test_create_child_from_parent(self):
+        data = {TYPE_KEY: "InnerChild", "value": 10, "extra": "hi"}
+        obj = Inner.create(data)
+        self.assertIsInstance(obj, InnerChild)
+        self.assertEqual(obj.value, 10)
+        self.assertEqual(obj.extra, "hi")
+
+    def test_create_same_class(self):
+        data = {TYPE_KEY: "Inner", "value": 5}
+        obj = Inner.create(data)
+        self.assertIsInstance(obj, Inner)
+        self.assertEqual(obj.value, 5)
+
+    def test_create_rejects_unrelated_class(self):
+        data = {TYPE_KEY: "Inner", "value": 1}
+        with self.assertRaises(TypeError):
+            Outer.create(data)
+
+    def test_create_missing_type_key(self):
+        with self.assertRaises(KeyError):
+            Inner.create({"value": 1})
+
+    def test_create_unknown_type(self):
+        with self.assertRaises(KeyError):
+            SerializableClass.create({TYPE_KEY: "NonExistent"})
+
+    def test_create_roundtrip(self):
+        original = InnerChild(value=99, extra="round")
+        restored = Inner.create(original.to_dict())
+        self.assertIsInstance(restored, InnerChild)
         self.assertEqual(restored.to_dict(), original.to_dict())
 
 
