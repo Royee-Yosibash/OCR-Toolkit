@@ -8,7 +8,7 @@ from PIL import Image
 
 from consts import APP_ROOT, IMAGE_EXTENSIONS
 from evaluation.ocr_ground_truth import OCRGroundTruth
-from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.polygon import Polygon
 from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"
@@ -110,9 +110,8 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
 
     for i, det_data in enumerate(data["detections"]):
         prefix = f"Detection #{i + 1}"
-        # TODO: What if in the future we use polygons? add dynamic import?
         try:
-            bb = BoundingBox.from_dict(det_data)
+            bb = Polygon.create(det_data)
         except (ValueError, KeyError, TypeError) as e:
             errors.append(f"{prefix}: invalid detection: {e}")
             continue

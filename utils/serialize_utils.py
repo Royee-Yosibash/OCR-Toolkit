@@ -48,6 +48,33 @@ class SerializableClass:
         return cls._registry[type_name]
 
     @classmethod
+    def create(cls, raw_dict: dict):
+        """Factory that instantiates the class specified by ``_type``, scoped to the calling class hierarchy.
+
+        Resolves the class from the registry using the ``_type`` key and
+        validates that it is the calling class or a subclass of it before
+        delegating to ``from_dict``.
+
+        Args:
+            raw_dict: A dict containing a ``_type`` key identifying the
+                target class, plus the fields needed to construct it.
+
+        Returns:
+            An instance of the class identified by ``_type``.
+
+        Raises:
+            KeyError: If ``_type`` is missing or not found in the registry.
+            TypeError: If the resolved class is not a subclass of the
+                calling class.
+        """
+        if TYPE_KEY not in raw_dict:
+            raise KeyError(f"Cannot create: dict is missing the '{TYPE_KEY}' key.")
+        target_cls = cls._resolve_class(raw_dict[TYPE_KEY])
+        if not issubclass(target_cls, cls):
+            raise TypeError(f"'{target_cls.__name__}' is not a subclass of '{cls.__name__}'.")
+        return target_cls.from_dict(raw_dict)
+
+    @classmethod
     def from_dict(cls, raw_dict: dict):
         """Recursively create an instance from a dict.
 
