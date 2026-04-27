@@ -49,7 +49,7 @@ if _HAS_PADDLEOCR:
         models are selected and a warning is logged.
         """
 
-        def __init__(self, config: OCRConfig | dict) -> None:
+        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the PaddleOCR engine.
 
             Args:
@@ -59,8 +59,9 @@ if _HAS_PADDLEOCR:
                     ``use_doc_orientation_classify`` (default False),
                     ``use_doc_unwarping`` (default False),
                     ``use_textline_orientation`` (default False).
+                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config)
+            super().__init__(config, alias=alias)
 
             model_params = self.config.model_params
 
