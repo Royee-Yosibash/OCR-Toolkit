@@ -1,0 +1,39 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          175,
+          274
+        ],
+        [
+          1386,
+          467
+        ]
+      ],
+      "text": "Lorem ipsum",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          485,
+          511
+        ],
+        [
+          1082,
+          593
+        ]
+      ],
+      "text": "Dolor sit amet",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}
