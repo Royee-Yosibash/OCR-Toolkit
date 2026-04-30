@@ -1,0 +1,413 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          46,
+          58
+        ],
+        [
+          278,
+          107
+        ]
+      ],
+      "text": "MONGOL #1",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          406,
+          58
+        ],
+        [
+          644,
+          123
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          44,
+          148
+        ],
+        [
+          304,
+          192
+        ]
+      ],
+      "text": "FABER CASTELL #2",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          403,
+          149
+        ],
+        [
+          628,
+          214
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          393,
+          229
+        ],
+        [
+          607,
+          289
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          50,
+          232
+        ],
+        [
+          235,
+          276
+        ]
+      ],
+      "text": "COLLEEN 2H",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          57,
+          307
+        ],
+        [
+          202,
+          359
+        ]
+      ],
+      "text": "HBW 9801",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          390,
+          312
+        ],
+        [
+          612,
+          377
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          58,
+          391
+        ],
+        [
+          172,
+          436
+        ]
+      ],
+      "text": "PANDA",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          396,
+          392
+        ],
+        [
+          605,
+          453
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          392,
+          473
+        ],
+        [
+          606,
+          534
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          53,
+          475
+        ],
+        [
+          229,
+          513
+        ]
+      ],
+      "text": "BIC CRISTAL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          389,
+          550
+        ],
+        [
+          590,
+          609
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          56,
+          551
+        ],
+        [
+          245,
+          590
+        ]
+      ],
+      "text": "FLEXSTICK 0.7",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          383,
+          626
+        ],
+        [
+          594,
+          687
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          629
+        ],
+        [
+          278,
+          672
+        ]
+      ],
+      "text": "FABER CASTELL 0.5",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          381,
+          702
+        ],
+        [
+          578,
+          758
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          710
+        ],
+        [
+          278,
+          746
+        ]
+      ],
+      "text": "PILOT BP S FINE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          378,
+          781
+        ],
+        [
+          585,
+          836
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          787
+        ],
+        [
+          260,
+          825
+        ]
+      ],
+      "text": "PILOT G-TEC 0.3",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          380,
+          857
+        ],
+        [
+          622,
+          923
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          60,
+          870
+        ],
+        [
+          342,
+          890
+        ]
+      ],
+      "text": "UNI-BALL SIGNO BROAD",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          376,
+          935
+        ],
+        [
+          613,
+          996
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          65,
+          943
+        ],
+        [
+          328,
+          974
+        ]
+      ],
+      "text": "PREPPY FOUNTAIN PEN",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          375,
+          1010
+        ],
+        [
+          630,
+          1075
+        ]
+      ],
+      "text": "handwriting",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          66,
+          1015
+        ],
+        [
+          222,
+          1047
+        ]
+      ],
+      "text": "GELLY ROLL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          386,
+          1146
+        ],
+        [
+          481,
+          1161
+        ]
+      ],
+      "text": "Aulat Kamay. ni ai",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "handwriting"
+  ]
+}
