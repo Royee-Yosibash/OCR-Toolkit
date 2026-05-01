@@ -19,10 +19,16 @@ BOOTSTRAP_MIN_SAMPLE_SIZE = 100
 
 
 def beta_ci(values: np.ndarray, level: int) -> list[float]:
-    """Compute a confidence interval using a Beta distribution fit.
+    """Compute a confidence interval for a metric bounded to [0, 1].
 
-    Suitable for metrics bounded to [0, 1]. Values at the exact
-    boundaries (0 or 1) are nudged inward so the Beta fit succeeds.
+    A Beta distribution is fit to the observations to derive the
+    interval. Values at the exact boundaries (0 or 1) are nudged
+    inward by ``eps`` so the fit succeeds. When every observation
+    collapses to a single value the Beta fit is not identifiable;
+    in that degenerate case the function falls back to a Wilson
+    score interval treating the observed mean as a Bernoulli
+    proportion over ``len(values)`` trials, with the result clipped
+    to [0, 1].
 
     Args:
         values: Array of metric values in [0, 1].
@@ -33,10 +39,20 @@ def beta_ci(values: np.ndarray, level: int) -> list[float]:
     """
     eps = 1e-6
     clamped = np.clip(values, eps, 1 - eps)
-    a, b, _, _ = _stats.beta.fit(clamped, floc=0, fscale=1)
-    lo = (100 - level) / 200
-    hi = (100 + level) / 200
-    return [float(_stats.beta.ppf(lo, a, b)), float(_stats.beta.ppf(hi, a, b))]
+    if not np.all(clamped == clamped[0]):
+        a, b, _, _ = _stats.beta.fit(clamped, floc=0, fscale=1)
+        lo = (100 - level) / 200
+        hi = (100 + level) / 200
+        return [float(_stats.beta.ppf(lo, a, b)), float(_stats.beta.ppf(hi, a, b))]
+    else:
+        # Wilson score confidence interval
+        alpha = 1 - level / 100
+        z = float(_stats.norm.ppf(1 - alpha / 2))
+        denom = 1 + z ** 2 / len(values)
+        p_hat = float(np.mean(values))
+        center = (p_hat + z ** 2 / (2 * len(values))) / denom
+        half = z * np.sqrt(p_hat * (1 - p_hat) / len(values) + z ** 2 / (4 * len(values) ** 2)) / denom
+        return [float(np.clip(center - half, 0.0, 1.0)), float(np.clip(center + half, 0.0, 1.0))]
 
 
 def bootstrap_ci(values: np.ndarray, level: int) -> list[float]:

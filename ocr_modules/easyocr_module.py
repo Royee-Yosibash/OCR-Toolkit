@@ -51,7 +51,7 @@ if _HAS_EASYOCR:
                 xs = [int(pt[0]) for pt in corners]
                 ys = [int(pt[1]) for pt in corners]
                 bb = BoundingBox(
-                    coordinates=((min(xs), min(ys)), (max(xs), max(ys))),
+                    coordinates=((max(min(xs), 0), max(min(ys), 0)), (max(max(xs), 0), max(max(ys), 0))),
                     text=text,
                     confidence=score,
                 )
