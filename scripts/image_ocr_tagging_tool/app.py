@@ -10,6 +10,7 @@ from flask import Flask, jsonify, render_template, request
 from PIL import Image
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
+from ocr_backbone.bounding_box import BoundingBox  # noqa: F401 - register in SerializableClass
 from ocr_backbone.ocr_abstract import OCRAbstract
 from utils.json_utils import save_json
 
@@ -118,6 +119,8 @@ def create_app() -> Flask:
             return jsonify({"status": "ok", "path": str(save_path)})
         except KeyError as e:
             return jsonify({"error": f"Missing required field: {e}"}), 400
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
         except Exception as e:
             return jsonify({"error": str(e)}), 500
 

@@ -49,7 +49,7 @@ if _HAS_PADDLEOCR:
         models are selected and a warning is logged.
         """
 
-        def __init__(self, config: OCRConfig | dict) -> None:
+        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the PaddleOCR engine.
 
             Args:
@@ -59,8 +59,9 @@ if _HAS_PADDLEOCR:
                     ``use_doc_orientation_classify`` (default False),
                     ``use_doc_unwarping`` (default False),
                     ``use_textline_orientation`` (default False).
+                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config)
+            super().__init__(config, alias=alias)
 
             model_params = self.config.model_params
 
@@ -128,7 +129,7 @@ if _HAS_PADDLEOCR:
                     xs = [int(pt[0]) for pt in poly]
                     ys = [int(pt[1]) for pt in poly]
                     bb = BoundingBox(
-                        coordinates=((min(xs), min(ys)), (max(xs), max(ys))),
+                        coordinates=((max(min(xs), 0), max(min(ys), 0)), (max(max(xs), 0), max(max(ys), 0))),
                         text=text,
                         confidence=float(score),
                     )

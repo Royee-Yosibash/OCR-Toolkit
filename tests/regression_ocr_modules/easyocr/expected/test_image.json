@@ -1,6 +1,8 @@
 {
+  "_type": "OCRResult",
   "detections": [
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           535,
@@ -12,10 +14,10 @@
         ]
       ],
       "text": "Washington;'",
-      "confidence": 0.619871,
-      "_type": "BoundingBox"
+      "confidence": 0.619871
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           364,
@@ -27,10 +29,10 @@
         ]
       ],
       "text": "King",
-      "confidence": 0.999883,
-      "_type": "BoundingBox"
+      "confidence": 0.999883
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           15,
@@ -42,10 +44,10 @@
         ]
       ],
       "text": "\"[ Have",
-      "confidence": 0.872584,
-      "_type": "BoundingBox"
+      "confidence": 0.872584
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           79,
@@ -57,10 +59,10 @@
         ]
       ],
       "text": "Dream\" Speech by the Rev. Martin Luther",
-      "confidence": 0.817005,
-      "_type": "BoundingBox"
+      "confidence": 0.817005
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           399,
@@ -71,11 +73,11 @@
           71
         ]
       ],
-      "text": "Jr. at the",
-      "confidence": 0.466628,
-      "_type": "BoundingBox"
+      "text": "Jr.at the",
+      "confidence": 0.466628
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           467,
@@ -87,10 +89,10 @@
         ]
       ],
       "text": "March on",
-      "confidence": 0.99216,
-      "_type": "BoundingBox"
+      "confidence": 0.99216
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -102,10 +104,10 @@
         ]
       ],
       "text": "1963 (excerpts)",
-      "confidence": 0.900836,
-      "_type": "BoundingBox"
+      "confidence": 0.900836
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           178,
@@ -117,10 +119,10 @@
         ]
       ],
       "text": "today",
-      "confidence": 0.992171,
-      "_type": "BoundingBox"
+      "confidence": 0.992171
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           215,
@@ -131,11 +133,11 @@
           133
         ]
       ],
-      "text": "in what will go down in history as the greatest demonstration for",
-      "confidence": 0.597306,
-      "_type": "BoundingBox"
+      "text": "in what will g0 down in history as the greatest demonstration for",
+      "confidence": 0.597306
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -147,10 +149,10 @@
         ]
       ],
       "text": "Iam happy to join with you",
-      "confidence": 0.903442,
-      "_type": "BoundingBox"
+      "confidence": 0.903442
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -162,10 +164,10 @@
         ]
       ],
       "text": "freedom in the history of our nation:",
-      "confidence": 0.670571,
-      "_type": "BoundingBox"
+      "confidence": 0.670571
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           145,
@@ -177,10 +179,10 @@
         ]
       ],
       "text": "great American in whose symbolic shadow we stand today signed the",
-      "confidence": 0.87582,
-      "_type": "BoundingBox"
+      "confidence": 0.87582
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -192,10 +194,10 @@
         ]
       ],
       "text": "Five score years ago",
-      "confidence": 0.852929,
-      "_type": "BoundingBox"
+      "confidence": 0.852929
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -207,10 +209,10 @@
         ]
       ],
       "text": "Emancipation Proclamation. This momentous decree is",
-      "confidence": 0.948533,
-      "_type": "BoundingBox"
+      "confidence": 0.948533
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           354,
@@ -222,10 +224,10 @@
         ]
       ],
       "text": "great beacon light of hope to millions of Negro",
-      "confidence": 0.83489,
-      "_type": "BoundingBox"
+      "confidence": 0.83489
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -237,10 +239,10 @@
         ]
       ],
       "text": "slaves who had been seared in the flames of withering injustice_",
-      "confidence": 0.923055,
-      "_type": "BoundingBox"
+      "confidence": 0.923055
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           397,
@@ -252,10 +254,10 @@
         ]
       ],
       "text": "It came as",
-      "confidence": 0.840912,
-      "_type": "BoundingBox"
+      "confidence": 0.840912
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           471,
@@ -267,10 +269,10 @@
         ]
       ],
       "text": "joyous daybreak to end the",
-      "confidence": 0.767008,
-      "_type": "BoundingBox"
+      "confidence": 0.767008
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -282,10 +284,10 @@
         ]
       ],
       "text": "long night of their captivity: But 100 years later the Negro still is not free",
-      "confidence": 0.683335,
-      "_type": "BoundingBox"
+      "confidence": 0.683335
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           451,
@@ -297,10 +299,10 @@
         ]
       ],
       "text": "One hundred years later the",
-      "confidence": 0.839199,
-      "_type": "BoundingBox"
+      "confidence": 0.839199
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -312,10 +314,10 @@
         ]
       ],
       "text": "life of the Negro is still badly crippled by the manacles of segregation and the chains of discrimination:",
-      "confidence": 0.69413,
-      "_type": "BoundingBox"
+      "confidence": 0.69413
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -327,10 +329,10 @@
         ]
       ],
       "text": "One hundred years later the Negro lives on",
-      "confidence": 0.976978,
-      "_type": "BoundingBox"
+      "confidence": 0.976978
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           281,
@@ -342,10 +344,10 @@
         ]
       ],
       "text": "lonely island of poverty in the midst of",
-      "confidence": 0.519004,
-      "_type": "BoundingBox"
+      "confidence": 0.519004
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           525,
@@ -357,10 +359,10 @@
         ]
       ],
       "text": "vast ocean of",
-      "confidence": 0.959686,
-      "_type": "BoundingBox"
+      "confidence": 0.959686
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           67,
@@ -372,10 +374,10 @@
         ]
       ],
       "text": "prosperity: One hundred years later the Negro is still languished in the corners of American",
-      "confidence": 0.819198,
-      "_type": "BoundingBox"
+      "confidence": 0.819198
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -387,10 +389,10 @@
         ]
       ],
       "text": "material",
-      "confidence": 0.752368,
-      "_type": "BoundingBox"
+      "confidence": 0.752368
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -402,10 +404,10 @@
         ]
       ],
       "text": "society and finds himself in exile in his own land: So we've come here today to dramatize",
-      "confidence": 0.696296,
-      "_type": "BoundingBox"
+      "confidence": 0.696296
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           555,
@@ -417,10 +419,10 @@
         ]
       ],
       "text": "shameful",
-      "confidence": 0.999984,
-      "_type": "BoundingBox"
+      "confidence": 0.999984
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -432,10 +434,10 @@
         ]
       ],
       "text": "condition:",
-      "confidence": 0.979337,
-      "_type": "BoundingBox"
+      "confidence": 0.979337
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -447,10 +449,10 @@
         ]
       ],
       "text": "In a sense we've come to our nation'$ capital to cash",
-      "confidence": 0.573414,
-      "_type": "BoundingBox"
+      "confidence": 0.573414
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           339,
@@ -462,10 +464,10 @@
         ]
       ],
       "text": "check When the architects of our Republic wrote",
-      "confidence": 0.916106,
-      "_type": "BoundingBox"
+      "confidence": 0.916106
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           36,
@@ -477,10 +479,10 @@
         ]
       ],
       "text": "magnificent words of the Constitution and the Declaration of Independence_",
-      "confidence": 0.803333,
-      "_type": "BoundingBox"
+      "confidence": 0.803333
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -492,10 +494,10 @@
         ]
       ],
       "text": "the",
-      "confidence": 0.999997,
-      "_type": "BoundingBox"
+      "confidence": 0.999997
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           495,
@@ -507,10 +509,10 @@
         ]
       ],
       "text": "they were signing",
-      "confidence": 0.748673,
-      "_type": "BoundingBox"
+      "confidence": 0.748673
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -522,10 +524,10 @@
         ]
       ],
       "text": "promissory note to which every American was to fall heir. This note was",
-      "confidence": 0.740694,
-      "_type": "BoundingBox"
+      "confidence": 0.740694
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           455,
@@ -537,10 +539,10 @@
         ]
       ],
       "text": "promise that all men-yes",
-      "confidence": 0.542899,
-      "_type": "BoundingBox"
+      "confidence": 0.542899
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           215,
@@ -552,10 +554,10 @@
         ]
       ],
       "text": "would be guaranteed the unalienable rights of life, liberty and the",
-      "confidence": 0.665524,
-      "_type": "BoundingBox"
+      "confidence": 0.665524
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -567,10 +569,10 @@
         ]
       ],
       "text": "black men as well as white men-",
-      "confidence": 0.789685,
-      "_type": "BoundingBox"
+      "confidence": 0.789685
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           12,
@@ -582,10 +584,10 @@
         ]
       ],
       "text": "pursuit of happiness.",
-      "confidence": 0.861356,
-      "_type": "BoundingBox"
+      "confidence": 0.861356
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           282,
@@ -597,10 +599,10 @@
         ]
       ],
       "text": "high",
-      "confidence": 0.998697,
-      "_type": "BoundingBox"
+      "confidence": 0.998697
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -612,10 +614,10 @@
         ]
       ],
       "text": "We must forever conduct our struggle on the",
-      "confidence": 0.815079,
-      "_type": "BoundingBox"
+      "confidence": 0.815079
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           315,
@@ -627,10 +629,10 @@
         ]
       ],
       "text": "plane of dignity and discipline",
-      "confidence": 0.9968,
-      "_type": "BoundingBox"
+      "confidence": 0.9968
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           499,
@@ -642,10 +644,10 @@
         ]
       ],
       "text": "We must not allow our",
-      "confidence": 0.986589,
-      "_type": "BoundingBox"
+      "confidence": 0.986589
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -657,10 +659,10 @@
         ]
       ],
       "text": "creative protests to degenerate into physical",
-      "confidence": 0.65274,
-      "_type": "BoundingBox"
+      "confidence": 0.65274
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           361,
@@ -672,10 +674,10 @@
         ]
       ],
       "text": "The marvelous new militancy which has",
-      "confidence": 0.845851,
-      "_type": "BoundingBox"
+      "confidence": 0.845851
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           283,
@@ -687,10 +689,10 @@
         ]
       ],
       "text": "violence_",
-      "confidence": 0.996198,
-      "_type": "BoundingBox"
+      "confidence": 0.996198
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           12,
@@ -702,10 +704,10 @@
         ]
       ],
       "text": "engulfed the Negro community must not lead us to distrust all white people, for many of our white",
-      "confidence": 0.615986,
-      "_type": "BoundingBox"
+      "confidence": 0.615986
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -717,10 +719,10 @@
         ]
       ],
       "text": "brothers, as evidenced by their presence here today; have come to realize that their destiny is tied up",
-      "confidence": 0.779534,
-      "_type": "BoundingBox"
+      "confidence": 0.779534
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -732,10 +734,10 @@
         ]
       ],
       "text": "with our destiny:",
-      "confidence": 0.978145,
-      "_type": "BoundingBox"
+      "confidence": 0.978145
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           33,
@@ -747,10 +749,10 @@
         ]
       ],
       "text": "We cannot walk alone: And as we walk we must make the pledge that we shall always march ahead:",
-      "confidence": 0.659462,
-      "_type": "BoundingBox"
+      "confidence": 0.659462
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -762,10 +764,10 @@
         ]
       ],
       "text": "We cannot turn back: There are those who are asking the devotees of civil rights",
-      "confidence": 0.705623,
-      "_type": "BoundingBox"
+      "confidence": 0.705623
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           503,
@@ -777,10 +779,10 @@
         ]
       ],
       "text": "'When will you be",
-      "confidence": 0.744751,
-      "_type": "BoundingBox"
+      "confidence": 0.744751
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -792,10 +794,10 @@
         ]
       ],
       "text": "satisfied?\" We can never be satisfied as long as the Negro is the victim of the unspeakable horrors of",
-      "confidence": 0.941551,
-      "_type": "BoundingBox"
+      "confidence": 0.941551
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -807,10 +809,10 @@
         ]
       ],
       "text": "police brutality:",
-      "confidence": 0.981087,
-      "_type": "BoundingBox"
+      "confidence": 0.981087
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -822,10 +824,10 @@
         ]
       ],
       "text": "We can never be satisfied as long as our bodies, heavy with the fatigue of travel, cannot gain lodging in",
-      "confidence": 0.700253,
-      "_type": "BoundingBox"
+      "confidence": 0.700253
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -837,10 +839,10 @@
         ]
       ],
       "text": "the motels of the highwavs and the hotels of the cities:",
-      "confidence": 0.513525,
-      "_type": "BoundingBox"
+      "confidence": 0.513525
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           96,
@@ -852,10 +854,10 @@
         ]
       ],
       "text": "satisfied",
-      "confidence": 0.999966,
-      "_type": "BoundingBox"
+      "confidence": 0.999966
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           165,
@@ -867,10 +869,10 @@
         ]
       ],
       "text": "long",
-      "confidence": 0.550229,
-      "_type": "BoundingBox"
+      "confidence": 0.550229
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -882,10 +884,10 @@
         ]
       ],
       "text": "We cannot be",
-      "confidence": 0.692241,
-      "_type": "BoundingBox"
+      "confidence": 0.692241
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           197,
@@ -897,10 +899,10 @@
         ]
       ],
       "text": "as the Negro's basic mobility is from",
-      "confidence": 0.627575,
-      "_type": "BoundingBox"
+      "confidence": 0.627575
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           427,
@@ -912,10 +914,10 @@
         ]
       ],
       "text": "smaller ghetto to",
-      "confidence": 0.963523,
-      "_type": "BoundingBox"
+      "confidence": 0.963523
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           543,
@@ -927,10 +929,10 @@
         ]
       ],
       "text": "larger one",
-      "confidence": 0.846665,
-      "_type": "BoundingBox"
+      "confidence": 0.846665
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           611,
@@ -942,10 +944,10 @@
         ]
       ],
       "text": "We",
-      "confidence": 0.996001,
-      "_type": "BoundingBox"
+      "confidence": 0.996001
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -957,10 +959,10 @@
         ]
       ],
       "text": "can never be satisfied as long as our children are stripped of their adulthood and robbed of their dignity",
-      "confidence": 0.604906,
-      "_type": "BoundingBox"
+      "confidence": 0.604906
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           113,
@@ -972,10 +974,10 @@
         ]
       ],
       "text": "For Whites Only",
-      "confidence": 0.997541,
-      "_type": "BoundingBox"
+      "confidence": 0.997541
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -987,10 +989,10 @@
         ]
       ],
       "text": "by signs stating",
-      "confidence": 0.987269,
-      "_type": "BoundingBox"
+      "confidence": 0.987269
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -1002,10 +1004,10 @@
         ]
       ],
       "text": "We cannot be satisfied as long as the Negro in Mississippi cannot vote and the Negro in New York",
-      "confidence": 0.512846,
-      "_type": "BoundingBox"
+      "confidence": 0.512846
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -1017,10 +1019,10 @@
         ]
       ],
       "text": "believes he has nothing for which to vote:",
-      "confidence": 0.723938,
-      "_type": "BoundingBox"
+      "confidence": 0.723938
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -1032,10 +1034,10 @@
         ]
       ],
       "text": "No; no, we are not satisfied, and we will not be satisfied until justice rolls down like waters and",
-      "confidence": 0.728937,
-      "_type": "BoundingBox"
+      "confidence": 0.728937
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           13,
@@ -1047,10 +1049,10 @@
         ]
       ],
       "text": "righteousness like",
-      "confidence": 0.995979,
-      "_type": "BoundingBox"
+      "confidence": 0.995979
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           133,
@@ -1062,10 +1064,10 @@
         ]
       ],
       "text": "mighty stream:",
-      "confidence": 0.797779,
-      "_type": "BoundingBox"
+      "confidence": 0.797779
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           511,
@@ -1077,10 +1079,10 @@
         ]
       ],
       "text": "and",
-      "confidence": 0.999939,
-      "_type": "BoundingBox"
+      "confidence": 0.999939
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           19,
@@ -1092,10 +1094,10 @@
         ]
       ],
       "text": "say to you today; my friends; though, even though we face the difficulties of today",
-      "confidence": 0.647,
-      "_type": "BoundingBox"
+      "confidence": 0.647
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           613,
@@ -1107,10 +1109,10 @@
         ]
       ],
       "text": "still",
-      "confidence": 0.999176,
-      "_type": "BoundingBox"
+      "confidence": 0.999176
     },
     {
+      "_type": "BoundingBox",
       "coordinates": [
         [
           539,
@@ -1122,9 +1124,7 @@
         ]
       ],
       "text": "tomorrow;",
-      "confidence": 0.998034,
-      "_type": "BoundingBox"
+      "confidence": 0.998034
     }
-  ],
-  "_type": "OCRResult"
+  ]
 }

@@ -1,0 +1,69 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          421,
+          31
+        ],
+        [
+          702,
+          77
+        ]
+      ],
+      "text": "A long time ago",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          363,
+          82
+        ],
+        [
+          762,
+          125
+        ]
+      ],
+      "text": "In a galaxy far, far away...",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          663,
+          1282
+        ],
+        [
+          1014,
+          1395
+        ]
+      ],
+      "text": "STAR",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          587,
+          1392
+        ],
+        [
+          1077,
+          1534
+        ]
+      ],
+      "text": "WARS",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}

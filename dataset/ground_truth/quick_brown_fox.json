@@ -1,0 +1,23 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          9,
+          86
+        ],
+        [
+          877,
+          132
+        ]
+      ],
+      "text": "The quick brown fox jumps over the lazy dog",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "handwriting"
+  ]
+}

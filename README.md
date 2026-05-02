@@ -37,18 +37,16 @@ plots identify the optimal combination.
   grid splitting, contour-based segmentation, binarization (adaptive and Otsu),
   and user-supplied steps. Combine stages via configuration or code to build the
   pipeline that fits your input data.
-- **Evaluation pipeline** -- compute CER, WER, word recall, word precision,
-  and word count ratio against ground-truth annotations, with per-image and
-  aggregate results including confidence intervals and supporting visualizations
+- **Evaluation pipeline** -- compute character accuracy, word accuracy, word
+  recall, word precision, and word count ratio against ground-truth
+  annotations, with per-image and aggregate results including confidence
+  intervals and supporting visualizations
 - **Tagging tool** -- browser-based Flask UI for creating and editing
   ground-truth bounding-box annotations.
 
 ## Versioning
 
-Current version: **0.0.10** (released 2026-04-06).
-
-This project is in early development. All releases so far are patch-level
-(0.0.x) and no major or minor milestones have been cut yet.
+Current version: **0.1.3** (released 2026-05-03).
 
 ## Installation
 

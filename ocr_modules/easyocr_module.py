@@ -23,14 +23,15 @@ if _HAS_EASYOCR:
     class EasyOCRModule(OCRAbstract):
         """OCR module using the EasyOCR engine."""
 
-        def __init__(self, config: OCRConfig | dict) -> None:
+        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the EasyOCR reader.
 
             Args:
                 config: An OCRConfig instance or a dict that will be
                     unpacked into one.
+                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config)
+            super().__init__(config, alias=alias)
             self._reader = easyocr.Reader(self.config.model_params.pop("languages", ["en"]))
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
@@ -50,7 +51,7 @@ if _HAS_EASYOCR:
                 xs = [int(pt[0]) for pt in corners]
                 ys = [int(pt[1]) for pt in corners]
                 bb = BoundingBox(
-                    coordinates=((min(xs), min(ys)), (max(xs), max(ys))),
+                    coordinates=((max(min(xs), 0), max(min(ys), 0)), (max(max(xs), 0), max(max(ys), 0))),
                     text=text,
                     confidence=score,
                 )
