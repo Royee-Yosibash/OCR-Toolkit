@@ -1,8 +1,9 @@
+import math
 import unittest
 
 from evaluation.metrics import (
-    CharacterErrorRate,
-    WordErrorRate,
+    CharacterAccuracy,
+    WordAccuracy,
     word_count_ratio,
     word_precision,
     word_recall,
@@ -30,57 +31,76 @@ def _make_result(text: str) -> OCRResult:
     )
 
 
-class TestOCRResultCER(unittest.TestCase):
-    """Tests for CharacterErrorRate."""
+class TestCharacterAccuracy(unittest.TestCase):
+    """Tests for CharacterAccuracy (= exp(-CER))."""
 
     def setUp(self):
-        self.metric = CharacterErrorRate()
+        self.metric = CharacterAccuracy()
 
     def test_identical(self):
-        self.assertAlmostEqual(self.metric(_make_result("hello"), _make_result("hello")), 0.0)
+        self.assertAlmostEqual(self.metric(_make_result("hello"), _make_result("hello")), 1.0)
 
     def test_empty_both(self):
-        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("")), 0.0)
+        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("")), 1.0)
 
     def test_empty_ground_truth(self):
-        self.assertEqual(self.metric(_make_result("abc"), _make_result("")), 3.0)
+        # 3 spurious characters with empty GT -> CER magnitude = 3 -> exp(-3)
+        self.assertAlmostEqual(self.metric(_make_result("abc"), _make_result("")), math.exp(-3.0))
 
     def test_empty_prediction(self):
-        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("abc")), 1.0)
+        # CER = 3/3 = 1 -> exp(-1)
+        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("abc")), math.exp(-1.0))
 
     def test_substitution(self):
-        self.assertAlmostEqual(self.metric(_make_result("abc"), _make_result("axc")), 1 / 3)
+        # CER = 1/3
+        self.assertAlmostEqual(self.metric(_make_result("abc"), _make_result("axc")), math.exp(-1 / 3))
 
     def test_insertion(self):
-        self.assertAlmostEqual(self.metric(_make_result("abcd"), _make_result("abc")), 1 / 3)
+        # CER = 1/3
+        self.assertAlmostEqual(self.metric(_make_result("abcd"), _make_result("abc")), math.exp(-1 / 3))
 
-    def test_is_unbounded(self):
-        self.assertFalse(self.metric.is_bounded)
+    def test_is_bounded(self):
+        self.assertTrue(self.metric.is_bounded)
+
+    def test_score_in_unit_interval(self):
+        # Always in (0, 1] regardless of input.
+        score = self.metric(_make_result("xxxxxxxxx"), _make_result("abc"))
+        self.assertGreater(score, 0.0)
+        self.assertLessEqual(score, 1.0)
 
 
-class TestOCRResultWER(unittest.TestCase):
-    """Tests for WordErrorRate."""
+class TestWordAccuracy(unittest.TestCase):
+    """Tests for WordAccuracy (= exp(-WER))."""
 
     def setUp(self):
-        self.metric = WordErrorRate()
+        self.metric = WordAccuracy()
 
     def test_identical(self):
-        self.assertAlmostEqual(self.metric(_make_result("hello world"), _make_result("hello world")), 0.0)
+        self.assertAlmostEqual(self.metric(_make_result("hello world"), _make_result("hello world")), 1.0)
 
     def test_empty_both(self):
-        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("")), 0.0)
+        self.assertAlmostEqual(self.metric(_make_result(""), _make_result("")), 1.0)
 
     def test_empty_ground_truth(self):
-        self.assertEqual(self.metric(_make_result("hello world"), _make_result("")), 2.0)
+        # 2 spurious words with empty GT -> WER magnitude = 2 -> exp(-2)
+        self.assertAlmostEqual(self.metric(_make_result("hello world"), _make_result("")), math.exp(-2.0))
 
     def test_one_substitution(self):
-        self.assertAlmostEqual(self.metric(_make_result("hello earth"), _make_result("hello world")), 0.5)
+        # WER = 1/2
+        self.assertAlmostEqual(
+            self.metric(_make_result("hello earth"), _make_result("hello world")),
+            math.exp(-0.5),
+        )
 
     def test_completely_wrong(self):
-        self.assertAlmostEqual(self.metric(_make_result("foo bar"), _make_result("hello world")), 1.0)
+        # WER = 2/2 = 1 -> exp(-1)
+        self.assertAlmostEqual(
+            self.metric(_make_result("foo bar"), _make_result("hello world")),
+            math.exp(-1.0),
+        )
 
-    def test_is_unbounded(self):
-        self.assertFalse(self.metric.is_bounded)
+    def test_is_bounded(self):
+        self.assertTrue(self.metric.is_bounded)
 
     def test_split_bbs_equivalent(self):
         one_bb = OCRResult(
@@ -94,7 +114,7 @@ class TestOCRResultWER(unittest.TestCase):
                 BoundingBox(coordinates=((10, 0), (20, 10)), text="world"),
             ]
         )
-        self.assertAlmostEqual(self.metric(two_bbs, one_bb), 0.0)
+        self.assertAlmostEqual(self.metric(two_bbs, one_bb), 1.0)
 
     def test_special_chars_ignored(self):
         pred = OCRResult(
@@ -107,7 +127,7 @@ class TestOCRResultWER(unittest.TestCase):
                 BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
             ]
         )
-        self.assertAlmostEqual(self.metric(pred, gt), 0.0)
+        self.assertAlmostEqual(self.metric(pred, gt), 1.0)
 
     def test_punctuation_ignored(self):
         pred = OCRResult(
@@ -120,7 +140,7 @@ class TestOCRResultWER(unittest.TestCase):
                 BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
             ]
         )
-        self.assertAlmostEqual(self.metric(pred, gt), 0.0)
+        self.assertAlmostEqual(self.metric(pred, gt), 1.0)
 
 
 class TestWordCountRatio(unittest.TestCase):

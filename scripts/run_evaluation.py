@@ -21,8 +21,8 @@ from pathlib import Path
 from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
 from evaluation.evaluation_pipeline import ALL_TAGS_KEY, evaluation_pipeline
 from evaluation.metrics import (
-    ocr_result_cer,
-    ocr_result_wer,
+    ocr_result_char_accuracy,
+    ocr_result_word_accuracy,
     word_count_ratio,
     word_precision,
     word_recall,
@@ -33,8 +33,8 @@ from ocr_modules import import_all_modules
 from utils.datasets_handles import DATASET_DIR
 
 ALL_METRICS = [
-    ocr_result_cer,
-    ocr_result_wer,
+    ocr_result_char_accuracy,
+    ocr_result_word_accuracy,
     word_count_ratio,
     word_precision,
     word_recall,

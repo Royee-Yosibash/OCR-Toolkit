@@ -4,6 +4,7 @@ Provides text-level metrics (CER, WER) and word-level bag-of-words
 metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
+import math
 import re
 from abc import ABC, abstractmethod
 from collections import Counter
@@ -132,41 +133,64 @@ def _ocr_result_to_words(result: OCRResult) -> list[str]:
     return _ocr_result_to_text(result).split()
 
 
-class CharacterErrorRate(Metric):
-    """Compute the Character Error Rate over full concatenated text of two OCRResults.
+class CharacterAccuracy(Metric):
+    """Compute a character-level accuracy score from concatenated OCR texts.
 
-    CER = levenshtein_distance(prediction, ground_truth) / len(ground_truth).
-    Returns 0.0 when both texts are empty.
+    Internally derives the Character Error Rate
+    ``CER = levenshtein_distance(pred, gt) / len(gt)``, then maps it to
+    an accuracy score via ``exp(-CER)``. When the ground truth is empty
+    the raw character count of the prediction is used as the error
+    magnitude so spurious detections still produce vanishing scores.
+
+    Best score: 1.0 -- the prediction matches the ground truth character
+    for character (CER = 0). The score decays smoothly toward 0 as the
+    error rate grows: CER = 0.5 -> ~0.61, CER = 1 -> ~0.37, CER = 2 ->
+    ~0.14, CER -> infinity -> 0. The score is bounded to (0, 1] and is
+    never exactly 0, preserving differences between very-bad and
+    catastrophically-bad predictions.
     """
 
-    is_bounded = False
-    display_name = "Character Error Rate"
+    is_bounded = True
+    display_name = "Character Accuracy"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_text = _ocr_result_to_text(prediction)
         gt_text = _ocr_result_to_text(ground_truth)
         if len(gt_text) == 0:
-            return 0.0 if len(pred_text) == 0 else float(len(pred_text))
-        return _levenshtein_distance(pred_text, gt_text) / len(gt_text)
+            cer = 0.0 if len(pred_text) == 0 else float(len(pred_text))
+        else:
+            cer = _levenshtein_distance(pred_text, gt_text) / len(gt_text)
+        return math.exp(-cer)
 
 
-class WordErrorRate(Metric):
-    """Compute the Word Error Rate over full concatenated text of two OCRResults.
+class WordAccuracy(Metric):
+    """Compute a word-level accuracy score from concatenated OCR texts.
 
     Splits both texts on whitespace and computes the Levenshtein distance
-    at the word level, normalized by the number of ground-truth words.
-    Returns 0.0 when both texts are empty.
+    at the word level, normalized by the number of ground-truth words to
+    yield the Word Error Rate (WER). The accuracy score is then
+    ``exp(-WER)``. When the ground truth is empty the raw predicted word
+    count is used as the error magnitude.
+
+    Best score: 1.0 -- every ground-truth word appears in the same order
+    and form in the prediction (WER = 0). The score decays smoothly
+    toward 0 as the word-level error grows: WER = 0.5 -> ~0.61,
+    WER = 1 -> ~0.37, WER -> infinity -> 0. Bounded to (0, 1]; never
+    exactly 0, so it still distinguishes between bad and worse
+    predictions.
     """
 
-    is_bounded = False
-    display_name = "Word Error Rate"
+    is_bounded = True
+    display_name = "Word Accuracy"
 
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
         pred_words = _ocr_result_to_text(prediction).split()
         gt_words = _ocr_result_to_text(ground_truth).split()
         if len(gt_words) == 0:
-            return 0.0 if len(pred_words) == 0 else float(len(pred_words))
-        return _levenshtein_distance(pred_words, gt_words) / len(gt_words)
+            wer = 0.0 if len(pred_words) == 0 else float(len(pred_words))
+        else:
+            wer = _levenshtein_distance(pred_words, gt_words) / len(gt_words)
+        return math.exp(-wer)
 
 
 class WordCountRatio(Metric):
@@ -175,6 +199,18 @@ class WordCountRatio(Metric):
     A value of 1.0 means the same number of words were detected.
     Values above 1.0 indicate over-detection, below 1.0 indicate
     missed words.
+
+    Best score: 1.0 -- the prediction contains exactly as many words as
+    the ground truth (note this only checks counts, not which words).
+    Values >1.0 indicate over-detection (hallucinated, duplicated, or
+    over-segmented words); values <1.0 indicate under-detection (missed
+    or merged words). 0.0 means no words were detected. The metric is
+    unbounded above and is best read alongside WordPrecision/WordRecall:
+    a ratio of 1.0 with low precision/recall means the right *amount*
+    of words but the wrong ones.
+
+    Intentionally left unbounded and two-sided: the sign of the
+    deviation from 1.0 is itself the diagnostic signal.
     """
 
     is_bounded = False
@@ -194,6 +230,14 @@ class WordRecall(Metric):
     Uses bag-of-words matching with multiplicity: each GT word is
     matched at most as many times as it appears in the prediction.
     Order and BB boundaries are ignored.
+
+    Best score: 1.0 -- every ground-truth word (with multiplicity) is
+    present in the prediction; the OCR missed nothing. Lower values
+    indicate progressively more GT words went undetected or were
+    transcribed incorrectly: 0.5 means half the GT words were
+    recovered, 0.0 means none were. Bounded to [0, 1]. Recall is
+    insensitive to spurious extra words in the prediction; pair it
+    with WordPrecision to detect over-detection.
     """
 
     is_bounded = True
@@ -215,6 +259,14 @@ class WordPrecision(Metric):
     Uses bag-of-words matching with multiplicity: each predicted word
     is matched at most as many times as it appears in the GT.
     Order and BB boundaries are ignored.
+
+    Best score: 1.0 -- every predicted word (with multiplicity) is also
+    in the ground truth; the OCR added nothing spurious. Lower values
+    mean a growing fraction of predicted words are hallucinated,
+    duplicated, or mis-recognized: 0.5 means half the predicted words
+    do not appear in the GT, 0.0 means none of the prediction matches.
+    Bounded to [0, 1]. Precision is insensitive to GT words the model
+    failed to find; pair it with WordRecall to detect under-detection.
     """
 
     is_bounded = True
@@ -237,16 +289,16 @@ def metric_class_display_name(name: str) -> str:
     available, otherwise falls back to title-casing the class name.
 
     Args:
-        name: The metric class name (e.g. ``CharacterErrorRate``).
+        name: The metric class name (e.g. ``CharacterAccuracy``).
 
     Returns:
-        Human-readable label (e.g. ``Character Error Rate``).
+        Human-readable label (e.g. ``Character Accuracy``).
     """
     return METRICS_DISPLAY_NAME_LOOKUP.get(name, name)
 
 
-ocr_result_cer = CharacterErrorRate()
-ocr_result_wer = WordErrorRate()
+ocr_result_char_accuracy = CharacterAccuracy()
+ocr_result_word_accuracy = WordAccuracy()
 word_count_ratio = WordCountRatio()
 word_recall = WordRecall()
 word_precision = WordPrecision()

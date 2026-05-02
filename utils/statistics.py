@@ -37,7 +37,12 @@ def beta_ci(values: np.ndarray, level: int) -> list[float]:
     Returns:
         A two-element list [lower_bound, upper_bound].
     """
-    eps = 1e-6
+    # Smithson-Verkuilen boundary nudge: clamp distance from {0, 1} scales as 0.5/n
+    # so boundary observations stay away from the digamma singularity. A fixed
+    # tiny eps (e.g. 1e-6) makes log(x) and log(1-x) explode for small samples
+    # with mass at the edges, which drives scipy's Beta MLE into a region where
+    # the solver fails to converge (FitSolverError).
+    eps = 0.5 / len(values)
     clamped = np.clip(values, eps, 1 - eps)
     if not np.all(clamped == clamped[0]):
         a, b, _, _ = _stats.beta.fit(clamped, floc=0, fscale=1)
