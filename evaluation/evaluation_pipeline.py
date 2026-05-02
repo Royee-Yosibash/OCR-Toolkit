@@ -294,9 +294,7 @@ def evaluation_pipeline(
     per_image: dict[str, dict[str, dict[int, float]]] = {}
     image_tags: dict[int, list[str]] = {}
     if labels is None:
-        labels = [
-            ocr.alias if ocr.alias else f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)
-        ] if ocrs else []
+        labels = [ocr.alias if ocr.alias else f"{type(ocr).__name__}_{i}" for i, ocr in enumerate(ocrs)] if ocrs else []
 
     mode = "metrics-only" if metrics_only else "full"
     logger.info(
