@@ -701,7 +701,7 @@
                         showStatus(`OCR error: ${data.error}`);
                         return;
                     }
-                    const boxes = data.bounding_boxes || [];
+                    const boxes = data.detections || [];
                     const texts = boxes.map(b => b.text);
                     bb.text = texts.join(" ");
                     renderBBList();
@@ -741,7 +741,7 @@
                         showStatus(`OCR error on BB #${idx + 1}: ${data.error}`);
                         continue;
                     }
-                    const boxes = data.bounding_boxes || [];
+                    const boxes = data.detections || [];
                     bb.text = boxes.map(b => b.text).join(" ");
                 } catch (err) {
                     showStatus(`OCR failed on BB #${idx + 1}: ${err.message}`);
@@ -781,7 +781,7 @@
                         showStatus(`OCR error: ${data.error}`);
                         return;
                     }
-                    const boxes = data.bounding_boxes || [];
+                    const boxes = data.detections || [];
                     boxes.forEach(b => {
                         const coords = b.coordinates;
                         boundingBoxes.push({
@@ -1009,7 +1009,7 @@
             reader.onload = ev => {
                 try {
                     const data = JSON.parse(ev.target.result);
-                    const boxes = data.bounding_boxes || [];
+                    const boxes = data.detections || [];
                     boxes.forEach(b => {
                         const coords = b.coordinates;
                         boundingBoxes.push({

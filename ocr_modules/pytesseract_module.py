@@ -4,6 +4,7 @@ import logging
 
 import numpy as np
 
+from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
@@ -22,38 +23,52 @@ except ImportError:
 if _HAS_PYTESSERACT:
 
     class PytesseractModule(OCRAbstract):
-        """OCR module using the pytesseract (Tesseract) engine.
-
-        Skeleton implementation. The underlying engine is not yet wired up;
-        the class exists so it can be registered as an ``OCRAbstract``
-        subclass and selected via configuration.
-        """
+        """OCR module using the pytesseract (Tesseract) engine."""
 
         def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
-            """Initialize the pytesseract module.
+            """Initialize the pytesseract reader.
 
             Args:
                 config: An OCRConfig instance or a dict that will be
-                    unpacked into one.
+                    unpacked into one. Supported model_params keys:
+                    ``lang`` (default ``"eng"``).
                 alias: Optional display name used as the label in evaluations.
             """
             super().__init__(config, alias=alias)
-            self._reader = pytesseract
+            self._lang = self.config.model_params.pop("lang", "eng")
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run pytesseract on a single image.
 
-            Not yet implemented.
-
             Args:
                 image: Input image as a numpy array (H x W x C).
-                single_run_model_params: Additional keyword arguments for the
-                    pytesseract call.
+                single_run_model_params: Additional keyword arguments passed to
+                    ``pytesseract.image_to_data``.
 
             Returns:
                 An OCRResult containing detected text regions.
-
-            Raises:
-                NotImplementedError: Always; the engine integration is pending.
             """
-            raise NotImplementedError("PytesseractModule._run_single is not yet implemented.")
+            data = pytesseract.image_to_data(
+                image,
+                lang=self._lang,
+                output_type=pytesseract.Output.DICT,
+                **single_run_model_params,
+            )
+            bboxes = []
+            for i, text in enumerate(data["text"]):
+                if not text or not text.strip():
+                    continue
+                conf = float(data["conf"][i])
+                if conf < 0:
+                    continue
+                x = int(data["left"][i])
+                y = int(data["top"][i])
+                w = int(data["width"][i])
+                h = int(data["height"][i])
+                bb = BoundingBox(
+                    coordinates=((max(x, 0), max(y, 0)), (max(x + w, 0), max(y + h, 0))),
+                    text=text,
+                    confidence=conf / 100.0,
+                )
+                bboxes.append(bb)
+            return OCRResult(detections=bboxes)

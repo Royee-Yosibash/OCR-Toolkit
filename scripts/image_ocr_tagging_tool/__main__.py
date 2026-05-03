@@ -15,9 +15,12 @@ automatically.
 """
 
 import argparse
+import logging
 import webbrowser
 
 from ocr_modules import import_all_modules
+
+logger = logging.getLogger(__name__)
 
 
 def main() -> None:
@@ -37,13 +40,25 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        force=True,
+    )
+
+    logger.info("Importing all OCR modules to trigger registration")
     import_all_modules()
+    logger.info("OCR modules imported")
 
     from scripts.image_ocr_tagging_tool.app import create_app
 
+    logger.info("Creating Flask app")
     app = create_app()
 
+    logger.info("Opening browser at http://localhost:%d", args.port)
     webbrowser.open(f"http://localhost:{args.port}")
+
+    logger.info("Starting Flask server on port %d", args.port)
     app.run(host="localhost", port=args.port)
 
 
