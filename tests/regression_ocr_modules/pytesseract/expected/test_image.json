@@ -1,0 +1,8255 @@
+{
+  "_type": "OCRResult",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          30,
+          57
+        ],
+        [
+          64,
+          67
+        ]
+      ],
+      "text": "Have",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          80,
+          57
+        ],
+        [
+          132,
+          67
+        ]
+      ],
+      "text": "Dream\u201d",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          137,
+          57
+        ],
+        [
+          183,
+          70
+        ]
+      ],
+      "text": "Speech",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          189,
+          57
+        ],
+        [
+          204,
+          70
+        ]
+      ],
+      "text": "by",
+      "confidence": 0.97
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          209,
+          57
+        ],
+        [
+          230,
+          67
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          235,
+          57
+        ],
+        [
+          263,
+          67
+        ]
+      ],
+      "text": "Rev.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          268,
+          57
+        ],
+        [
+          313,
+          67
+        ]
+      ],
+      "text": "Martin",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          318,
+          57
+        ],
+        [
+          363,
+          67
+        ]
+      ],
+      "text": "Luther",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          368,
+          57
+        ],
+        [
+          398,
+          70
+        ]
+      ],
+      "text": "King",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          402,
+          57
+        ],
+        [
+          416,
+          69
+        ]
+      ],
+      "text": "Jr.",
+      "confidence": 0.82
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          438,
+          57
+        ],
+        [
+          459,
+          67
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          464,
+          57
+        ],
+        [
+          512,
+          67
+        ]
+      ],
+      "text": "\u201cMarch",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          538,
+          57
+        ],
+        [
+          630,
+          70
+        ]
+      ],
+      "text": "Washington,\u201d",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          420,
+          58
+        ],
+        [
+          433,
+          67
+        ]
+      ],
+      "text": "at",
+      "confidence": 0.82
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          68,
+          60
+        ],
+        [
+          75,
+          67
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          517,
+          60
+        ],
+        [
+          533,
+          67
+        ]
+      ],
+      "text": "on",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          16,
+          77
+        ],
+        [
+          47,
+          87
+        ]
+      ],
+      "text": "1963",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          53,
+          77
+        ],
+        [
+          124,
+          90
+        ]
+      ],
+      "text": "(excerpts)",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          265,
+          109
+        ],
+        [
+          285,
+          138
+        ]
+      ],
+      "text": "will",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          44,
+          118
+        ],
+        [
+          80,
+          131
+        ]
+      ],
+      "text": "happy",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          98,
+          118
+        ],
+        [
+          113,
+          131
+        ]
+      ],
+      "text": "join",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          125,
+          118
+        ],
+        [
+          151,
+          128
+        ]
+      ],
+      "text": "with",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          180,
+          118
+        ],
+        [
+          214,
+          131
+        ]
+      ],
+      "text": "today",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          218,
+          118
+        ],
+        [
+          228,
+          128
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          235,
+          118
+        ],
+        [
+          260,
+          128
+        ]
+      ],
+      "text": "what",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          307,
+          118
+        ],
+        [
+          340,
+          128
+        ]
+      ],
+      "text": "down",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          344,
+          118
+        ],
+        [
+          354,
+          128
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          359,
+          118
+        ],
+        [
+          399,
+          131
+        ]
+      ],
+      "text": "history",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          419,
+          118
+        ],
+        [
+          438,
+          128
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          495,
+          118
+        ],
+        [
+          583,
+          128
+        ]
+      ],
+      "text": "demonstration",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          587,
+          118
+        ],
+        [
+          604,
+          128
+        ]
+      ],
+      "text": "for",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          119
+        ],
+        [
+          39,
+          128
+        ]
+      ],
+      "text": "lam",
+      "confidence": 0.3
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          83,
+          119
+        ],
+        [
+          96,
+          128
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          442,
+          119
+        ],
+        [
+          491,
+          131
+        ]
+      ],
+      "text": "greatest",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          154,
+          121
+        ],
+        [
+          176,
+          131
+        ]
+      ],
+      "text": "you",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          289,
+          121
+        ],
+        [
+          303,
+          131
+        ]
+      ],
+      "text": "go",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          403,
+          121
+        ],
+        [
+          415,
+          128
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          150,
+          130
+        ],
+        [
+          163,
+          159
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          169,
+          130
+        ],
+        [
+          184,
+          159
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          139
+        ],
+        [
+          65,
+          149
+        ]
+      ],
+      "text": "freedom",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          69,
+          139
+        ],
+        [
+          79,
+          149
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          83,
+          139
+        ],
+        [
+          103,
+          149
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          107,
+          139
+        ],
+        [
+          147,
+          152
+        ]
+      ],
+      "text": "history",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          191,
+          139
+        ],
+        [
+          232,
+          149
+        ]
+      ],
+      "text": "nation.",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          404,
+          158
+        ],
+        [
+          417,
+          187
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          167
+        ],
+        [
+          38,
+          177
+        ]
+      ],
+      "text": "Five",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          243,
+          167
+        ],
+        [
+          252,
+          177
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          167
+        ],
+        [
+          295,
+          177
+        ]
+      ],
+      "text": "whose",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          299,
+          167
+        ],
+        [
+          351,
+          180
+        ]
+      ],
+      "text": "symbolic",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          355,
+          167
+        ],
+        [
+          458,
+          177
+        ]
+      ],
+      "text": "shadow",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          424,
+          167
+        ],
+        [
+          456,
+          177
+        ]
+      ],
+      "text": "stand",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          462,
+          167
+        ],
+        [
+          495,
+          180
+        ]
+      ],
+      "text": "today",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          499,
+          167
+        ],
+        [
+          537,
+          180
+        ]
+      ],
+      "text": "signed",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          541,
+          167
+        ],
+        [
+          560,
+          177
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          147,
+          168
+        ],
+        [
+          178,
+          180
+        ]
+      ],
+      "text": "great",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          182,
+          168
+        ],
+        [
+          238,
+          177
+        ]
+      ],
+      "text": "American",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          42,
+          170
+        ],
+        [
+          73,
+          177
+        ]
+      ],
+      "text": "score",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          77,
+          170
+        ],
+        [
+          108,
+          180
+        ]
+      ],
+      "text": "years",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          112,
+          170
+        ],
+        [
+          133,
+          180
+        ]
+      ],
+      "text": "ago",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          137,
+          170
+        ],
+        [
+          143,
+          177
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          188
+        ],
+        [
+          95,
+          201
+        ]
+      ],
+      "text": "Emancipation",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          99,
+          188
+        ],
+        [
+          181,
+          198
+        ]
+      ],
+      "text": "Proclamation.",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          185,
+          188
+        ],
+        [
+          209,
+          198
+        ]
+      ],
+      "text": "This",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          289,
+          188
+        ],
+        [
+          329,
+          198
+        ]
+      ],
+      "text": "decree",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          390,
+          188
+        ],
+        [
+          433,
+          198
+        ]
+      ],
+      "text": "beacon",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          437,
+          188
+        ],
+        [
+          463,
+          201
+        ]
+      ],
+      "text": "light",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          467,
+          188
+        ],
+        [
+          479,
+          198
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          483,
+          188
+        ],
+        [
+          512,
+          201
+        ]
+      ],
+      "text": "hope",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          532,
+          188
+        ],
+        [
+          578,
+          198
+        ]
+      ],
+      "text": "millions",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          581,
+          188
+        ],
+        [
+          594,
+          198
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          213,
+          189
+        ],
+        [
+          285,
+          198
+        ]
+      ],
+      "text": "momentous",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          355,
+          189
+        ],
+        [
+          387,
+          201
+        ]
+      ],
+      "text": "great",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          516,
+          189
+        ],
+        [
+          528,
+          198
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          597,
+          189
+        ],
+        [
+          633,
+          201
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.79
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          333,
+          191
+        ],
+        [
+          341,
+          198
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          345,
+          191
+        ],
+        [
+          351,
+          198
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          199
+        ],
+        [
+          52,
+          228
+        ]
+      ],
+      "text": "slaves",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          55,
+          199
+        ],
+        [
+          76,
+          228
+        ]
+      ],
+      "text": "who",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          266,
+          199
+        ],
+        [
+          276,
+          228
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          83,
+          208
+        ],
+        [
+          104,
+          218
+        ]
+      ],
+      "text": "had",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          109,
+          208
+        ],
+        [
+          137,
+          218
+        ]
+      ],
+      "text": "been",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          142,
+          208
+        ],
+        [
+          181,
+          218
+        ]
+      ],
+      "text": "seared",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          199,
+          208
+        ],
+        [
+          219,
+          218
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          222,
+          208
+        ],
+        [
+          262,
+          218
+        ]
+      ],
+      "text": "flames",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          281,
+          208
+        ],
+        [
+          338,
+          221
+        ]
+      ],
+      "text": "withering",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          345,
+          208
+        ],
+        [
+          394,
+          221
+        ]
+      ],
+      "text": "injustice.",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          471,
+          208
+        ],
+        [
+          511,
+          221
+        ]
+      ],
+      "text": "joyous",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          515,
+          208
+        ],
+        [
+          569,
+          221
+        ]
+      ],
+      "text": "daybreak",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          589,
+          208
+        ],
+        [
+          611,
+          218
+        ]
+      ],
+      "text": "end",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          615,
+          208
+        ],
+        [
+          634,
+          218
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          399,
+          209
+        ],
+        [
+          407,
+          218
+        ]
+      ],
+      "text": "It",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          410,
+          209
+        ],
+        [
+          442,
+          218
+        ]
+      ],
+      "text": "came",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          573,
+          209
+        ],
+        [
+          585,
+          218
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          189,
+          211
+        ],
+        [
+          195,
+          218
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          446,
+          211
+        ],
+        [
+          458,
+          218
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          462,
+          211
+        ],
+        [
+          468,
+          218
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          76,
+          220
+        ],
+        [
+          85,
+          249
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          298,
+          220
+        ],
+        [
+          316,
+          249
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          229
+        ],
+        [
+          40,
+          242
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.82
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          44,
+          229
+        ],
+        [
+          74,
+          242
+        ]
+      ],
+      "text": "night",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          85,
+          229
+        ],
+        [
+          121,
+          239
+        ]
+      ],
+      "text": "their",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          124,
+          229
+        ],
+        [
+          178,
+          242
+        ]
+      ],
+      "text": "captivity.",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          207,
+          229
+        ],
+        [
+          228,
+          239
+        ]
+      ],
+      "text": "100",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          267,
+          229
+        ],
+        [
+          294,
+          239
+        ]
+      ],
+      "text": "later",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          386,
+          229
+        ],
+        [
+          394,
+          239
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.65
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          421,
+          229
+        ],
+        [
+          448,
+          239
+        ]
+      ],
+      "text": "free.",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          452,
+          229
+        ],
+        [
+          476,
+          239
+        ]
+      ],
+      "text": "One",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          481,
+          229
+        ],
+        [
+          530,
+          239
+        ]
+      ],
+      "text": "hundred",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          570,
+          229
+        ],
+        [
+          598,
+          239
+        ]
+      ],
+      "text": "later",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          601,
+          229
+        ],
+        [
+          620,
+          239
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          182,
+          230
+        ],
+        [
+          202,
+          239
+        ]
+      ],
+      "text": "But",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          322,
+          230
+        ],
+        [
+          357,
+          242
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          361,
+          230
+        ],
+        [
+          371,
+          239
+        ]
+      ],
+      "text": "still",
+      "confidence": 0.65
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          398,
+          230
+        ],
+        [
+          418,
+          239
+        ]
+      ],
+      "text": "not",
+      "confidence": 0.8
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          231,
+          232
+        ],
+        [
+          263,
+          242
+        ]
+      ],
+      "text": "years",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          534,
+          232
+        ],
+        [
+          566,
+          242
+        ]
+      ],
+      "text": "years",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          240,
+          241
+        ],
+        [
+          253,
+          270
+        ]
+      ],
+      "text": "by",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          250
+        ],
+        [
+          32,
+          260
+        ]
+      ],
+      "text": "life",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          37,
+          250
+        ],
+        [
+          48,
+          260
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          54,
+          250
+        ],
+        [
+          71,
+          260
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          115,
+          250
+        ],
+        [
+          123,
+          260
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          127,
+          250
+        ],
+        [
+          147,
+          260
+        ]
+      ],
+      "text": "still",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          152,
+          250
+        ],
+        [
+          183,
+          263
+        ]
+      ],
+      "text": "badly",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          187,
+          250
+        ],
+        [
+          234,
+          263
+        ]
+      ],
+      "text": "crippled",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          250
+        ],
+        [
+          276,
+          260
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          280,
+          250
+        ],
+        [
+          335,
+          260
+        ]
+      ],
+      "text": "manacles",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          339,
+          250
+        ],
+        [
+          351,
+          260
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          355,
+          250
+        ],
+        [
+          423,
+          263
+        ]
+      ],
+      "text": "segregation",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          428,
+          250
+        ],
+        [
+          449,
+          260
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          453,
+          250
+        ],
+        [
+          473,
+          260
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          477,
+          250
+        ],
+        [
+          514,
+          260
+        ]
+      ],
+      "text": "chains",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          518,
+          250
+        ],
+        [
+          543,
+          260
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          562,
+          250
+        ],
+        [
+          564,
+          252
+        ]
+      ],
+      "text": "discrit",
+      "confidence": 0.84
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          577,
+          250
+        ],
+        [
+          621,
+          260
+        ]
+      ],
+      "text": "ination.",
+      "confidence": 0.54
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          75,
+          251
+        ],
+        [
+          111,
+          263
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          225,
+          261
+        ],
+        [
+          252,
+          290
+        ]
+      ],
+      "text": "lives",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          425,
+          261
+        ],
+        [
+          438,
+          290
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          270
+        ],
+        [
+          38,
+          280
+        ]
+      ],
+      "text": "\u2018One",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          43,
+          270
+        ],
+        [
+          92,
+          280
+        ]
+      ],
+      "text": "hundred",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          132,
+          270
+        ],
+        [
+          159,
+          280
+        ]
+      ],
+      "text": "later",
+      "confidence": 0.88
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          162,
+          270
+        ],
+        [
+          182,
+          280
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          285,
+          270
+        ],
+        [
+          320,
+          283
+        ]
+      ],
+      "text": "lonely",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          324,
+          270
+        ],
+        [
+          358,
+          280
+        ]
+      ],
+      "text": "island",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          362,
+          270
+        ],
+        [
+          373,
+          280
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          378,
+          270
+        ],
+        [
+          437,
+          283
+        ]
+      ],
+      "text": "poverty",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          441,
+          270
+        ],
+        [
+          461,
+          280
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          465,
+          270
+        ],
+        [
+          498,
+          280
+        ]
+      ],
+      "text": "midst",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          503,
+          270
+        ],
+        [
+          513,
+          280
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          594,
+          270
+        ],
+        [
+          607,
+          280
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          186,
+          271
+        ],
+        [
+          222,
+          283
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          527,
+          271
+        ],
+        [
+          551,
+          280
+        ]
+      ],
+      "text": "vast",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          96,
+          273
+        ],
+        [
+          128,
+          283
+        ]
+      ],
+      "text": "years",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          273
+        ],
+        [
+          269,
+          280
+        ]
+      ],
+      "text": "on",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          274,
+          273
+        ],
+        [
+          280,
+          280
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          519,
+          273
+        ],
+        [
+          523,
+          280
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          555,
+          273
+        ],
+        [
+          590,
+          280
+        ]
+      ],
+      "text": "ocean",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          344,
+          282
+        ],
+        [
+          355,
+          311
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          359,
+          282
+        ],
+        [
+          381,
+          311
+        ]
+      ],
+      "text": "still",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          291
+        ],
+        [
+          63,
+          301
+        ]
+      ],
+      "text": "material",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          68,
+          291
+        ],
+        [
+          128,
+          304
+        ]
+      ],
+      "text": "prosperity.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          136,
+          291
+        ],
+        [
+          160,
+          301
+        ]
+      ],
+      "text": "One",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          164,
+          291
+        ],
+        [
+          214,
+          301
+        ]
+      ],
+      "text": "hundred",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          254,
+          291
+        ],
+        [
+          281,
+          301
+        ]
+      ],
+      "text": "later",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          284,
+          291
+        ],
+        [
+          304,
+          301
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          384,
+          291
+        ],
+        [
+          447,
+          304
+        ]
+      ],
+      "text": "languished",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          452,
+          291
+        ],
+        [
+          462,
+          301
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          466,
+          291
+        ],
+        [
+          485,
+          301
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          537,
+          291
+        ],
+        [
+          550,
+          301
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          308,
+          292
+        ],
+        [
+          344,
+          304
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          553,
+          292
+        ],
+        [
+          580,
+          301
+        ]
+      ],
+      "text": "Amer",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          218,
+          294
+        ],
+        [
+          250,
+          304
+        ]
+      ],
+      "text": "years",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          489,
+          294
+        ],
+        [
+          534,
+          301
+        ]
+      ],
+      "text": "corners",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          603,
+          294
+        ],
+        [
+          609,
+          301
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.0
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          468,
+          302
+        ],
+        [
+          478,
+          331
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          311
+        ],
+        [
+          81,
+          321
+        ]
+      ],
+      "text": "\u2018and",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          85,
+          311
+        ],
+        [
+          114,
+          321
+        ]
+      ],
+      "text": "finds",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          118,
+          311
+        ],
+        [
+          161,
+          321
+        ]
+      ],
+      "text": "himself",
+      "confidence": 0.62
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          165,
+          311
+        ],
+        [
+          175,
+          321
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          225,
+          311
+        ],
+        [
+          241,
+          321
+        ]
+      ],
+      "text": "his",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          274,
+          311
+        ],
+        [
+          302,
+          321
+        ]
+      ],
+      "text": "land.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          306,
+          311
+        ],
+        [
+          320,
+          321
+        ]
+      ],
+      "text": "So",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          324,
+          311
+        ],
+        [
+          359,
+          321
+        ]
+      ],
+      "text": "we've",
+      "confidence": 0.79
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          400,
+          311
+        ],
+        [
+          426,
+          321
+        ]
+      ],
+      "text": "here",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          430,
+          311
+        ],
+        [
+          479,
+          324
+        ]
+      ],
+      "text": "today",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          483,
+          311
+        ],
+        [
+          514,
+          321
+        ]
+      ],
+      "text": "dramatize",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          557,
+          311
+        ],
+        [
+          611,
+          321
+        ]
+      ],
+      "text": "shameful",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          179,
+          314
+        ],
+        [
+          192,
+          321
+        ]
+      ],
+      "text": "exile",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          213,
+          314
+        ],
+        [
+          220,
+          321
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          244,
+          314
+        ],
+        [
+          269,
+          321
+        ]
+      ],
+      "text": "own",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          363,
+          314
+        ],
+        [
+          395,
+          321
+        ]
+      ],
+      "text": "come",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          546,
+          314
+        ],
+        [
+          552,
+          321
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          332
+        ],
+        [
+          73,
+          342
+        ]
+      ],
+      "text": "condition.",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          76,
+          360
+        ],
+        [
+          111,
+          370
+        ]
+      ],
+      "text": "we've",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          191,
+          360
+        ],
+        [
+          239,
+          370
+        ]
+      ],
+      "text": "nation\u2019s",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          242,
+          360
+        ],
+        [
+          281,
+          373
+        ]
+      ],
+      "text": "capital",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          301,
+          360
+        ],
+        [
+          327,
+          370
+        ]
+      ],
+      "text": "cash",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          341,
+          360
+        ],
+        [
+          378,
+          370
+        ]
+      ],
+      "text": "check.",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          382,
+          360
+        ],
+        [
+          417,
+          370
+        ]
+      ],
+      "text": "When",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          421,
+          360
+        ],
+        [
+          441,
+          370
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          445,
+          360
+        ],
+        [
+          503,
+          370
+        ]
+      ],
+      "text": "architects",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          507,
+          360
+        ],
+        [
+          519,
+          370
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          547,
+          360
+        ],
+        [
+          597,
+          373
+        ]
+      ],
+      "text": "Republic",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          361
+        ],
+        [
+          25,
+          370
+        ]
+      ],
+      "text": "In",
+      "confidence": 0.74
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          151,
+          361
+        ],
+        [
+          164,
+          370
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          285,
+          361
+        ],
+        [
+          297,
+          370
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          600,
+          361
+        ],
+        [
+          636,
+          370
+        ]
+      ],
+      "text": "wrote",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          29,
+          363
+        ],
+        [
+          35,
+          370
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.74
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          39,
+          363
+        ],
+        [
+          73,
+          370
+        ]
+      ],
+      "text": "sense",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          115,
+          363
+        ],
+        [
+          147,
+          370
+        ]
+      ],
+      "text": "come",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          167,
+          363
+        ],
+        [
+          188,
+          370
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          331,
+          363
+        ],
+        [
+          337,
+          370
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          522,
+          363
+        ],
+        [
+          543,
+          370
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          152,
+          372
+        ],
+        [
+          163,
+          401
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          169,
+          372
+        ],
+        [
+          184,
+          401
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          381
+        ],
+        [
+          33,
+          391
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          381
+        ],
+        [
+          108,
+          394
+        ]
+      ],
+      "text": "magnificent",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          111,
+          381
+        ],
+        [
+          148,
+          391
+        ]
+      ],
+      "text": "words",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          190,
+          381
+        ],
+        [
+          263,
+          391
+        ]
+      ],
+      "text": "Constitution",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          267,
+          381
+        ],
+        [
+          289,
+          391
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          293,
+          381
+        ],
+        [
+          312,
+          391
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          317,
+          381
+        ],
+        [
+          384,
+          391
+        ]
+      ],
+      "text": "Declaration",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          388,
+          381
+        ],
+        [
+          401,
+          391
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          404,
+          381
+        ],
+        [
+          492,
+          394
+        ]
+      ],
+      "text": "Independence,",
+      "confidence": 0.88
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          496,
+          381
+        ],
+        [
+          523,
+          394
+        ]
+      ],
+      "text": "they",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          560,
+          381
+        ],
+        [
+          601,
+          394
+        ]
+      ],
+      "text": "signing",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          526,
+          384
+        ],
+        [
+          556,
+          391
+        ]
+      ],
+      "text": "were",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          605,
+          384
+        ],
+        [
+          611,
+          391
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          131,
+          402
+        ],
+        [
+          166,
+          412
+        ]
+      ],
+      "text": "which",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          206,
+          402
+        ],
+        [
+          262,
+          412
+        ]
+      ],
+      "text": "American",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          308,
+          402
+        ],
+        [
+          326,
+          412
+        ]
+      ],
+      "text": "fall",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          331,
+          402
+        ],
+        [
+          348,
+          412
+        ]
+      ],
+      "text": "heir.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          360,
+          402
+        ],
+        [
+          384,
+          412
+        ]
+      ],
+      "text": "This",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          456,
+          402
+        ],
+        [
+          504,
+          415
+        ]
+      ],
+      "text": "promise",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          508,
+          402
+        ],
+        [
+          532,
+          412
+        ]
+      ],
+      "text": "that",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          536,
+          402
+        ],
+        [
+          549,
+          412
+        ]
+      ],
+      "text": "all",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          85,
+          403
+        ],
+        [
+          111,
+          412
+        ]
+      ],
+      "text": "note",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          115,
+          403
+        ],
+        [
+          127,
+          412
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          292,
+          403
+        ],
+        [
+          305,
+          412
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          388,
+          403
+        ],
+        [
+          415,
+          412
+        ]
+      ],
+      "text": "note",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          405
+        ],
+        [
+          80,
+          415
+        ]
+      ],
+      "text": "promissory",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          170,
+          405
+        ],
+        [
+          202,
+          415
+        ]
+      ],
+      "text": "every",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          266,
+          405
+        ],
+        [
+          289,
+          412
+        ]
+      ],
+      "text": "was",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          419,
+          405
+        ],
+        [
+          442,
+          412
+        ]
+      ],
+      "text": "was",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          446,
+          405
+        ],
+        [
+          452,
+          412
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          553,
+          405
+        ],
+        [
+          615,
+          415
+        ]
+      ],
+      "text": "men\u2014yes,",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          422
+        ],
+        [
+          45,
+          432
+        ]
+      ],
+      "text": "black",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          94,
+          422
+        ],
+        [
+          118,
+          432
+        ]
+      ],
+      "text": "well",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          138,
+          422
+        ],
+        [
+          172,
+          432
+        ]
+      ],
+      "text": "white",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          176,
+          422
+        ],
+        [
+          252,
+          432
+        ]
+      ],
+      "text": "men\u2014would",
+      "confidence": 0.84
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          422
+        ],
+        [
+          270,
+          432
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          274,
+          422
+        ],
+        [
+          342,
+          435
+        ]
+      ],
+      "text": "guaranteed",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          346,
+          422
+        ],
+        [
+          366,
+          432
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          370,
+          422
+        ],
+        [
+          439,
+          432
+        ]
+      ],
+      "text": "unalienable",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          443,
+          422
+        ],
+        [
+          476,
+          435
+        ]
+      ],
+      "text": "rights",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          480,
+          422
+        ],
+        [
+          492,
+          432
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          495,
+          422
+        ],
+        [
+          516,
+          434
+        ]
+      ],
+      "text": "life,",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          521,
+          422
+        ],
+        [
+          559,
+          435
+        ]
+      ],
+      "text": "iberty",
+      "confidence": 0.73
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          562,
+          422
+        ],
+        [
+          584,
+          432
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          588,
+          422
+        ],
+        [
+          607,
+          432
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          49,
+          425
+        ],
+        [
+          74,
+          432
+        ]
+      ],
+      "text": "men",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          79,
+          425
+        ],
+        [
+          91,
+          432
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          122,
+          425
+        ],
+        [
+          135,
+          432
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          60,
+          434
+        ],
+        [
+          73,
+          463
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          443
+        ],
+        [
+          97,
+          456
+        ]
+      ],
+      "text": "pursuit",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          117,
+          446
+        ],
+        [
+          145,
+          453
+        ]
+      ],
+      "text": "happiness.",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          157,
+          451
+        ],
+        [
+          159,
+          453
+        ]
+      ],
+      "text": "...",
+      "confidence": 0.37
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          71,
+          471
+        ],
+        [
+          115,
+          481
+        ]
+      ],
+      "text": "forever",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          118,
+          471
+        ],
+        [
+          166,
+          481
+        ]
+      ],
+      "text": "conduct",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          194,
+          471
+        ],
+        [
+          241,
+          484
+        ]
+      ],
+      "text": "struggle",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          263,
+          471
+        ],
+        [
+          283,
+          481
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          287,
+          471
+        ],
+        [
+          312,
+          484
+        ]
+      ],
+      "text": "high",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          316,
+          471
+        ],
+        [
+          348,
+          484
+        ]
+      ],
+      "text": "plane",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          352,
+          471
+        ],
+        [
+          375,
+          481
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          412,
+          471
+        ],
+        [
+          433,
+          481
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          437,
+          471
+        ],
+        [
+          496,
+          484
+        ]
+      ],
+      "text": "discipline.",
+      "confidence": 0.87
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          581,
+          471
+        ],
+        [
+          613,
+          481
+        ]
+      ],
+      "text": "allow",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          472
+        ],
+        [
+          34,
+          481
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.84
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          472
+        ],
+        [
+          68,
+          481
+        ]
+      ],
+      "text": "must",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          500,
+          472
+        ],
+        [
+          520,
+          481
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          524,
+          472
+        ],
+        [
+          554,
+          481
+        ]
+      ],
+      "text": "must",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          558,
+          472
+        ],
+        [
+          577,
+          481
+        ]
+      ],
+      "text": "not",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          170,
+          474
+        ],
+        [
+          190,
+          481
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          245,
+          474
+        ],
+        [
+          259,
+          481
+        ]
+      ],
+      "text": "on",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          379,
+          474
+        ],
+        [
+          392,
+          484
+        ]
+      ],
+      "text": "dignity",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          616,
+          474
+        ],
+        [
+          637,
+          481
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.86
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          341,
+          483
+        ],
+        [
+          344,
+          512
+        ]
+      ],
+      "text": ".",
+      "confidence": 0.72
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          492
+        ],
+        [
+          61,
+          502
+        ]
+      ],
+      "text": "creative",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          134,
+          492
+        ],
+        [
+          202,
+          505
+        ]
+      ],
+      "text": "degenerate",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          206,
+          492
+        ],
+        [
+          229,
+          502
+        ]
+      ],
+      "text": "into",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          233,
+          492
+        ],
+        [
+          279,
+          505
+        ]
+      ],
+      "text": "physical",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          283,
+          492
+        ],
+        [
+          336,
+          502
+        ]
+      ],
+      "text": "violence.",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          361,
+          492
+        ],
+        [
+          383,
+          502
+        ]
+      ],
+      "text": "The",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          387,
+          492
+        ],
+        [
+          449,
+          502
+        ]
+      ],
+      "text": "marvelous",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          538,
+          492
+        ],
+        [
+          573,
+          502
+        ]
+      ],
+      "text": "which",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          578,
+          492
+        ],
+        [
+          598,
+          502
+        ]
+      ],
+      "text": "has",
+      "confidence": 0.84
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          66,
+          493
+        ],
+        [
+          114,
+          505
+        ]
+      ],
+      "text": "protests",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          117,
+          493
+        ],
+        [
+          130,
+          502
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          482,
+          493
+        ],
+        [
+          535,
+          505
+        ]
+      ],
+      "text": "militancy",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          453,
+          495
+        ],
+        [
+          478,
+          502
+        ]
+      ],
+      "text": "new",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          348,
+          500
+        ],
+        [
+          357,
+          502
+        ]
+      ],
+      "text": "..",
+      "confidence": 0.72
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          573,
+          504
+        ],
+        [
+          603,
+          533
+        ]
+      ],
+      "text": "white",
+      "confidence": 0.79
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          513
+        ],
+        [
+          66,
+          526
+        ]
+      ],
+      "text": "engulfed",
+      "confidence": 0.64
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          70,
+          513
+        ],
+        [
+          89,
+          523
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          133,
+          513
+        ],
+        [
+          200,
+          526
+        ]
+      ],
+      "text": "community",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          261,
+          513
+        ],
+        [
+          284,
+          523
+        ]
+      ],
+      "text": "lead",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          323,
+          513
+        ],
+        [
+          367,
+          523
+        ]
+      ],
+      "text": "distrust",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          371,
+          513
+        ],
+        [
+          384,
+          523
+        ]
+      ],
+      "text": "all",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          388,
+          513
+        ],
+        [
+          421,
+          523
+        ]
+      ],
+      "text": "white",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          425,
+          513
+        ],
+        [
+          469,
+          526
+        ]
+      ],
+      "text": "people,",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          473,
+          513
+        ],
+        [
+          490,
+          523
+        ]
+      ],
+      "text": "for",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          530,
+          513
+        ],
+        [
+          543,
+          523
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          94,
+          514
+        ],
+        [
+          129,
+          526
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          204,
+          514
+        ],
+        [
+          234,
+          523
+        ]
+      ],
+      "text": "must",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          239,
+          514
+        ],
+        [
+          257,
+          523
+        ]
+      ],
+      "text": "not",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          306,
+          514
+        ],
+        [
+          319,
+          523
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          290,
+          516
+        ],
+        [
+          303,
+          523
+        ]
+      ],
+      "text": "us",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          494,
+          516
+        ],
+        [
+          527,
+          526
+        ]
+      ],
+      "text": "many",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          548,
+          516
+        ],
+        [
+          566,
+          523
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          152,
+          524
+        ],
+        [
+          165,
+          553
+        ]
+      ],
+      "text": "by",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          533
+        ],
+        [
+          68,
+          545
+        ]
+      ],
+      "text": "brothers,",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          89,
+          533
+        ],
+        [
+          149,
+          543
+        ]
+      ],
+      "text": "evidenced",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          170,
+          533
+        ],
+        [
+          199,
+          543
+        ]
+      ],
+      "text": "their",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          261,
+          533
+        ],
+        [
+          287,
+          543
+        ]
+      ],
+      "text": "here",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          291,
+          533
+        ],
+        [
+          328,
+          546
+        ]
+      ],
+      "text": "today,",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          332,
+          533
+        ],
+        [
+          360,
+          543
+        ]
+      ],
+      "text": "have",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          416,
+          533
+        ],
+        [
+          455,
+          543
+        ]
+      ],
+      "text": "realize",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          458,
+          533
+        ],
+        [
+          483,
+          543
+        ]
+      ],
+      "text": "that",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          486,
+          533
+        ],
+        [
+          515,
+          543
+        ]
+      ],
+      "text": "their",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          518,
+          533
+        ],
+        [
+          561,
+          546
+        ]
+      ],
+      "text": "destiny",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          565,
+          533
+        ],
+        [
+          574,
+          543
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.82
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          577,
+          533
+        ],
+        [
+          599,
+          543
+        ]
+      ],
+      "text": "tied",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          400,
+          534
+        ],
+        [
+          412,
+          543
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          73,
+          536
+        ],
+        [
+          85,
+          543
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          203,
+          536
+        ],
+        [
+          256,
+          546
+        ]
+      ],
+      "text": "presence",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          364,
+          536
+        ],
+        [
+          396,
+          543
+        ]
+      ],
+      "text": "come",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          604,
+          536
+        ],
+        [
+          619,
+          546
+        ]
+      ],
+      "text": "up",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          554
+        ],
+        [
+          40,
+          564
+        ]
+      ],
+      "text": "with",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          68,
+          554
+        ],
+        [
+          114,
+          567
+        ]
+      ],
+      "text": "destiny.",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          44,
+          557
+        ],
+        [
+          65,
+          564
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          103,
+          582
+        ],
+        [
+          131,
+          592
+        ]
+      ],
+      "text": "walk",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          134,
+          582
+        ],
+        [
+          170,
+          592
+        ]
+      ],
+      "text": "alone.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          174,
+          582
+        ],
+        [
+          197,
+          592
+        ]
+      ],
+      "text": "And",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          239,
+          582
+        ],
+        [
+          266,
+          592
+        ]
+      ],
+      "text": "walk",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          324,
+          582
+        ],
+        [
+          356,
+          592
+        ]
+      ],
+      "text": "make",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          360,
+          582
+        ],
+        [
+          379,
+          592
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          384,
+          582
+        ],
+        [
+          423,
+          595
+        ]
+      ],
+      "text": "pledge",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          427,
+          582
+        ],
+        [
+          451,
+          592
+        ]
+      ],
+      "text": "that",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          476,
+          582
+        ],
+        [
+          502,
+          592
+        ]
+      ],
+      "text": "shall",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          506,
+          582
+        ],
+        [
+          547,
+          595
+        ]
+      ],
+      "text": "always",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          550,
+          582
+        ],
+        [
+          587,
+          592
+        ]
+      ],
+      "text": "march",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          591,
+          582
+        ],
+        [
+          631,
+          592
+        ]
+      ],
+      "text": "ahead.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          35,
+          583
+        ],
+        [
+          55,
+          592
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.82
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          583
+        ],
+        [
+          100,
+          592
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          291,
+          583
+        ],
+        [
+          321,
+          592
+        ]
+      ],
+      "text": "must",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          202,
+          585
+        ],
+        [
+          214,
+          592
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          217,
+          585
+        ],
+        [
+          235,
+          592
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          269,
+          585
+        ],
+        [
+          287,
+          592
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          454,
+          585
+        ],
+        [
+          472,
+          592
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          590
+        ],
+        [
+          17,
+          592
+        ]
+      ],
+      "text": ".",
+      "confidence": 0.43
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          29,
+          590
+        ],
+        [
+          31,
+          592
+        ]
+      ],
+      "text": "..",
+      "confidence": 0.43
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          432,
+          594
+        ],
+        [
+          455,
+          623
+        ]
+      ],
+      "text": "civil",
+      "confidence": 0.68
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          112,
+          603
+        ],
+        [
+          142,
+          613
+        ]
+      ],
+      "text": "back.",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          145,
+          603
+        ],
+        [
+          180,
+          613
+        ]
+      ],
+      "text": "There",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          206,
+          603
+        ],
+        [
+          239,
+          613
+        ]
+      ],
+      "text": "those",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          243,
+          603
+        ],
+        [
+          269,
+          613
+        ]
+      ],
+      "text": "who",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          295,
+          603
+        ],
+        [
+          332,
+          616
+        ]
+      ],
+      "text": "asking",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          335,
+          603
+        ],
+        [
+          355,
+          613
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          359,
+          603
+        ],
+        [
+          413,
+          613
+        ]
+      ],
+      "text": "devotees",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          417,
+          603
+        ],
+        [
+          429,
+          613
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          459,
+          603
+        ],
+        [
+          495,
+          616
+        ]
+      ],
+      "text": "rights,",
+      "confidence": 0.68
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          500,
+          603
+        ],
+        [
+          540,
+          613
+        ]
+      ],
+      "text": "\u201cWhen",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          544,
+          603
+        ],
+        [
+          564,
+          613
+        ]
+      ],
+      "text": "will",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          594,
+          603
+        ],
+        [
+          608,
+          613
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.88
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          604
+        ],
+        [
+          34,
+          613
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.86
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          604
+        ],
+        [
+          79,
+          613
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          82,
+          604
+        ],
+        [
+          107,
+          613
+        ]
+      ],
+      "text": "turn",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          184,
+          606
+        ],
+        [
+          203,
+          613
+        ]
+      ],
+      "text": "are",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          273,
+          606
+        ],
+        [
+          291,
+          613
+        ]
+      ],
+      "text": "are",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          568,
+          606
+        ],
+        [
+          590,
+          616
+        ]
+      ],
+      "text": "you",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          396,
+          615
+        ],
+        [
+          429,
+          644
+        ]
+      ],
+      "text": "victim",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          435,
+          615
+        ],
+        [
+          448,
+          644
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          624
+        ],
+        [
+          76,
+          634
+        ]
+      ],
+      "text": "satisfied?\u201d",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          166,
+          624
+        ],
+        [
+          180,
+          634
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          184,
+          624
+        ],
+        [
+          232,
+          634
+        ]
+      ],
+      "text": "satisfied",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          253,
+          624
+        ],
+        [
+          278,
+          637
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          297,
+          624
+        ],
+        [
+          317,
+          634
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          361,
+          624
+        ],
+        [
+          370,
+          634
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          373,
+          624
+        ],
+        [
+          405,
+          634
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          454,
+          624
+        ],
+        [
+          470,
+          634
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          475,
+          624
+        ],
+        [
+          549,
+          637
+        ]
+      ],
+      "text": "unspeakable",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          554,
+          624
+        ],
+        [
+          597,
+          634
+        ]
+      ],
+      "text": "horrors",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          601,
+          624
+        ],
+        [
+          613,
+          634
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          80,
+          625
+        ],
+        [
+          100,
+          634
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          321,
+          625
+        ],
+        [
+          357,
+          637
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          104,
+          627
+        ],
+        [
+          124,
+          634
+        ]
+      ],
+      "text": "can",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          128,
+          627
+        ],
+        [
+          162,
+          634
+        ]
+      ],
+      "text": "never",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          237,
+          627
+        ],
+        [
+          249,
+          634
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          282,
+          627
+        ],
+        [
+          294,
+          634
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          644
+        ],
+        [
+          49,
+          657
+        ]
+      ],
+      "text": "police",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          54,
+          644
+        ],
+        [
+          107,
+          657
+        ]
+      ],
+      "text": "brutality.",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          440,
+          664
+        ],
+        [
+          450,
+          693
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          541,
+          664
+        ],
+        [
+          564,
+          693
+        ]
+      ],
+      "text": "gain",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          100,
+          673
+        ],
+        [
+          114,
+          683
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          118,
+          673
+        ],
+        [
+          166,
+          683
+        ]
+      ],
+      "text": "satisfied",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          187,
+          673
+        ],
+        [
+          212,
+          686
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          673
+        ],
+        [
+          298,
+          685
+        ]
+      ],
+      "text": "bodies,",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          303,
+          673
+        ],
+        [
+          337,
+          686
+        ]
+      ],
+      "text": "heavy",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          340,
+          673
+        ],
+        [
+          366,
+          683
+        ]
+      ],
+      "text": "with",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          370,
+          673
+        ],
+        [
+          390,
+          683
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          394,
+          673
+        ],
+        [
+          435,
+          686
+        ]
+      ],
+      "text": "fatigue",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          454,
+          673
+        ],
+        [
+          491,
+          685
+        ]
+      ],
+      "text": "travel,",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          569,
+          673
+        ],
+        [
+          612,
+          686
+        ]
+      ],
+      "text": "lodging",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          616,
+          673
+        ],
+        [
+          626,
+          683
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          674
+        ],
+        [
+          34,
+          683
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          498,
+          674
+        ],
+        [
+          535,
+          683
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          676
+        ],
+        [
+          58,
+          683
+        ]
+      ],
+      "text": "can",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          62,
+          676
+        ],
+        [
+          96,
+          683
+        ]
+      ],
+      "text": "never",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          171,
+          676
+        ],
+        [
+          183,
+          683
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          216,
+          676
+        ],
+        [
+          228,
+          683
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          232,
+          676
+        ],
+        [
+          252,
+          683
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          693
+        ],
+        [
+          33,
+          703
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          693
+        ],
+        [
+          78,
+          703
+        ]
+      ],
+      "text": "motels",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          81,
+          693
+        ],
+        [
+          94,
+          703
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          97,
+          693
+        ],
+        [
+          116,
+          703
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          121,
+          693
+        ],
+        [
+          175,
+          706
+        ]
+      ],
+      "text": "highways",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          179,
+          693
+        ],
+        [
+          200,
+          703
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          205,
+          693
+        ],
+        [
+          224,
+          703
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          229,
+          693
+        ],
+        [
+          265,
+          703
+        ]
+      ],
+      "text": "hotels",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          268,
+          693
+        ],
+        [
+          279,
+          703
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          285,
+          693
+        ],
+        [
+          300,
+          703
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          307,
+          694
+        ],
+        [
+          340,
+          703
+        ]
+      ],
+      "text": "cities.",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          83,
+          722
+        ],
+        [
+          97,
+          732
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          133,
+          722
+        ],
+        [
+          149,
+          732
+        ]
+      ],
+      "text": "ied",
+      "confidence": 0.66
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          170,
+          722
+        ],
+        [
+          195,
+          735
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          215,
+          722
+        ],
+        [
+          234,
+          732
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.86
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          239,
+          722
+        ],
+        [
+          284,
+          735
+        ]
+      ],
+      "text": "Negro\u2019s",
+      "confidence": 0.68
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          288,
+          722
+        ],
+        [
+          317,
+          732
+        ]
+      ],
+      "text": "basic",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          321,
+          722
+        ],
+        [
+          347,
+          732
+        ]
+      ],
+      "text": "mobility",
+      "confidence": 0.89
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          385,
+          722
+        ],
+        [
+          414,
+          732
+        ]
+      ],
+      "text": "from",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          428,
+          722
+        ],
+        [
+          471,
+          732
+        ]
+      ],
+      "text": "smaller",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          474,
+          722
+        ],
+        [
+          514,
+          735
+        ]
+      ],
+      "text": "ghetto",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          544,
+          722
+        ],
+        [
+          579,
+          735
+        ]
+      ],
+      "text": "larger",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          723
+        ],
+        [
+          34,
+          732
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          723
+        ],
+        [
+          79,
+          732
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          517,
+          723
+        ],
+        [
+          530,
+          732
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          611,
+          723
+        ],
+        [
+          632,
+          732
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          101,
+          725
+        ],
+        [
+          106,
+          732
+        ]
+      ],
+      "text": "s",
+      "confidence": 0.77
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          154,
+          725
+        ],
+        [
+          166,
+          732
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          199,
+          725
+        ],
+        [
+          211,
+          732
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          373,
+          725
+        ],
+        [
+          381,
+          732
+        ]
+      ],
+      "text": "is",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          418,
+          725
+        ],
+        [
+          424,
+          732
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          534,
+          725
+        ],
+        [
+          540,
+          732
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          582,
+          725
+        ],
+        [
+          608,
+          732
+        ]
+      ],
+      "text": "one.",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          210,
+          733
+        ],
+        [
+          226,
+          762
+        ]
+      ],
+      "text": "our",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          358,
+          733
+        ],
+        [
+          367,
+          762
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          543,
+          733
+        ],
+        [
+          553,
+          762
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.97
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          76,
+          742
+        ],
+        [
+          90,
+          752
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          94,
+          742
+        ],
+        [
+          143,
+          752
+        ]
+      ],
+      "text": "satisfied",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          164,
+          742
+        ],
+        [
+          188,
+          755
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          224,
+          742
+        ],
+        [
+          279,
+          752
+        ]
+      ],
+      "text": "children",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          307,
+          742
+        ],
+        [
+          355,
+          755
+        ]
+      ],
+      "text": "stripped",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          367,
+          742
+        ],
+        [
+          397,
+          752
+        ]
+      ],
+      "text": "thei",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          407,
+          742
+        ],
+        [
+          467,
+          752
+        ]
+      ],
+      "text": "adulthood",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          472,
+          742
+        ],
+        [
+          493,
+          752
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          498,
+          742
+        ],
+        [
+          540,
+          752
+        ]
+      ],
+      "text": "robbed",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          559,
+          742
+        ],
+        [
+          582,
+          752
+        ]
+      ],
+      "text": "thei",
+      "confidence": 0.72
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          745
+        ],
+        [
+          34,
+          752
+        ]
+      ],
+      "text": "can",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          39,
+          745
+        ],
+        [
+          72,
+          752
+        ]
+      ],
+      "text": "never",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          147,
+          745
+        ],
+        [
+          159,
+          752
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          192,
+          745
+        ],
+        [
+          204,
+          752
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          284,
+          745
+        ],
+        [
+          303,
+          752
+        ]
+      ],
+      "text": "are",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          763
+        ],
+        [
+          28,
+          776
+        ]
+      ],
+      "text": "by",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          32,
+          763
+        ],
+        [
+          61,
+          776
+        ]
+      ],
+      "text": "signs",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          65,
+          763
+        ],
+        [
+          105,
+          776
+        ]
+      ],
+      "text": "stating",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          109,
+          763
+        ],
+        [
+          134,
+          773
+        ]
+      ],
+      "text": "\u201cFor",
+      "confidence": 0.86
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          137,
+          763
+        ],
+        [
+          179,
+          773
+        ]
+      ],
+      "text": "Whites",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          183,
+          763
+        ],
+        [
+          219,
+          776
+        ]
+      ],
+      "text": "Only.\u201d",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          83,
+          792
+        ],
+        [
+          97,
+          802
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          101,
+          792
+        ],
+        [
+          149,
+          802
+        ]
+      ],
+      "text": "satisfied",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          170,
+          792
+        ],
+        [
+          195,
+          805
+        ]
+      ],
+      "text": "long",
+      "confidence": 0.87
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          215,
+          792
+        ],
+        [
+          234,
+          802
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          278,
+          792
+        ],
+        [
+          288,
+          802
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          293,
+          792
+        ],
+        [
+          307,
+          802
+        ]
+      ],
+      "text": "Mi",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          346,
+          792
+        ],
+        [
+          356,
+          805
+        ]
+      ],
+      "text": "pi",
+      "confidence": 0.74
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          435,
+          792
+        ],
+        [
+          456,
+          802
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          460,
+          792
+        ],
+        [
+          480,
+          802
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          524,
+          792
+        ],
+        [
+          534,
+          802
+        ]
+      ],
+      "text": "in",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          568,
+          792
+        ],
+        [
+          595,
+          802
+        ]
+      ],
+      "text": "York",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          793
+        ],
+        [
+          34,
+          802
+        ]
+      ],
+      "text": "We",
+      "confidence": 0.85
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          38,
+          793
+        ],
+        [
+          79,
+          802
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          239,
+          793
+        ],
+        [
+          274,
+          805
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          360,
+          793
+        ],
+        [
+          401,
+          802
+        ]
+      ],
+      "text": "cannot",
+      "confidence": 0.87
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          404,
+          793
+        ],
+        [
+          431,
+          802
+        ]
+      ],
+      "text": "vote",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          484,
+          793
+        ],
+        [
+          520,
+          805
+        ]
+      ],
+      "text": "Negro",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          538,
+          793
+        ],
+        [
+          565,
+          802
+        ]
+      ],
+      "text": "New",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          154,
+          795
+        ],
+        [
+          166,
+          802
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          199,
+          795
+        ],
+        [
+          211,
+          802
+        ]
+      ],
+      "text": "as",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          812
+        ],
+        [
+          63,
+          822
+        ]
+      ],
+      "text": "believes",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          67,
+          812
+        ],
+        [
+          81,
+          822
+        ]
+      ],
+      "text": "he",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          85,
+          812
+        ],
+        [
+          105,
+          822
+        ]
+      ],
+      "text": "has",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          109,
+          812
+        ],
+        [
+          154,
+          825
+        ]
+      ],
+      "text": "nothing",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          157,
+          812
+        ],
+        [
+          175,
+          822
+        ]
+      ],
+      "text": "for",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          178,
+          812
+        ],
+        [
+          213,
+          822
+        ]
+      ],
+      "text": "which",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          217,
+          813
+        ],
+        [
+          229,
+          822
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          233,
+          813
+        ],
+        [
+          262,
+          822
+        ]
+      ],
+      "text": "vote.",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          213,
+          833
+        ],
+        [
+          225,
+          861
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          231,
+          833
+        ],
+        [
+          251,
+          861
+        ]
+      ],
+      "text": "will",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          128,
+          841
+        ],
+        [
+          180,
+          853
+        ]
+      ],
+      "text": "satisfied,",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          185,
+          841
+        ],
+        [
+          206,
+          851
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          280,
+          841
+        ],
+        [
+          294,
+          851
+        ]
+      ],
+      "text": "be",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          298,
+          841
+        ],
+        [
+          346,
+          851
+        ]
+      ],
+      "text": "satisfied",
+      "confidence": 0.93
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          385,
+          841
+        ],
+        [
+          419,
+          851
+        ]
+      ],
+      "text": "justice",
+      "confidence": 0.74
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          423,
+          841
+        ],
+        [
+          448,
+          851
+        ]
+      ],
+      "text": "rolls",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          451,
+          841
+        ],
+        [
+          484,
+          851
+        ]
+      ],
+      "text": "down",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          489,
+          841
+        ],
+        [
+          508,
+          851
+        ]
+      ],
+      "text": "like",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          557,
+          841
+        ],
+        [
+          578,
+          851
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.92
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          842
+        ],
+        [
+          34,
+          853
+        ]
+      ],
+      "text": "No,",
+      "confidence": 0.69
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          105,
+          842
+        ],
+        [
+          125,
+          851
+        ]
+      ],
+      "text": "not",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          256,
+          842
+        ],
+        [
+          276,
+          851
+        ]
+      ],
+      "text": "not",
+      "confidence": 0.95
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          512,
+          842
+        ],
+        [
+          553,
+          851
+        ]
+      ],
+      "text": "waters",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          39,
+          844
+        ],
+        [
+          57,
+          853
+        ]
+      ],
+      "text": "no,",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          61,
+          844
+        ],
+        [
+          78,
+          851
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          82,
+          844
+        ],
+        [
+          101,
+          851
+        ]
+      ],
+      "text": "are",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          351,
+          844
+        ],
+        [
+          357,
+          851
+        ]
+      ],
+      "text": "until",
+      "confidence": 0.62
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          14,
+          861
+        ],
+        [
+          97,
+          874
+        ]
+      ],
+      "text": "righteousness",
+      "confidence": 0.81
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          101,
+          861
+        ],
+        [
+          121,
+          871
+        ]
+      ],
+      "text": "like",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          135,
+          861
+        ],
+        [
+          176,
+          874
+        ]
+      ],
+      "text": "mighty",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          179,
+          862
+        ],
+        [
+          224,
+          871
+        ]
+      ],
+      "text": "stream.",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          125,
+          864
+        ],
+        [
+          131,
+          871
+        ]
+      ],
+      "text": "a",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          229,
+          869
+        ],
+        [
+          245,
+          871
+        ]
+      ],
+      "text": "...",
+      "confidence": 0.79
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          10,
+          881
+        ],
+        [
+          15,
+          910
+        ]
+      ],
+      "text": "|",
+      "confidence": 0.88
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          606,
+          881
+        ],
+        [
+          610,
+          910
+        ]
+      ],
+      "text": "|",
+      "confidence": 0.7
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          85,
+          890
+        ],
+        [
+          122,
+          903
+        ]
+      ],
+      "text": "today,",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          148,
+          890
+        ],
+        [
+          192,
+          902
+        ]
+      ],
+      "text": "friends,",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          196,
+          890
+        ],
+        [
+          242,
+          903
+        ]
+      ],
+      "text": "though,",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          278,
+          890
+        ],
+        [
+          320,
+          903
+        ]
+      ],
+      "text": "though",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          345,
+          890
+        ],
+        [
+          370,
+          900
+        ]
+      ],
+      "text": "face",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          373,
+          890
+        ],
+        [
+          393,
+          900
+        ]
+      ],
+      "text": "the",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          397,
+          890
+        ],
+        [
+          433,
+          900
+        ]
+      ],
+      "text": "difficulties",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          464,
+          890
+        ],
+        [
+          474,
+          900
+        ]
+      ],
+      "text": "of",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          477,
+          890
+        ],
+        [
+          511,
+          903
+        ]
+      ],
+      "text": "today",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          515,
+          890
+        ],
+        [
+          536,
+          900
+        ]
+      ],
+      "text": "and",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          615,
+          890
+        ],
+        [
+          635,
+          900
+        ]
+      ],
+      "text": "still",
+      "confidence": 0.83
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          44,
+          891
+        ],
+        [
+          56,
+          900
+        ]
+      ],
+      "text": "to",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          540,
+          891
+        ],
+        [
+          604,
+          902
+        ]
+      ],
+      "text": "tomorrow,",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          21,
+          893
+        ],
+        [
+          40,
+          903
+        ]
+      ],
+      "text": "say",
+      "confidence": 0.91
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          60,
+          893
+        ],
+        [
+          81,
+          903
+        ]
+      ],
+      "text": "you",
+      "confidence": 0.9
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          127,
+          893
+        ],
+        [
+          144,
+          903
+        ]
+      ],
+      "text": "my",
+      "confidence": 0.96
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          246,
+          893
+        ],
+        [
+          274,
+          900
+        ]
+      ],
+      "text": "even",
+      "confidence": 0.94
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          324,
+          893
+        ],
+        [
+          341,
+          900
+        ]
+      ],
+      "text": "we",
+      "confidence": 0.96
+    }
+  ]
+}

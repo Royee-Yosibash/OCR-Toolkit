@@ -3,7 +3,10 @@
 import unittest
 from html.parser import HTMLParser
 
-from scripts.image_ocr_tagging_tool.app import create_app
+from tests.app_tests import APP_DEPS_REASON, HAS_APP_DEPS
+
+if HAS_APP_DEPS:
+    from scripts.image_ocr_tagging_tool.app import create_app
 
 
 class _TagCounter(HTMLParser):
@@ -53,6 +56,7 @@ class _TagCounter(HTMLParser):
             self.tag_stack.pop()
 
 
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestTaggingToolPageLoads(unittest.TestCase):
     """Verify the index page returns 200 and is well-formed HTML."""
 
@@ -98,6 +102,7 @@ class TestTaggingToolPageLoads(unittest.TestCase):
         )
 
 
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestTaggingToolUIElements(unittest.TestCase):
     """Verify all expected UI elements are present in the page."""
 
@@ -169,6 +174,7 @@ class TestTaggingToolUIElements(unittest.TestCase):
         self.assertIn("hidden", snippet)
 
 
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestTaggingToolFooterButtons(unittest.TestCase):
     """Verify footer buttons call the correct JS functions."""
 
@@ -196,6 +202,7 @@ class TestTaggingToolFooterButtons(unittest.TestCase):
         self.assertIn("navNext()", self.html)
 
 
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
     """Verify critical JS functions are defined in the page script."""
 
@@ -237,6 +244,7 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
                 )
 
 
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestTaggingToolJavaScriptVariables(unittest.TestCase):
     """Verify critical JS state variables are declared in the page."""
 

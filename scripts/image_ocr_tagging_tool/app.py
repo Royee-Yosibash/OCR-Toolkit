@@ -2,6 +2,7 @@
 
 import base64
 import io
+import logging
 import subprocess
 from pathlib import Path
 
@@ -13,6 +14,8 @@ from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.bounding_box import BoundingBox  # noqa: F401 - register in SerializableClass
 from ocr_backbone.ocr_abstract import OCRAbstract
 from utils.json_utils import save_json
+
+logger = logging.getLogger(__name__)
 
 
 def create_app() -> Flask:
@@ -53,24 +56,35 @@ def create_app() -> Flask:
             JSON response with the OCR result dict.
         """
         try:
+            logger.info("/api/run_ocr called")
             data = request.get_json()
             image_b64 = data["image"]
             model_name = data["model_name"]
+            logger.info("Request payload: model_name=%s, image_b64_length=%d", model_name, len(image_b64))
 
+            logger.info("Decoding base64 image")
             image_bytes = base64.b64decode(image_b64)
             pil_image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
             image_array = np.array(pil_image)
+            logger.info("Decoded image to array with shape %s", image_array.shape)
 
             config = {"model_name": model_name, "grid_rows": 1, "grid_cols": 1}
+            logger.info("Instantiating OCR module from config: %s", config)
             ocr = OCRAbstract.from_config(config)
+
+            logger.info("Running OCR with model %s", model_name)
             result = ocr.get_text_bb(image_array)
+            logger.info("OCR complete: %d detection(s)", len(result.detections))
 
             return jsonify(result.to_dict())
         except KeyError as e:
+            logger.warning("/api/run_ocr missing required field: %s", e)
             return jsonify({"error": f"Missing required field: {e}"}), 400
         except ValueError as e:
+            logger.warning("/api/run_ocr value error: %s", e)
             return jsonify({"error": str(e)}), 400
         except Exception as e:
+            logger.exception("/api/run_ocr unexpected error")
             return jsonify({"error": str(e)}), 500
 
     @app.route("/api/save", methods=["POST"])
