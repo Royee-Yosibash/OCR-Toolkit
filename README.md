@@ -32,7 +32,8 @@ plots identify the optimal combination.
 ## Features
 
 - **Unified OCR interface** -- integrate any OCR engine by subclassing
-  `OCRAbstract`. Ships with EasyOCR and PaddleOCR implementations.
+  `OCRAbstract`. Ships with EasyOCR, PaddleOCR, and pytesseract
+  implementations.
 - **Modular preprocessing** -- composable preprocessing pipeline supporting
   grid splitting, contour-based segmentation, binarization (adaptive and Otsu),
   and user-supplied steps. Combine stages via configuration or code to build the
@@ -46,30 +47,51 @@ plots identify the optimal combination.
 
 ## Versioning
 
-Current version: **0.1.3** (released 2026-05-03).
+Current version: **0.1.4** (released 2026-05-05).
 
 ## Installation
 
 Requires Python 3.12+.
 
-**Basic** (core functionality without OCR engine dependencies):
+The project ships three independent optional dependency groups on top of the
+always-installed base. Pick any subset, combine them, or use `full` for
+everything.
+
+**Base** (core abstractions, evaluation primitives, no engines, no app):
 
 ```bash
 pip install -e .
 ```
 
-**Full** (includes EasyOCR, PaddleOCR, and PaddlePaddle):
+**OCRs** (all OCR engines: EasyOCR, PaddleOCR, PaddlePaddle, pytesseract):
 
 ```bash
-pip install -e ".[full]"
+pip install -e ".[ocrs]"
 ```
 
-**Development** (includes ruff, pre-commit, and pytest):
+> Note: `pytesseract` also requires the system `tesseract` binary, e.g.
+> `sudo apt-get install -y tesseract-ocr` on Debian/Ubuntu.
+
+**Dataset Tagging App** (Flask UI plus its end-to-end test deps):
+
+```bash
+pip install -e ".[dataset-tagging-app]"
+```
+
+**Developer** (ruff, pytest, pre-commit):
 
 ```bash
 pip install -e ".[dev]"
 pre-commit install
 ```
+
+**Full** (all three groups above):
+
+```bash
+pip install -e ".[full]"
+```
+
+Combinations are supported, e.g. `pip install -e ".[ocrs,dev]"`.
 
 All code style is enforced by [Ruff](https://docs.astral.sh/ruff/) via
 pre-commit hooks. After `pre-commit install`, every commit is automatically
@@ -80,7 +102,7 @@ under `[tool.ruff]`.
 
 ```
 ocr_backbone/       Core abstractions: OCRAbstract, OCRConfig, OCRResult, BoundingBox, InputImage
-ocr_modules/        Concrete OCR engine implementations (EasyOCR, PaddleOCR)
+ocr_modules/        Concrete OCR engine implementations (EasyOCR, PaddleOCR, pytesseract)
 evaluation/         Evaluation pipeline, metrics, ground truth, and plotting utilities
 utils/              Shared utilities (JSON I/O, dataset loading, statistics, serialization)
 scripts/            CLI tools: run_evaluation, draw_bboxes, tagging tool
