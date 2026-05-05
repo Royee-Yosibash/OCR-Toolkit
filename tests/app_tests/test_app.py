@@ -3,11 +3,15 @@ import json
 import unittest
 from unittest.mock import patch
 
-from scripts.image_ocr_tagging_tool.app import create_app
+from tests.app_tests import APP_DEPS_REASON, HAS_APP_DEPS
 from tests.consts import TEST_IMAGE_PATH
 from tests.unit_tests.dummy_ocr import DummyOCR  # noqa: F401 - register in OCRAbstract
 
+if HAS_APP_DEPS:
+    from scripts.image_ocr_tagging_tool.app import create_app
 
+
+@unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestSaveBatchEndpoint(unittest.TestCase):
     def setUp(self):
         self.app = create_app()
