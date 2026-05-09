@@ -1,0 +1,175 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          298,
+          16
+        ],
+        [
+          816,
+          56
+        ]
+      ],
+      "text": "ON GRAVITATIONAL WAVES.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          533,
+          86
+        ],
+        [
+          576,
+          118
+        ]
+      ],
+      "text": "BY",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          342,
+          139
+        ],
+        [
+          765,
+          166
+        ]
+      ],
+      "text": "A. EINSTEIN and N. ROSEN.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          487,
+          192
+        ],
+        [
+          624,
+          223
+        ]
+      ],
+      "text": "ABSTRACT.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          119,
+          230
+        ],
+        [
+          1049,
+          270
+        ]
+      ],
+      "text": "The rigorous solution for cylindrical gravitational waves is given. For the",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          59,
+          264
+        ],
+        [
+          1048,
+          305
+        ]
+      ],
+      "text": "convenience of the reader the theory of gravitational waves and their production,",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          63,
+          297
+        ],
+        [
+          1048,
+          336
+        ]
+      ],
+      "text": "already known in principle, is given in the first part of this paper. After encoun-",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          62,
+          330
+        ],
+        [
+          1048,
+          366
+        ]
+      ],
+      "text": "tering relationships which cast doubt on the existence of rigorous solutions for",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          63,
+          362
+        ],
+        [
+          1049,
+          398
+        ]
+      ],
+      "text": "undulatory gravitational fields, we investigate rigorously the case of cylindrical",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          61,
+          395
+        ],
+        [
+          1049,
+          432
+        ]
+      ],
+      "text": "gravitational waves. It turns out that rigorous solutions exist and that the",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          62,
+          425
+        ],
+        [
+          876,
+          464
+        ]
+      ],
+      "text": "problem reduces to the usual cylindrical waves in euclidean space.",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured",
+    "document"
+  ]
+}

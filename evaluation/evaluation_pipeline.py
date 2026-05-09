@@ -245,7 +245,7 @@ def run_multiple_ocrs_and_save(
             logger.debug(f"Skipping {ocr_id} -- cached result exists")
             continue
         logger.info("Running OCR engine ")
-        result = ocr.get_text_bb(image=image)
+        result = ocr.get_text_detections(image=image)
         save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
         logger.info(f"Saved OCR result for {ocr_id} to {save_path}")
 

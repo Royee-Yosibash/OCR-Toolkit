@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 class OCRAbstract(ABC):
     """Abstract base class for OCR engines.
 
-    Handles splitting an image into a grid of sub-images, running OCR on each
-    cell, and remapping the resulting detections back to the original
-    image coordinates.
+    Handles splitting an image into sub-images, running OCR on each cell,
+    and remapping the resulting detections back to the original image
+    coordinates.
 
     Subclasses must implement ``__init__`` to set up the underlying engine
     and ``_run_single`` to perform inference on a single sub-image.
@@ -152,7 +152,7 @@ class OCRAbstract(ABC):
         logger.info("Preprocessing complete: %d image(s) to process", len(input_images))
         return input_images
 
-    def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
+    def get_text_detections(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
 
         Splits the image into a grid defined by the stored config, runs
@@ -170,7 +170,7 @@ class OCRAbstract(ABC):
         Returns:
             An OCRResult with detections in original image coordinates.
         """
-        logger.info(f"get_text_bb called with image shape {image.shape}")
+        logger.info(f"get_text_detections called with image shape {image.shape}")
         if config_overrides:
             logger.info(f"Applying config overrides: {list(config_overrides.keys())}")
             config = copy.deepcopy(self.config)

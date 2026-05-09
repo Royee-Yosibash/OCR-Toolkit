@@ -29,7 +29,7 @@ class TestOCR(unittest.TestCase):
     def test_no_preprocessing_single_cell(self):
         ocr = DummyOCR()
         image = np.zeros((100, 200, 3), dtype=np.uint8)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
         self.assertEqual(len(result.detections), 1)
         self.assertEqual(result.detections[0].coordinates, ((0, 0), (200, 100)))
 
@@ -37,7 +37,7 @@ class TestOCR(unittest.TestCase):
         ocr = DummyOCR()
         ocr.config = OCRConfig(model_name="dummy", preprocess_methods=[grid_m_n(2, 2)])
         image = np.zeros((100, 200, 3), dtype=np.uint8)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
         bbs = result.detections
         self.assertEqual(len(bbs), 4)
         self.assertEqual(bbs[0].coordinates, ((0, 0), (100, 50)))
@@ -53,7 +53,7 @@ class TestOCR(unittest.TestCase):
             detection_validator=lambda bb: bb.coordinates[0][0] == 0,
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
         self.assertEqual(len(result.detections), 2)
         self.assertTrue(all(bb.coordinates[0][0] == 0 for bb in result.detections))
 
@@ -65,7 +65,7 @@ class TestOCR(unittest.TestCase):
             detection_validator=None,
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
         self.assertEqual(len(result.detections), 4)
 
     def test_preprocess_binarize_then_grid(self):
@@ -78,7 +78,7 @@ class TestOCR(unittest.TestCase):
             ],
         )
         image = np.random.randint(0, 256, (100, 200, 3), dtype=np.uint8)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
         self.assertEqual(len(result.detections), 4)
 
     def test_from_config_returns_registered_class(self):

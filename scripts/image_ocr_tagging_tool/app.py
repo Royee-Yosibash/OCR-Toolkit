@@ -73,7 +73,7 @@ def create_app() -> Flask:
             ocr = OCRAbstract.from_config(config)
 
             logger.info("Running OCR with model %s", model_name)
-            result = ocr.get_text_bb(image_array)
+            result = ocr.get_text_detections(image_array)
             logger.info("OCR complete: %d detection(s)", len(result.detections))
 
             return jsonify(result.to_dict())
