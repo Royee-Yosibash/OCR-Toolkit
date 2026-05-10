@@ -189,8 +189,10 @@ def dataset_generator(
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"
     gt_dir = root / "ground_truth"
-    assert images_dir.exists(), "images directory does not exist"
-    assert gt_dir.exists(), "ground truth directory does not exist"
+    if not images_dir.exists():
+        raise FileNotFoundError(f"images directory does not exist: {images_dir}")
+    if not gt_dir.exists():
+        raise FileNotFoundError(f"ground truth directory does not exist: {gt_dir}")
 
     for gt_path in sorted(gt_dir.glob("*.json")):
         stem = gt_path.stem

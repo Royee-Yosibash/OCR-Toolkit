@@ -35,6 +35,15 @@ class OCRAbstract(ABC):
         OCRAbstract._registry[cls.__name__] = cls
 
     @classmethod
+    def registered_models(cls) -> list[str]:
+        """Return the names of every registered OCR subclass.
+
+        Returns:
+            A list of class names available via ``from_config``.
+        """
+        return list(cls._registry.keys())
+
+    @classmethod
     def from_config(cls, config: OCRConfig | dict):
         """Create an OCR instance from a config.
 
@@ -184,10 +193,9 @@ class OCRAbstract(ABC):
         all_detections: list[Polygon] = []
         for cell in cells:
             cell_result = self._run_single(cell.image, config.model_params)
-            for detection in cell_result.detections:
-                detection.remap_coordinates(cell.x_offset, cell.y_offset)
-
-            all_detections += cell_result.detections
+            all_detections.extend(
+                d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections
+            )
 
         if config.detection_validator is not None:
             before = len(all_detections)

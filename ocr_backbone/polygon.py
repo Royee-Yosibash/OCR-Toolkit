@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from utils.serialize_utils import SerializableClass
 
@@ -64,14 +64,27 @@ class Polygon(SerializableClass):
         oy, ox = other._top_left_vertex()[1], other._top_left_vertex()[0]
         return (sy, sx) < (oy, ox)
 
-    def remap_coordinates(self, x_offset: int, y_offset: int) -> None:
-        """Translate all vertices by the given offsets.
+    def translate_coordinates(self, x_offset: int, y_offset: int) -> "Polygon":
+        """Return a copy of this polygon with all vertices offset.
+
+        The returned instance is the same runtime class as ``self`` and is
+        re-validated through ``__post_init__``, so subclass invariants
+        (e.g. ``BoundingBox`` ordering) and the non-negative coordinate
+        constraint are enforced.
 
         Args:
             x_offset: Horizontal pixel offset to add.
             y_offset: Vertical pixel offset to add.
+
+        Returns:
+            A new polygon of the same type with translated coordinates.
+
+        Raises:
+            ValueError: If the resulting coordinates violate any subclass
+                invariant or fall below zero.
         """
-        self.coordinates = tuple((x + x_offset, y + y_offset) for x, y in self.coordinates)
+        new_coords = tuple((x + x_offset, y + y_offset) for x, y in self.coordinates)
+        return replace(self, coordinates=new_coords)
 
     def to_dict(self) -> dict:
         raw_dict = super().to_dict()
