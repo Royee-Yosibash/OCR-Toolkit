@@ -42,7 +42,7 @@ def create_app() -> Flask:
         Returns:
             JSON response with a list of model name strings.
         """
-        return jsonify(list(OCRAbstract._registry.keys()))
+        return jsonify(OCRAbstract.registered_models())
 
     @app.route("/api/run_ocr", methods=["POST"])
     def run_ocr():
