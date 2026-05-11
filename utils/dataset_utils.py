@@ -50,7 +50,7 @@ def load_image(image_path: Path) -> np.ndarray:
     return np.array(Image.open(image_path).convert("RGB"))
 
 
-def load_groud_truth(tags_path: Path) -> OCRGroundTruth:
+def load_ground_truth(tags_path: Path) -> OCRGroundTruth:
     """Load a ground_truth JSON file as an OCRGroundTruth.
 
     Args:
@@ -197,5 +197,5 @@ def dataset_generator(
     for gt_path in sorted(gt_dir.glob("*.json")):
         stem = gt_path.stem
         image = load_image(_find_image_for_stem(stem, images_dir))
-        gt = load_groud_truth(gt_path)
+        gt = load_ground_truth(gt_path)
         yield image, gt

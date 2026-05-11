@@ -30,7 +30,7 @@ from evaluation.metrics import (
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_modules import import_all_modules
-from utils.datasets_handles import DATASET_DIR
+from utils.dataset_utils import DATASET_DIR
 
 ALL_METRICS = [
     ocr_result_char_accuracy,
@@ -97,9 +97,10 @@ def evaluate() -> None:
             ocrs.append(OCRAbstract.from_config(config))
             labels.append(cf.stem)
     else:
-        logger.info(f"Registered OCR modules: {list(OCRAbstract._registry.keys())}")
+        registered = OCRAbstract.registered_models()
+        logger.info(f"Registered OCR modules: {registered}")
         ocrs = []
-        for name in OCRAbstract._registry:
+        for name in registered:
             logger.info(f"Instantiating OCR module: {name}")
             ocrs.append(OCRAbstract.from_config(OCRConfig(model_name=name)))
 
@@ -107,8 +108,8 @@ def evaluate() -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     logger.info(
         f"Running evaluation (dataset={args.dataset}, "
-        + "output_dir={output_dir},"
-        + f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
+        f"output_dir={output_dir}, "
+        f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
     )
 
     evaluation_pipeline(
