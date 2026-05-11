@@ -31,7 +31,7 @@ from evaluation.metrics import METRICS_BOUNDED_LOOKUP, Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
-from utils.datasets_handles import dataset_generator
+from utils.dataset_utils import dataset_generator
 from utils.json_utils import load_json, save_json
 from utils.statistics import beta_ci, bootstrap_ci
 

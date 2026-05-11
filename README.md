@@ -152,12 +152,11 @@ Opens `http://localhost:5000` in the default browser.
 ## Configuration
 
 OCR runs are configured via `OCRConfig`, which can be loaded from a JSON file.
-The minimal template (`default_config.json`) requires only `model_name` and
-`model_params`:
+A minimal configuration requires only `model_name` and `model_params`:
 
 ```json
 {
-    "model_name": "",
+    "model_name": "EasyOCRModule",
     "model_params": {}
 }
 ```
