@@ -1,0 +1,40 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          107,
+          2
+        ],
+        [
+          535,
+          45
+        ]
+      ],
+      "text": "Newton after realizzieg",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          52,
+          40
+        ],
+        [
+          596,
+          91
+        ]
+      ],
+      "text": "things fall when you drop them.",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured",
+    "ai"
+  ]
+}
