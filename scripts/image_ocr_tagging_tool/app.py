@@ -18,6 +18,59 @@ from utils.json_utils import save_json
 logger = logging.getLogger(__name__)
 
 
+def _resolve_save_path(output_path: str, filename: str) -> Path:
+    """Compute the destination JSON path for a single tagged image.
+
+    Args:
+        output_path: Caller-supplied path. May be empty (use default), a
+            directory, or an explicit file path.
+        filename: Original image filename, used to derive the JSON stem.
+
+    Returns:
+        The resolved file path. Parent directories are created.
+    """
+    stem = Path(filename).stem
+    if not output_path:
+        save_dir = Path.home() / "Downloads" / "ocr_tags"
+        save_dir.mkdir(parents=True, exist_ok=True)
+        return save_dir / f"{stem}.json"
+    save_path = Path(output_path)
+    if save_path.is_dir() or not save_path.suffix:
+        save_path = save_path / f"{stem}.json"
+    save_path.parent.mkdir(parents=True, exist_ok=True)
+    return save_path
+
+
+def _empty_text_indices(detections: list[dict]) -> list[int]:
+    """Return 1-based positions of detections whose text is empty or whitespace.
+
+    Args:
+        detections: List of detection dicts with a "text" key.
+
+    Returns:
+        A list of 1-based indices flagging the empty-text detections.
+    """
+    return [i + 1 for i, det in enumerate(detections) if not det.get("text", "").strip()]
+
+
+def _save_one(detections: list[dict], tags: list[str], filename: str, output_path: str) -> Path:
+    """Persist a single image's tagged detections.
+
+    Args:
+        detections: List of detection dicts.
+        tags: List of tag strings.
+        filename: Original image filename, used to derive the JSON stem.
+        output_path: Caller-supplied output path; see ``_resolve_save_path``.
+
+    Returns:
+        The path where the JSON was written.
+    """
+    save_path = _resolve_save_path(output_path, filename)
+    result = OCRGroundTruth.from_dict({"detections": detections, "tags": tags})
+    save_json(save_path, result.to_dict())
+    return save_path
+
+
 def create_app() -> Flask:
     """Create and configure the Flask application.
 
@@ -103,33 +156,19 @@ def create_app() -> Flask:
         """
         try:
             data = request.get_json()
-            bounding_boxes = data["detections"]
+            detections = data["detections"]
             tags = data.get("tags", [])
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
-            empty_indices = [i for i, det in enumerate(bounding_boxes) if not det.get("text", "").strip()]
-            if empty_indices:
-                indices = ", ".join(str(i + 1) for i in empty_indices)
+            empty = _empty_text_indices(detections)
+            if empty:
+                indices = ", ".join(str(i) for i in empty)
                 return jsonify(
                     {"error": f"Detection(s) #{indices} have no text. Fill in or delete them before saving."}
                 ), 400
 
-            if not output_path:
-                filename_stem = Path(filename).stem
-                save_dir = Path.home() / "Downloads" / "ocr_tags"
-                save_dir.mkdir(parents=True, exist_ok=True)
-                save_path = save_dir / f"{filename_stem}.json"
-            else:
-                save_path = Path(output_path)
-                if save_path.is_dir() or not save_path.suffix:
-                    filename_stem = Path(filename).stem
-                    save_path = save_path / f"{filename_stem}.json"
-                save_path.parent.mkdir(parents=True, exist_ok=True)
-
-            result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
-            save_json(save_path, result.to_dict())
-
+            save_path = _save_one(detections, tags, filename, output_path)
             return jsonify({"status": "ok", "path": str(save_path)})
         except KeyError as e:
             return jsonify({"error": f"Missing required field: {e}"}), 400
@@ -182,10 +221,9 @@ def create_app() -> Flask:
             output_path = data.get("output_path", "")
 
             for img_idx, image_entry in enumerate(images):
-                detections = image_entry["detections"]
-                empty_indices = [i for i, det in enumerate(detections) if not det.get("text", "").strip()]
-                if empty_indices:
-                    indices = ", ".join(str(i + 1) for i in empty_indices)
+                empty = _empty_text_indices(image_entry["detections"])
+                if empty:
+                    indices = ", ".join(str(i) for i in empty)
                     filename = image_entry.get("filename", "untitled.png")
                     return jsonify(
                         {
@@ -195,27 +233,17 @@ def create_app() -> Flask:
                         }
                     ), 400
 
-            paths = []
-            for image_entry in images:
-                bounding_boxes = image_entry["detections"]
-                tags = image_entry.get("tags", [])
-                filename = image_entry.get("filename", "untitled.png")
-
-                if not output_path:
-                    filename_stem = Path(filename).stem
-                    save_dir = Path.home() / "Downloads" / "ocr_tags"
-                    save_dir.mkdir(parents=True, exist_ok=True)
-                    save_path = save_dir / f"{filename_stem}.json"
-                else:
-                    save_path = Path(output_path)
-                    if save_path.is_dir() or not save_path.suffix:
-                        filename_stem = Path(filename).stem
-                        save_path = save_path / f"{filename_stem}.json"
-                    save_path.parent.mkdir(parents=True, exist_ok=True)
-
-                result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
-                save_json(save_path, result.to_dict())
-                paths.append(str(save_path))
+            paths = [
+                str(
+                    _save_one(
+                        image_entry["detections"],
+                        image_entry.get("tags", []),
+                        image_entry.get("filename", "untitled.png"),
+                        output_path,
+                    )
+                )
+                for image_entry in images
+            ]
 
             return jsonify({"status": "ok", "paths": paths})
         except KeyError as e:
