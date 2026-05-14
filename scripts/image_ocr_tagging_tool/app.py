@@ -11,7 +11,6 @@ from flask import Flask, jsonify, render_template, request
 from PIL import Image
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
-from ocr_backbone.bounding_box import BoundingBox  # noqa: F401 - register in SerializableClass
 from ocr_backbone.ocr_abstract import OCRAbstract
 from utils.json_utils import save_json
 

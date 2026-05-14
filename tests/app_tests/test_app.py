@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 from tests.app_tests import APP_DEPS_REASON, HAS_APP_DEPS
 from tests.consts import TEST_IMAGE_PATH
-from tests.unit_tests.dummy_ocr import DummyOCR  # noqa: F401 - register in OCRAbstract
+from tests.unit_tests.dummy_ocr import DummyOCR
 
 if HAS_APP_DEPS:
     from scripts.image_ocr_tagging_tool.app import create_app
@@ -166,7 +166,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
 
         ocr_resp = self.client.post(
             "/api/run_ocr",
-            data=json.dumps({"image": image_b64, "model_name": "DummyOCR"}),
+            data=json.dumps({"image": image_b64, "model_name": DummyOCR.__name__}),
             content_type="application/json",
         )
         self.assertEqual(ocr_resp.status_code, 200)

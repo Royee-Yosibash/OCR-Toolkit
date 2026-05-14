@@ -20,7 +20,6 @@ from tests.app_tests import (
     PLAYWRIGHT_REASON,
 )
 from tests.consts import TEST_IMAGE_PATH
-from tests.unit_tests.dummy_ocr import DummyOCR  # noqa: F401 - register in OCRAbstract
 
 if HAS_APP_DEPS:
     from werkzeug.serving import make_server

@@ -14,9 +14,18 @@ class OCRGroundTruth(OCRResult):
     tags: list[str] = field(default_factory=list)
 
     def __post_init__(self) -> None:
-        """Sort bounding boxes and normalize tags to lowercase."""
+        """Sort bounding boxes, normalize tags to lowercase, and reject duplicates.
+
+        Raises:
+            ValueError: If any tag appears more than once after
+                case-insensitive normalization.
+        """
         super().__post_init__()
         self.tags = [t.lower() for t in self.tags]
+        if len(self.tags) != len(set(self.tags)):
+            seen: set[str] = set()
+            duplicates = sorted({t for t in self.tags if t in seen or seen.add(t)})
+            raise ValueError(f"Duplicate tag(s) after case-insensitive normalization: {duplicates}")
 
     def is_close(self, other: "OCRGroundTruth", confidence_tolerance: float = 1e-3) -> bool:
         """Also compares tags on top of the base bounding box comparison.

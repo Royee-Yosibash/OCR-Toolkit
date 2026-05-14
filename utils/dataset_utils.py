@@ -124,24 +124,38 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
         raise ValueError(f"Validation failed for {tags_path.name} ({len(errors)} error(s)):\n" + "\n".join(errors))
 
 
-def validate_dataset() -> None:
-    """Validate the entire dataset directory.
+def validate_dataset(dataset_root: Path | str | None = None) -> None:
+    """Validate a dataset directory.
 
     Checks that every image has a corresponding ground_truth file and vice
     versa, then validates each tag file against its image.
 
+    Args:
+        dataset_root: Root directory of the dataset, expected to contain
+            ``images/`` and ``ground_truth/`` subdirectories. Defaults to
+            the built-in ``dataset/`` directory when *None*.
+
     Raises:
-        FileNotFoundError: If any images are missing ground_truth or ground_truth are
-            missing images.
+        FileNotFoundError: If the dataset root or its required
+            subdirectories do not exist, or if any images are missing
+            ground_truth or ground_truth are missing images.
         ValueError: If any tag validation errors are found across the
             dataset. The message contains all errors grouped by stem.
     """
+    root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
+    images_dir = root / "images"
+    gt_dir = root / "ground_truth"
+    if not images_dir.exists():
+        raise FileNotFoundError(f"images directory does not exist: {images_dir}")
+    if not gt_dir.exists():
+        raise FileNotFoundError(f"ground truth directory does not exist: {gt_dir}")
+
     image_stems = set()
     for ext in IMAGE_EXTENSIONS:
-        for img_path in IMAGES_DIR.glob(f"*{ext}"):
+        for img_path in images_dir.glob(f"*{ext}"):
             image_stems.add(img_path.stem)
 
-    tag_stems = {p.stem for p in TAGS_DIR.glob("*.json")}
+    tag_stems = {p.stem for p in gt_dir.glob("*.json")}
 
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
@@ -152,9 +166,9 @@ def validate_dataset() -> None:
         raise FileNotFoundError(f"Missing images for {len(missing_images)} tag(s): " + ", ".join(missing_images))
 
     all_errors: dict[str, list[str]] = {}
-    for tags_path in sorted(TAGS_DIR.glob("*.json")):
+    for tags_path in sorted(gt_dir.glob("*.json")):
         stem = tags_path.stem
-        image_path = _find_image_for_stem(stem)
+        image_path = _find_image_for_stem(stem, images_dir)
         try:
             validate_tags(tags_path, image_path)
         except ValueError as e:
