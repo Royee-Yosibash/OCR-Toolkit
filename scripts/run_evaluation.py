@@ -30,7 +30,7 @@ from evaluation.metrics import (
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_modules import import_all_modules
-from utils.dataset_utils import DATASET_DIR
+from utils.dataset_utils import DATASET_DIR, validate_dataset
 
 ALL_METRICS = [
     ocr_result_char_accuracy,
@@ -78,6 +78,9 @@ def evaluate() -> None:
     )
 
     import_all_modules()
+
+    logger.info(f"Validating dataset at {args.dataset}")
+    validate_dataset(args.dataset)
 
     labels = None
     if args.config:

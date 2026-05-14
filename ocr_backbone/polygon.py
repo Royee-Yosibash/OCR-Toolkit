@@ -38,7 +38,7 @@ class Polygon(SerializableClass):
 
         for crds in self.coordinates:
             if (crds[0] < 0) or (crds[1] < 0):
-                raise ValueError("All coordinates values must be positive.")
+                raise ValueError("All coordinates values must non negative.")
 
     def _top_left_vertex(self) -> tuple[int, int]:
         """Return the topmost vertex, breaking ties by leftmost.
