@@ -10,6 +10,7 @@ from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 from ocr_backbone.polygon import Polygon
+from utils.serialize_utils import register_unique
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +31,14 @@ class OCRAbstract(ABC):
     _registry: dict = {}
 
     def __init_subclass__(cls, **kwargs: object) -> None:
-        """Auto-register concrete subclasses by class name."""
+        """Auto-register concrete subclasses by class name.
+
+        Raises:
+            ValueError: If a different class with the same name is already
+                registered.
+        """
         super().__init_subclass__(**kwargs)
-        OCRAbstract._registry[cls.__name__] = cls
+        register_unique(OCRAbstract._registry, cls)
 
     @classmethod
     def registered_models(cls) -> list[str]:
@@ -179,9 +185,9 @@ class OCRAbstract(ABC):
         Returns:
             An OCRResult with detections in original image coordinates.
         """
-        logger.info(f"get_text_detections called with image shape {image.shape}")
+        logger.info("get_text_detections called with image shape %s", image.shape)
         if config_overrides:
-            logger.info(f"Applying config overrides: {list(config_overrides.keys())}")
+            logger.info("Applying config overrides: %s", list(config_overrides.keys()))
             config = copy.deepcopy(self.config)
             config.update(config_overrides)
         else:
@@ -193,14 +199,12 @@ class OCRAbstract(ABC):
         all_detections: list[Polygon] = []
         for cell in cells:
             cell_result = self._run_single(cell.image, config.model_params)
-            all_detections.extend(
-                d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections
-            )
+            all_detections.extend(d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections)
 
         if config.detection_validator is not None:
             before = len(all_detections)
             all_detections = [det for det in all_detections if config.detection_validator(det)]
-            logger.info(f"detection_validator filtered {before} -> {len(all_detections)} detections")
+            logger.info("detection_validator filtered %d -> %d detections", before, len(all_detections))
 
-        logger.info(f"Returning {len(all_detections)} detection(s)")
+        logger.info("Returning %d detection(s)", len(all_detections))
         return OCRResult(detections=all_detections)

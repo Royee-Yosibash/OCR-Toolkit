@@ -10,6 +10,7 @@ from ocr_backbone.image_preprocessing import binarize
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from utils.json_utils import save_json
+from utils.serialize_utils import TYPE_KEY, SerializableClass
 
 
 class TestOCRConfig(unittest.TestCase):
@@ -47,7 +48,7 @@ class TestOCRConfig(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             config_file_path = Path(tmp_dir) / "config.json"
             save_json(config_file_path, {"model_params": {}})
-            with self.assertRaises(KeyError):
+            with self.assertRaises(TypeError):
                 load_config(config_file_path)
 
 
@@ -190,3 +191,26 @@ class TestFromDictPreprocessMethods(unittest.TestCase):
             finally:
                 sys.path.remove(tmp_dir)
                 sys.modules.pop("custom_pp", None)
+
+
+class TestOCRConfigSerializableIntegration(unittest.TestCase):
+    """Verifies OCRConfig's participation in the SerializableClass hierarchy."""
+
+    def test_is_registered_in_serializable_registry(self):
+        self.assertIs(SerializableClass._registry.get("OCRConfig"), OCRConfig)
+
+    def test_to_dict_emits_type_discriminator(self):
+        config = OCRConfig(model_name="easyocr")
+        self.assertEqual(config.to_dict()[TYPE_KEY], "OCRConfig")
+
+    def test_create_roundtrip_via_serializable(self):
+        original = OCRConfig(model_name="easyocr", model_params={"lang": "en"})
+        restored = SerializableClass.create(original.to_dict())
+        self.assertIsInstance(restored, OCRConfig)
+        self.assertEqual(restored.model_name, "easyocr")
+        self.assertEqual(restored.model_params, {"lang": "en"})
+
+    def test_from_dict_ignores_unknown_keys(self):
+        config = OCRConfig.from_dict({"model_name": "easyocr", "alias": "Baseline"})
+        self.assertEqual(config.model_name, "easyocr")
+        self.assertFalse(hasattr(config, "alias"))

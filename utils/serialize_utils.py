@@ -3,6 +3,24 @@ import typing
 TYPE_KEY = "_type"
 
 
+def register_unique(registry: dict[str, type], cls: type) -> None:
+    """Register ``cls`` under ``cls.__name__`` in ``registry`` or raise on conflict.
+
+    Idempotent: re-registering the same class is a no-op.
+
+    Args:
+        registry: The mapping to mutate.
+        cls: The class to register.
+    Raises:
+        ValueError: If a different class is already registered under
+            ``cls.__name__``.
+    """
+    name = cls.__name__
+    if name in registry and registry[name] is not cls:
+        raise ValueError(f"'{name}' is already registered to {registry[name]!r}.")
+    registry[name] = cls
+
+
 class SerializableClass:
     """Abstract base class providing recursive serialization to dict.
 
@@ -23,12 +41,7 @@ class SerializableClass:
             ValueError: If a class with the same name is already registered.
         """
         super().__init_subclass__(**kwargs)
-        name = cls.__name__
-        if name in cls._registry and cls._registry[name] is not cls:
-            raise ValueError(
-                f"Duplicate SerializableClass name: '{name}' is already registered to {cls._registry[name]!r}."
-            )
-        cls._registry[name] = cls
+        register_unique(cls._registry, cls)
 
     @classmethod
     def _resolve_class(cls, type_name: str) -> type:

@@ -10,6 +10,7 @@ import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.polygon import Polygon
 from utils.json_utils import load_json
+from utils.serialize_utils import TYPE_KEY, SerializableClass
 
 PPReturnType = InputImage | list[InputImage]
 VALID_PP_RETURN_TYPES = (InputImage, list[InputImage], PPReturnType)
@@ -36,8 +37,16 @@ class PreprocessingProtocol(Protocol):
 
 
 @dataclass
-class OCRConfig:
+class OCRConfig(SerializableClass):
     """Configuration for an OCR run.
+
+    Inherits from ``SerializableClass`` so its instances participate in the
+    project-wide registry and can be discriminated by ``_type`` when nested
+    in heterogeneous serialized structures. Two of its fields are callables
+    that the generic serializer cannot round-trip on its own
+    (``detection_validator`` and ``preprocess_methods``); ``to_dict`` and
+    ``from_dict`` are overridden to translate them to and from JSON-safe
+    descriptors while delegating every other field to the base class.
 
     Args:
         model_name: Name of the OCR model to use.
@@ -189,45 +198,58 @@ class OCRConfig:
     def to_dict(self) -> dict:
         """Convert the config to a JSON-serializable dict.
 
-        ``detection_validator`` is stored as a ``"module.path:function_name"``
-        string when present, so the dict can be round-tripped through JSON.
-        Each preprocessing callable is serialized back to a dict with
-        ``"name"`` as a fully qualified dotted path.
+        Delegates to ``SerializableClass.to_dict`` for the trivial fields,
+        then rewrites the two callable-valued fields into JSON-safe
+        descriptors. ``detection_validator`` is stored as a
+        ``"module.path:function_name"`` string when present and omitted
+        when ``None``. Each preprocessing callable is serialized to a
+        dict with ``"name"`` as a fully qualified dotted path and
+        optional ``"kwargs"``.
 
         Returns:
             A plain dict representation of this config.
         """
-        serialized_pp = []
-        for method in self.preprocess_methods:
-            func = method.func if isinstance(method, partial) else method
-            kwargs = method.keywords if isinstance(method, partial) else {}
-            name = f"{func.__module__}.{func.__qualname__}"
-            entry: dict = {"name": name}
-            if kwargs:
-                entry["kwargs"] = kwargs
-            serialized_pp.append(entry)
-
-        data = {
-            "model_name": self.model_name,
-            "model_params": self.model_params,
-            "preprocess_methods": serialized_pp,
-        }
-        if self.detection_validator is not None:
+        data = super().to_dict()
+        data["preprocess_methods"] = [self._serialize_pp_method(m) for m in self.preprocess_methods]
+        if self.detection_validator is None:
+            data.pop("detection_validator", None)
+        else:
             module = self.detection_validator.__module__
             qualname = self.detection_validator.__qualname__
             data["detection_validator"] = f"{module}:{qualname}"
         return data
 
+    @staticmethod
+    def _serialize_pp_method(method: Callable) -> dict:
+        """Serialize a preprocessing callable into a descriptor dict.
+
+        Args:
+            method: The preprocessing callable, optionally wrapped in
+                ``functools.partial`` to carry bound kwargs.
+
+        Returns:
+            A dict with ``"name"`` (the fully qualified dotted path of
+            the underlying function) and an optional ``"kwargs"`` mapping.
+        """
+        func = method.func if isinstance(method, partial) else method
+        kwargs = method.keywords if isinstance(method, partial) else {}
+        entry: dict = {"name": f"{func.__module__}.{func.__qualname__}"}
+        if kwargs:
+            entry["kwargs"] = kwargs
+        return entry
+
     @classmethod
     def from_dict(cls, raw_dict: dict):
         """Create an OCRConfig from a plain dict.
 
-        ``detection_validator`` may be a callable or a dotted-path string in the
-        form ``"module.path:function_name"``. Strings are dynamically
-        imported.
-
-        ``preprocess_methods`` entries that are dicts are resolved into
-        callables via ``_resolve_pp_method``.
+        Resolves the two callable-valued fields into live callables and
+        then defers to ``SerializableClass.from_dict`` for instantiation.
+        ``detection_validator`` may be a callable or a dotted-path string
+        in the form ``"module.path:function_name"``. ``preprocess_methods``
+        entries that are dicts are resolved via ``_resolve_pp_method``.
+        Keys that do not correspond to a dataclass field are silently
+        dropped (besides ``_type``), preserving backward compatibility
+        with config JSONs that carry extra metadata such as ``alias``.
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
@@ -236,22 +258,24 @@ class OCRConfig:
 
         Returns:
             An OCRConfig instance.
+
+        Raises:
+            TypeError: If ``model_name`` is missing from ``raw_dict``.
         """
-        detection_validator = raw_dict.get("detection_validator")
+        valid_names = {f.name for f in fields(cls)}
+        prepared = {k: v for k, v in raw_dict.items() if k == TYPE_KEY or k in valid_names}
+
+        detection_validator = prepared.get("detection_validator")
         if isinstance(detection_validator, str):
             module_path, attr_name = detection_validator.rsplit(":", 1)
             module = importlib.import_module(module_path)
-            detection_validator = getattr(module, attr_name)
+            prepared["detection_validator"] = getattr(module, attr_name)
 
-        raw_pp = raw_dict.get("preprocess_methods", [])
-        preprocess_methods = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
+        raw_pp = prepared.get("preprocess_methods")
+        if raw_pp is not None:
+            prepared["preprocess_methods"] = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
 
-        return cls(
-            model_name=raw_dict["model_name"],
-            model_params=raw_dict.get("model_params", {}),
-            detection_validator=detection_validator,
-            preprocess_methods=preprocess_methods,
-        )
+        return super().from_dict(prepared)
 
 
 def load_config(path: str | Path) -> OCRConfig:
@@ -267,5 +291,4 @@ def load_config(path: str | Path) -> OCRConfig:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
     """
-    data = load_json(path)
-    return OCRConfig.from_dict(data)
+    return OCRConfig.from_dict(load_json(path))

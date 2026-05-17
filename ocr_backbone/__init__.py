@@ -9,7 +9,8 @@ under ``ocr_backbone/``.
 """
 
 from ocr_backbone.bounding_box import BoundingBox
+from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 from ocr_backbone.polygon import Polygon
 
-__all__ = ["BoundingBox", "OCRResult", "Polygon"]
+__all__ = ["BoundingBox", "OCRConfig", "OCRResult", "Polygon"]
