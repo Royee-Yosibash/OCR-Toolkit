@@ -80,10 +80,11 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
     """
     if images_dir is None:
         images_dir = IMAGES_DIR
-    matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS if (images_dir / f"{stem}{ext}").exists()]
-    if not matches:
-        raise FileNotFoundError(f"No image found for stem '{stem}' in {images_dir}")
-    return matches[0]
+    candidates = (images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS)
+    try:
+        return next(p for p in candidates if p.exists())
+    except StopIteration:
+        raise FileNotFoundError(f"No image found for stem '{stem}' in {images_dir}") from None
 
 
 def validate_tags(tags_path: Path, image_path: Path) -> None:
@@ -155,7 +156,8 @@ def validate_dataset(dataset_root: Path | str | None = None) -> None:
         for img_path in images_dir.glob(f"*{ext}"):
             image_stems.add(img_path.stem)
 
-    tag_stems = {p.stem for p in gt_dir.glob("*.json")}
+    tag_paths = sorted(gt_dir.glob("*.json"))
+    tag_stems = {p.stem for p in tag_paths}
 
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
@@ -166,7 +168,7 @@ def validate_dataset(dataset_root: Path | str | None = None) -> None:
         raise FileNotFoundError(f"Missing images for {len(missing_images)} tag(s): " + ", ".join(missing_images))
 
     all_errors: dict[str, list[str]] = {}
-    for tags_path in sorted(gt_dir.glob("*.json")):
+    for tags_path in tag_paths:
         stem = tags_path.stem
         image_path = _find_image_for_stem(stem, images_dir)
         try:

@@ -72,18 +72,12 @@ class OCRConfig(SerializableClass):
     def validate(self) -> None:
         """Run all validation checks on the current config state.
 
-        Takes a shallow snapshot of every field before running checks and
-        asserts that no field was mutated during validation.
-
         Raises:
-            TypeError: If a preprocessing callable has an incompatible
-                signature.
             ValueError: If ``model_name`` is empty or ``detection_validator``
                 is not callable.
-            RuntimeError: If validation itself mutated the config.
+            TypeError: If a preprocessing callable has an incompatible
+                signature.
         """
-        snapshot = {f.name: getattr(self, f.name) for f in fields(self)}
-
         if not isinstance(self.model_name, str) or not self.model_name:
             raise ValueError(f"model_name must be a non-empty string, got {self.model_name!r}.")
 
@@ -92,10 +86,6 @@ class OCRConfig(SerializableClass):
 
         for method in self.preprocess_methods:
             self._validate_pp_signature(method)
-
-        for f in fields(self):
-            if getattr(self, f.name) is not snapshot[f.name]:
-                raise RuntimeError(f"Config field '{f.name}' was mutated during validation.")
 
     @staticmethod
     def _resolve_pp_method(pp_method: dict) -> Callable:

@@ -63,7 +63,13 @@ class EvaluationResult:
     aggregate: dict[str, dict[str, dict[str, dict]]] = field(default_factory=dict, init=False)
 
     def __post_init__(self):
-        assert self.image_tags, "image_tags must not be empty"
+        """Validate inputs and compute aggregate statistics.
+
+        Raises:
+            ValueError: If ``image_tags`` is empty.
+        """
+        if not self.image_tags:
+            raise ValueError("image_tags must not be empty")
         self._compute_aggregate()
 
     def _compute_aggregate(self, ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS):
@@ -176,7 +182,8 @@ def _build_iterator(
 
     Args:
         output_dir: Root output directory.
-        dataset: Dataset iterable, used when metrics_only is False.
+        dataset: Dataset iterable, used when metrics_only is False. Ignored
+            (and may be None) when metrics_only is True.
         metrics_only: If True, iterate saved directories instead of dataset.
 
     Yields:
@@ -242,18 +249,18 @@ def run_multiple_ocrs_and_save(
     for ocr, ocr_id in zip(ocrs, ocr_ids, strict=True):
         save_path = save_dir / ocr_id
         if (save_path / OCR_RESULTS_FILE).exists() and not overwrite:
-            logger.debug(f"Skipping {ocr_id} -- cached result exists")
+            logger.debug("Skipping %s -- cached result exists", ocr_id)
             continue
-        logger.info(f"Running OCR engine {ocr_id}")
+        logger.info("Running OCR engine %s", ocr_id)
         result = ocr.get_text_detections(image=image)
         save_json(save_path / OCR_RESULTS_FILE, result.to_dict(), mkdir=True)
-        logger.info(f"Saved OCR result for {ocr_id} to {save_path}")
+        logger.info("Saved OCR result for %s to %s", ocr_id, save_path)
 
 
 def evaluation_pipeline(
     metrics: list[Metric],
     output_dir: str | Path,
-    dataset: str | None = None,
+    dataset: str | Path | None = None,
     ocrs: list[OCRAbstract] | None = None,
     overwrite: bool = False,
     metrics_only: bool = False,
@@ -269,9 +276,9 @@ def evaluation_pipeline(
         metrics: List of metric callables with signature
             (OCRResult, OCRResult) -> float | int | bool.
         output_dir: Directory where results are persisted.
-        dataset: Dataset identifier string. Currently, a path to a local
-            directory containing ``images/`` and ``ground_truth/`` subdirectories.
-            Required unless metrics_only is True.
+        dataset: Path to a local directory containing ``images/`` and
+            ``ground_truth/`` subdirectories. Required unless metrics_only
+            is True.
         ocrs: List of initialized OCR instances to evaluate. Required
             unless metrics_only is True.
         overwrite: If True, re-run OCR even when saved results exist.
@@ -304,10 +311,11 @@ def evaluation_pipeline(
         labels,
     )
 
-    for image_id, image, ground_truth in _build_iterator(output_dir, dataset_generator(dataset), metrics_only):
+    iterator_dataset = None if metrics_only else dataset_generator(dataset)
+    for image_id, image, ground_truth in _build_iterator(output_dir, iterator_dataset, metrics_only):
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         image_tags[image_id] = ground_truth.tags
-        logger.info(f"Processing image {image_id} (tags={ground_truth.tags})")
+        logger.info("Processing image %s (tags=%s)", image_id, ground_truth.tags)
         if not metrics_only:
             image_dir.mkdir(parents=True, exist_ok=True)
             save_json(image_dir / GT_FILE, ground_truth.to_dict())
@@ -316,9 +324,11 @@ def evaluation_pipeline(
         _score_image(image_dir, ground_truth, metrics, image_id, per_image)
 
     logger.info(
-        f"Evaluation loop complete -- scored {len(image_tags)} image(s) across {len(per_image)} OCR engine(s)",
+        "Evaluation loop complete -- scored %d image(s) across %d OCR engine(s)",
+        len(image_tags),
+        len(per_image),
     )
     evaluation_result = EvaluationResult(per_image=per_image, image_tags=image_tags)
     evaluation_result.save_results_to_file(output_dir=output_dir)
-    logger.info(f"Aggregate results saved to {output_dir}")
+    logger.info("Aggregate results saved to %s", output_dir)
     return evaluation_result

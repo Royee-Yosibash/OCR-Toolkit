@@ -79,7 +79,7 @@ def evaluate() -> None:
 
     import_all_modules()
 
-    logger.info(f"Validating dataset at {args.dataset}")
+    logger.info("Validating dataset at %s", args.dataset)
     validate_dataset(args.dataset)
 
     labels = None
@@ -89,30 +89,31 @@ def evaluate() -> None:
             config_files = sorted(config_path.glob("*.json"))
             if not config_files:
                 raise FileNotFoundError(f"No JSON config files found in {config_path}")
-            logger.info(f"Loading {len(config_files)} config(s) from {config_path}")
+            logger.info("Loading %d config(s) from %s", len(config_files), config_path)
         else:
             config_files = [config_path]
         ocrs = []
         labels = []
         for cf in config_files:
             config = load_config(cf)
-            logger.info(f"Loaded config from {cf} (model_name={config.model_name})")
+            logger.info("Loaded config from %s (model_name=%s)", cf, config.model_name)
             ocrs.append(OCRAbstract.from_config(config))
             labels.append(cf.stem)
     else:
         registered = OCRAbstract.registered_models()
-        logger.info(f"Registered OCR modules: {registered}")
+        logger.info("Registered OCR modules: %s", registered)
         ocrs = []
         for name in registered:
-            logger.info(f"Instantiating OCR module: {name}")
+            logger.info("Instantiating OCR module: %s", name)
             ocrs.append(OCRAbstract.from_config(OCRConfig(model_name=name)))
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     logger.info(
-        f"Running evaluation (dataset={args.dataset}, "
-        f"output_dir={output_dir}, "
-        f"metrics={[type(m).__name__ for m in ALL_METRICS]})"
+        "Running evaluation (dataset=%s, output_dir=%s, metrics=%s)",
+        args.dataset,
+        output_dir,
+        [type(m).__name__ for m in ALL_METRICS],
     )
 
     evaluation_pipeline(
@@ -129,7 +130,7 @@ def evaluate() -> None:
     plot_metric_comparison(agg, save_path=output_dir / "metric_comparison.png")
     plot_radar(agg, save_path=output_dir / "radar.png")
     plot_stat_range(agg, save_path=output_dir / "stat_range.png")
-    logger.info(f"All plots saved to {output_dir}")
+    logger.info("All plots saved to %s", output_dir)
 
 
 if __name__ == "__main__":

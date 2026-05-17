@@ -1,7 +1,7 @@
 """Entry point for the OCR tagging tool backend.
 
-Imports all OCR modules to trigger subclass registration, creates the
-Flask application, and opens the UI in the default browser.
+Creates the Flask application (which itself triggers OCR engine
+registration) and opens the UI in the default browser.
 
 Usage::
 
@@ -17,8 +17,6 @@ automatically.
 import argparse
 import logging
 import webbrowser
-
-from ocr_modules import import_all_modules
 
 logger = logging.getLogger(__name__)
 
@@ -45,10 +43,6 @@ def main() -> None:
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
         force=True,
     )
-
-    logger.info("Importing all OCR modules to trigger registration")
-    import_all_modules()
-    logger.info("OCR modules imported")
 
     from scripts.image_ocr_tagging_tool.app import create_app
 

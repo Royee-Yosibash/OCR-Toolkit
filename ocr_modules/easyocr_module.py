@@ -1,3 +1,4 @@
+import importlib.util
 import logging
 
 import numpy as np
@@ -6,16 +7,15 @@ from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from utils.lazy_import import LazyModule
 
 logger = logging.getLogger(__name__)
 
-try:
-    import easyocr
-
-    _HAS_EASYOCR = True
-except ImportError:
-    _HAS_EASYOCR = False
+_HAS_EASYOCR = importlib.util.find_spec("easyocr") is not None
+if not _HAS_EASYOCR:
     logger.info("easyocr not installed -- EasyOCRModule will not be available.")
+
+easyocr = LazyModule("easyocr")
 
 
 if _HAS_EASYOCR:
