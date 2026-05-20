@@ -18,8 +18,8 @@ import argparse
 import logging
 from pathlib import Path
 
-from evaluation.evaluation_analysis import load_aggregate, plot_metric_comparison, plot_radar, plot_stat_range
-from evaluation.evaluation_pipeline import ALL_TAGS_KEY, evaluation_pipeline
+from evaluation.evaluation_analysis import plot_metric_comparison, plot_radar, plot_stat_range
+from evaluation.evaluation_pipeline import AggregateResult, evaluation_pipeline
 from evaluation.metrics import (
     ocr_result_char_accuracy,
     ocr_result_word_accuracy,
@@ -125,7 +125,7 @@ def evaluate() -> None:
         labels=labels,
     )
 
-    agg = load_aggregate(output_dir)[ALL_TAGS_KEY]
+    agg = AggregateResult.from_path(output_dir)
     logger.info("Generating plots")
     plot_metric_comparison(agg, save_path=output_dir / "metric_comparison.png")
     plot_radar(agg, save_path=output_dir / "radar.png")

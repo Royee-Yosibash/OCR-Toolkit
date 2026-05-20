@@ -46,6 +46,105 @@ DEFAULT_CI_LEVELS = (95,)
 ALL_TAGS_KEY = "all"
 
 
+@dataclass(frozen=True)
+class TagAggregate:
+    """One tag's slice of an aggregate result.
+
+    Bundles the per-tag sub-dict together with the OCR-id and metric-name
+    lists derived from its top-level keys, so consumers can iterate without
+    re-deriving them.
+
+    Attributes:
+        data: The ``ocr_id -> metric_name -> stats`` sub-dict for the
+            chosen tag.
+    """
+
+    data: dict
+
+    @property
+    def labels(self) -> list[str]:
+        return list(self.data.keys())
+
+    @property
+    def metrics(self) -> list[str]:
+        return list(next(iter(self.data.values())).keys())
+
+@dataclass(frozen=True)
+class AggregateResult:
+    """Typed wrapper around the aggregate-results JSON of an evaluation run.
+
+    The underlying JSON shape is ``tag -> ocr_id -> metric_name -> stats``.
+    This class adds named per-tag access without otherwise changing the
+    structure, so it round-trips losslessly via :meth:`to_dict` /
+    :class:`AggregateResult(data=...)`.
+
+    Construction paths:
+        - ``AggregateResult(data=raw_dict)`` — wrap an in-memory dict (used
+          internally by the evaluation pipeline).
+        - ``AggregateResult.from_path(results_dir)`` — load from disk.
+
+    Attributes:
+        data: The raw nested dict, preserved as-is for JSON round-trips
+            and for callers that want full structural access.
+    """
+
+    data: dict
+
+    @classmethod
+    def from_path(cls, results_dir: str | Path) -> "AggregateResult":
+        """Load an aggregate JSON from an evaluation output directory.
+
+        Args:
+            results_dir: Path to a directory containing
+                ``AGGREGATE_RESULTS_FILE`` (``aggregate.json``).
+
+        Returns:
+            An :class:`AggregateResult` wrapping the parsed JSON.
+
+        Raises:
+            FileNotFoundError: If the aggregate file does not exist.
+        """
+        return cls(data=load_json(Path(results_dir) / AGGREGATE_RESULTS_FILE))
+
+    @property
+    def tags(self) -> list[str]:
+        """Return the tag keys available in this aggregate.
+
+        Returns:
+            The top-level keys of the underlying dict, including
+            ``ALL_TAGS_KEY`` ("all") and one entry per dataset tag.
+        """
+        return list(self.data.keys())
+
+    def view_for_tag(self, name: str = ALL_TAGS_KEY) -> Aggregate:
+        """Return the `TagView` for a single tag.
+
+        Args:
+            name: Tag key to slice on. Defaults to ``ALL_TAGS_KEY``
+                ("all"), i.e. the across-all-images aggregate.
+
+        Returns:
+            A :class:`TagView` bundling the tag sub-dict, its OCR-id
+            labels, and the metric names present.
+
+        Raises:
+            KeyError: If ``name`` is not present. The error message lists
+                the available tags.
+        """
+        if name not in self.data:
+            raise KeyError(f"Tag {name!r} not found in aggregate. Available tags: {sorted(self.data.keys())}")
+        return TagAggregate(data=self.data[name])
+
+    def to_dict(self) -> dict:
+        """Return the raw nested dict representation (for JSON serialization).
+
+        Returns:
+            The same dict shape as the aggregate JSON file:
+            ``tag -> ocr_id -> metric_name -> stats``.
+        """
+        return self.data
+
+
 @dataclass
 class EvaluationResult:
     """Container for evaluation output.
@@ -53,14 +152,15 @@ class EvaluationResult:
     Args:
         per_image: Nested dict of ocr_id -> metric_name -> image_id -> value.
         image_tags: Dict mapping image_id to the ground truth tags for that image.
-        aggregate: Nested dict of tag -> ocr_id -> metric_name -> stats.
-            The key ``"all"`` contains aggregate stats across all images.
-            Each tag key contains stats for images with that tag.
+        aggregate: An :class:`AggregateResult` wrapping the nested
+            ``tag -> ocr_id -> metric_name -> stats`` structure. The key
+            ``"all"`` contains aggregate stats across all images; each
+            tag key contains stats for images with that tag.
     """
 
-    per_image: dict[str, dict[str, dict[int, float]]] = field(default_factory=dict)
-    image_tags: dict[int, list[str]] = field(default_factory=dict)
-    aggregate: dict[str, dict[str, dict[str, dict]]] = field(default_factory=dict, init=False)
+    per_image: dict[str, dict[str, dict[int, float]]]
+    image_tags: dict[int, list[str]]
+    aggregate: AggregateResult = field(default_factory=lambda: AggregateResult(data={}), init=False)
 
     def __post_init__(self):
         """Validate inputs and compute aggregate statistics.
@@ -97,7 +197,7 @@ class EvaluationResult:
 
         insufficient_tags = {tag: len(ids) for tag, ids in tag_groups.items() if len(ids) < 2}
         if insufficient_tags:
-            raise ValueError(f"Tags with fewer than 2 images cannot produce meaningful statistics: {insufficient_tags}")
+            raise ValueError(f"{insufficient_tags}: fewer than 2 images cannot produce meaningful statistics")
 
         aggregate = {}
         for tag_key, image_ids in tag_groups.items():
@@ -113,7 +213,7 @@ class EvaluationResult:
                             ci_levels,
                         )
 
-        self.aggregate = aggregate
+        self.aggregate = AggregateResult(data=aggregate)
         logger.info("Aggregate statistics computed successfully")
 
     @staticmethod
@@ -152,7 +252,7 @@ class EvaluationResult:
         Args:
             output_dir: Directory to save the aggregate file in.
         """
-        save_json(output_dir / AGGREGATE_RESULTS_FILE, self.aggregate)
+        save_json(output_dir / AGGREGATE_RESULTS_FILE, self.aggregate.to_dict())
 
 
 def _compute_metrics(
