@@ -1,3 +1,4 @@
+from collections import Counter
 from dataclasses import dataclass, field
 
 from ocr_backbone.ocr_result import OCRResult
@@ -22,9 +23,8 @@ class OCRGroundTruth(OCRResult):
         """
         super().__post_init__()
         self.tags = [t.lower() for t in self.tags]
-        if len(self.tags) != len(set(self.tags)):
-            seen: set[str] = set()
-            duplicates = sorted({t for t in self.tags if t in seen or seen.add(t)})
+        duplicates = sorted(t for t, count in Counter(self.tags).items() if count > 1)
+        if duplicates:
             raise ValueError(f"Duplicate tag(s) after case-insensitive normalization: {duplicates}")
 
     def is_close(self, other: "OCRGroundTruth", confidence_tolerance: float = 1e-3) -> bool:

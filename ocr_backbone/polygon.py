@@ -33,7 +33,7 @@ class Polygon(SerializableClass):
 
     def _coordinates_verification(self):
         all_values = [v for point in self.coordinates for v in point]
-        if not all(isinstance(v, int) for v in all_values):
+        if not all(type(v) is int for v in all_values):
             raise ValueError("All coordinate values must be integers.")
 
         for crds in self.coordinates:
@@ -60,8 +60,8 @@ class Polygon(SerializableClass):
         """
         if not isinstance(other, Polygon):
             return NotImplemented
-        sy, sx = self._top_left_vertex()[1], self._top_left_vertex()[0]
-        oy, ox = other._top_left_vertex()[1], other._top_left_vertex()[0]
+        sx, sy = self._top_left_vertex()
+        ox, oy = other._top_left_vertex()
         return (sy, sx) < (oy, ox)
 
     def translate_coordinates(self, x_offset: int, y_offset: int) -> "Polygon":
