@@ -24,10 +24,10 @@ def register_unique(registry: dict[str, type], cls: type) -> None:
 class SerializableClass:
     """Abstract base class providing recursive serialization to dict.
 
-    Subclasses are automatically registered via ``__init_subclass__`` and
-    can be looked up by their fully qualified class path. The ``to_dict``
-    method embeds a ``_type`` key so that ``from_dict`` can reconstruct
-    the correct subclass without dynamic imports.
+    Subclasses are automatically registered in ``_registry`` via
+    ``__init_subclass__`` and can be looked up by their class name. The
+    ``to_dict`` method embeds a ``_type`` key so that ``from_dict`` can
+    reconstruct the correct subclass without dynamic imports.
     """
 
     # TODO: Make sure init=False is also supported
@@ -35,13 +35,9 @@ class SerializableClass:
     _registry: dict[str, type] = {}
 
     def __init_subclass__(cls, **kwargs):
-        """Register every subclass by its class name.
-
-        Raises:
-            ValueError: If a class with the same name is already registered.
-        """
+        """Register every subclass by its class name."""
         super().__init_subclass__(**kwargs)
-        register_unique(cls._registry, cls)
+        register_unique(SerializableClass._registry, cls)
 
     @classmethod
     def _resolve_class(cls, type_name: str) -> type:

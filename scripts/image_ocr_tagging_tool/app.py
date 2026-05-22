@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 from flask import Flask, jsonify, render_template, request
 from PIL import Image
+from werkzeug.exceptions import HTTPException
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
@@ -96,12 +97,19 @@ def create_app() -> Flask:
     def _unhandled(exc: Exception):
         """Return any unhandled exception as a JSON 500 so API clients get a parseable body.
 
+        HTTP exceptions (e.g. 404 from missing routes like ``/favicon.ico``)
+        are passed through to Flask's default handling so they don't get
+        logged as unhandled errors or rewrapped as 500s.
+
         Args:
             exc: The exception raised by a route handler.
 
         Returns:
-            A JSON response with the exception message and HTTP 500 status.
+            A JSON response with the exception message and HTTP 500 status,
+            or the original HTTPException for Flask to render normally.
         """
+        if isinstance(exc, HTTPException):
+            return exc
         logger.exception("Unhandled error in %s", request.path)
         return jsonify({"error": str(exc)}), 500
 

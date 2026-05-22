@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from evaluation.evaluation_pipeline import ALL_TAGS_KEY, AggregateResult
-from evaluation.metrics import metric_class_display_name
+from evaluation.metrics import Metric
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ def plot_metric_comparison(
         ax.bar(x + i * width, values, width, label=label, yerr=yerr, capsize=3)
 
     ax.set_xticks(x + width * (len(view.labels) - 1) / 2)
-    ax.set_xticklabels([metric_class_display_name(m) for m in view.metrics], rotation=30, ha="right")
+    ax.set_xticklabels([Metric._registry[m].display_name for m in view.metrics], rotation=30, ha="right")
     ax.set_ylabel(stat.capitalize())
     ax.set_title(f"OCR Module Comparison ({stat})")
     ax.legend()
@@ -121,7 +121,7 @@ def plot_radar(
     ax.set_xticklabels([])
 
     label_radius = 1.18
-    display_names = [metric_class_display_name(m) for m in view.metrics]
+    display_names = [Metric._registry[m].display_name for m in view.metrics]
     for angle, name in zip(angles[:-1], display_names, strict=True):
         angle_deg = np.degrees(angle)
         rotation = angle_deg - 90 if angle_deg <= 180 else angle_deg + 90
@@ -192,7 +192,7 @@ def plot_stat_range(
         )
         ax.set_xticks(x)
         ax.set_xticklabels(view.labels, rotation=45, ha="right", fontsize=8)
-        ax.set_title(metric_class_display_name(metric), fontsize=10)
+        ax.set_title(Metric._registry[metric].display_name, fontsize=10)
 
     fig.suptitle("Metric Ranges (min / mean / max)", fontsize=13)
     fig.tight_layout()
@@ -222,10 +222,10 @@ def summary_table(aggregate: AggregateResult, stat: str = "mean", tag: str = ALL
     """
     view = aggregate.view_for_tag(tag)
 
-    col_width = max(len(metric_class_display_name(m)) for m in view.metrics) + 2
+    col_width = max(len(Metric._registry[m].display_name) for m in view.metrics) + 2
     label_width = max(len(label) for label in view.labels) + 2
 
-    header = " " * label_width + "".join(metric_class_display_name(m).rjust(col_width) for m in view.metrics)
+    header = " " * label_width + "".join(Metric._registry[m].display_name.rjust(col_width) for m in view.metrics)
     lines = [header, "-" * len(header)]
 
     for label in view.labels:

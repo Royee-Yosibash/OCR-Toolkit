@@ -27,7 +27,7 @@ from pathlib import Path
 
 import numpy as np
 
-from evaluation.metrics import METRICS_BOUNDED_LOOKUP, Metric
+from evaluation.metrics import Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
@@ -116,15 +116,15 @@ class AggregateResult:
         """
         return list(self.data.keys())
 
-    def view_for_tag(self, name: str = ALL_TAGS_KEY) -> Aggregate:
-        """Return the `TagView` for a single tag.
+    def view_for_tag(self, name: str = ALL_TAGS_KEY) -> TagAggregate:
+        """Return the `TagAggregate` for a single tag.
 
         Args:
             name: Tag key to slice on. Defaults to ``ALL_TAGS_KEY``
                 ("all"), i.e. the across-all-images aggregate.
 
         Returns:
-            A :class:`TagView` bundling the tag sub-dict, its OCR-id
+            A `TagAggregate` bundling the tag sub-dict, its OCR-id
             labels, and the metric names present.
 
         Raises:
@@ -232,8 +232,7 @@ class EvaluationResult:
         Returns:
             A dict with mean, ci, n, min, max, and median.
         """
-        is_bounded = METRICS_BOUNDED_LOOKUP.get(metric_name, False)
-        ci_fn = beta_ci if is_bounded else bootstrap_ci
+        ci_fn = beta_ci if Metric._registry[metric_name].is_bounded else bootstrap_ci
         ci = {}
         for level in ci_levels:
             ci[str(level)] = ci_fn(values, level)
@@ -392,8 +391,14 @@ def evaluation_pipeline(
         An EvaluationResult with per-image scores and aggregate stats.
 
     Raises:
-        ValueError: If labels is provided but its length does not match ocrs.
+        ValueError: If labels is provided but its length does not match ocrs,
+            or if ocrs/dataset are missing when metrics_only is False.
     """
+    if not metrics_only:
+        if ocrs is None:
+            raise ValueError("ocrs must be provided when metrics_only is False.")
+        if dataset is None:
+            raise ValueError("dataset must be provided when metrics_only is False.")
     if labels is not None and ocrs is not None and len(labels) != len(ocrs):
         raise ValueError(f"labels length ({len(labels)}) must match ocrs length ({len(ocrs)}).")
     output_dir = Path(output_dir)

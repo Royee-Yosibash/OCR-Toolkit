@@ -1,0 +1,115 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          273,
+          239
+        ],
+        [
+          1305,
+          469
+        ]
+      ],
+      "text": "MAGNA",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          321,
+          489
+        ],
+        [
+          1239,
+          717
+        ]
+      ],
+      "text": "CARTA",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          654,
+          778
+        ],
+        [
+          939,
+          898
+        ]
+      ],
+      "text": "AND",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          249,
+          918
+        ],
+        [
+          1336,
+          1054
+        ]
+      ],
+      "text": "OTHER CHARTERS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          426,
+          1073
+        ],
+        [
+          1165,
+          1198
+        ]
+      ],
+      "text": "OF ENGLISH",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          512,
+          1227
+        ],
+        [
+          1075,
+          1347
+        ]
+      ],
+      "text": "LIBERTIES",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          240,
+          1781
+        ],
+        [
+          1327,
+          1886
+        ]
+      ],
+      "text": "The GUYON HOUSE PRESS",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured",
+    "document"
+  ]
+}

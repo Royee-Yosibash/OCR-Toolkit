@@ -28,15 +28,10 @@ class OCRAbstract(ABC):
     Subclasses are auto-registered by class name for lookup via ``from_config``.
     """
 
-    _registry: dict = {}
+    _registry: dict[str, type] = {}
 
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        """Auto-register concrete subclasses by class name.
-
-        Raises:
-            ValueError: If a different class with the same name is already
-                registered.
-        """
+    def __init_subclass__(cls, **kwargs):
+        """Register every concrete OCR subclass by class name."""
         super().__init_subclass__(**kwargs)
         register_unique(OCRAbstract._registry, cls)
 
