@@ -30,6 +30,12 @@ class OCRAbstract(ABC):
 
     _registry: dict[str, type] = {}
 
+    #: ``model_params`` keys consumed at construction time and therefore
+    #: stripped from per-call kwargs before being forwarded to
+    #: ``_run_single``. Subclasses override this to declare engine-init
+    #: parameters that must not leak into the inference call.
+    _INIT_PARAM_KEYS: frozenset[str] = frozenset()
+
     def __init_subclass__(cls, **kwargs):
         """Register every concrete OCR subclass by class name."""
         super().__init_subclass__(**kwargs)
@@ -191,9 +197,10 @@ class OCRAbstract(ABC):
         cells = self._preprocess(image=image, config=config)
 
         logger.info("Running OCR on %d cell(s)", len(cells))
+        call_params = {k: v for k, v in config.model_params.items() if k not in self._INIT_PARAM_KEYS}
         all_detections: list[Polygon] = []
         for cell in cells:
-            cell_result = self._run_single(cell.image, config.model_params)
+            cell_result = self._run_single(cell.image, call_params)
             all_detections.extend(d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections)
 
         if config.detection_validator is not None:

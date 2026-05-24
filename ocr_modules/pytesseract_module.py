@@ -25,6 +25,8 @@ if _HAS_PYTESSERACT:
     class PytesseractModule(OCRAbstract):
         """OCR module using the pytesseract (Tesseract) engine."""
 
+        _INIT_PARAM_KEYS = frozenset({"lang"})
+
         def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the pytesseract reader.
 
@@ -35,7 +37,7 @@ if _HAS_PYTESSERACT:
                 alias: Optional display name used as the label in evaluations.
             """
             super().__init__(config, alias=alias)
-            self._lang = self.config.model_params.pop("lang", "eng")
+            self._lang = self.config.model_params.get("lang", "eng")
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run pytesseract on a single image.
