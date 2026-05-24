@@ -14,7 +14,10 @@ from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
 from utils.serialize_utils import register_unique
 
-_PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
+_PUNCTUATION_RE = re.compile(
+    r"(?!(?<=\w)['\u2018\u2019](?=\w))(?:(?<!\d)[^\w\s]|[^\w\s](?!\d))",
+    re.UNICODE,
+)
 _WHITESPACE_RE = re.compile(r"\s+")
 
 

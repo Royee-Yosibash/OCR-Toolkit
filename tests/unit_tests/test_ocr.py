@@ -101,6 +101,53 @@ class TestOCR(unittest.TestCase):
             )
 
 
+class _RecordingOCR(DummyOCR):
+    """DummyOCR variant that records ``single_run_model_params`` for inspection."""
+
+    _INIT_PARAM_KEYS = frozenset({"init_only"})
+
+    def __init__(self, config=None, alias: str = "") -> None:
+        super().__init__(config=config, alias=alias)
+        self.received_params: list[dict] = []
+
+    def _run_single(self, image, single_run_model_params):
+        self.received_params.append(single_run_model_params)
+        return super()._run_single(image, single_run_model_params)
+
+
+class TestInitParamFiltering(unittest.TestCase):
+    """Tests for _INIT_PARAM_KEYS filtering and config-mutation safety."""
+
+    def test_init_only_key_stripped_before_run_single(self):
+        config = OCRConfig(
+            model_name="DummyOCR",
+            model_params={"init_only": "value", "call_kwarg": 42},
+        )
+        ocr = _RecordingOCR(config=config)
+        image = np.zeros((10, 10, 3), dtype=np.uint8)
+        ocr.get_text_detections(image)
+        self.assertEqual(len(ocr.received_params), 1)
+        self.assertNotIn("init_only", ocr.received_params[0])
+        self.assertEqual(ocr.received_params[0].get("call_kwarg"), 42)
+
+    def test_config_model_params_not_mutated(self):
+        original = {"init_only": "value", "call_kwarg": 42}
+        config = OCRConfig(model_name="DummyOCR", model_params=dict(original))
+        ocr = _RecordingOCR(config=config)
+        image = np.zeros((10, 10, 3), dtype=np.uint8)
+        ocr.get_text_detections(image)
+        self.assertEqual(ocr.config.model_params, original)
+
+    def test_to_dict_round_trip_preserves_init_keys(self):
+        config = OCRConfig(
+            model_name="DummyOCR",
+            model_params={"init_only": "value", "call_kwarg": 42},
+        )
+        _RecordingOCR(config=config)
+        restored = OCRConfig.from_dict(config.to_dict())
+        self.assertEqual(restored.model_params, {"init_only": "value", "call_kwarg": 42})
+
+
 class TestValidatePPSignature(unittest.TestCase):
     """Tests for OCRConfig._validate_pp_signature."""
 

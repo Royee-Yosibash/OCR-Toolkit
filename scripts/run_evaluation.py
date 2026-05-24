@@ -11,7 +11,7 @@ default settings.
 
 Usage::
 
-    python -m scripts.run_evaluation [--config config.json] [--output-dir scripts/results]
+    python -m scripts.run_evaluation [--config config.json] [--output-dir scripts/results] [--overwrite]
 """
 
 import argparse
@@ -20,25 +20,14 @@ from pathlib import Path
 
 from evaluation.evaluation_analysis import plot_metric_comparison, plot_radar, plot_stat_range
 from evaluation.evaluation_pipeline import AggregateResult, evaluation_pipeline
-from evaluation.metrics import (
-    ocr_result_char_accuracy,
-    ocr_result_word_accuracy,
-    word_count_ratio,
-    word_precision,
-    word_recall,
-)
+from evaluation.metrics import Metric
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_modules import import_all_modules
 from utils.dataset_utils import DATASET_DIR, validate_dataset
+from utils.logging_config import configure_logging
 
-ALL_METRICS = [
-    ocr_result_char_accuracy,
-    ocr_result_word_accuracy,
-    word_count_ratio,
-    word_precision,
-    word_recall,
-]
+ALL_METRICS = [cls() for cls in Metric._registry.values()]
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +37,7 @@ def evaluate() -> None:
 
     Run from the terminal as::
 
-        python -m scripts.run_evaluation [--config config.json] [--dataset dataset] [--output-dir scripts/results]
+        python -m scripts.run_evaluation [--config config.json] [--dataset dataset] [--output-dir scripts/results] [--overwrite]
     """
     parser = argparse.ArgumentParser(
         description="Run OCR evaluation on the dataset.",
@@ -69,13 +58,14 @@ def evaluate() -> None:
         default="scripts/results",
         help="Directory for saving evaluation results (default: scripts/results).",
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Re-run OCR even when cached per-image results already exist.",
+    )
     args = parser.parse_args()
 
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-        force=True,
-    )
+    configure_logging()
 
     import_all_modules()
 
@@ -121,7 +111,7 @@ def evaluate() -> None:
         output_dir=output_dir,
         dataset=args.dataset,
         ocrs=ocrs,
-        overwrite=True,
+        overwrite=args.overwrite,
         labels=labels,
     )
 
