@@ -144,7 +144,7 @@ Produces `<image_stem>_with_bounding_box.<ext>` in the same directory.
 Launch the browser-based annotation UI:
 
 ```bash
-python -m scripts.image_ocr_tagging_tool [--port 5000]
+python -m tagging_tool [--port 5000]
 ```
 
 Opens `http://localhost:5000` in the default browser.

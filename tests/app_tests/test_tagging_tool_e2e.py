@@ -24,7 +24,7 @@ from tests.consts import TEST_IMAGE_PATH
 if HAS_APP_DEPS:
     from werkzeug.serving import make_server
 
-    from scripts.image_ocr_tagging_tool.app import create_app
+    from tagging_tool.app import create_app
 
 if HAS_PLAYWRIGHT:
     from playwright.sync_api import sync_playwright

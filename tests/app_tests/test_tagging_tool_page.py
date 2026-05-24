@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from tests.app_tests import APP_DEPS_REASON, HAS_APP_DEPS
 
 if HAS_APP_DEPS:
-    from scripts.image_ocr_tagging_tool.app import create_app
+    from tagging_tool.app import create_app
 
 
 class _TagCounter(HTMLParser):

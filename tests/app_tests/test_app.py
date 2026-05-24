@@ -8,7 +8,7 @@ from tests.consts import TEST_IMAGE_PATH
 from tests.unit_tests.dummy_ocr import DummyOCR
 
 if HAS_APP_DEPS:
-    from scripts.image_ocr_tagging_tool.app import create_app
+    from tagging_tool.app import create_app
 
 
 @unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
@@ -34,7 +34,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
             "confidence": 0.9,
         }
 
-    @patch("scripts.image_ocr_tagging_tool.app.save_json")
+    @patch("tagging_tool.app.save_json")
     def test_save_single_ok(self, mock_save):
         payload = {
             "detections": [self._make_bb("hello")],
@@ -80,7 +80,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         body = resp.get_json()
         self.assertIn("no text", body["error"])
 
-    @patch("scripts.image_ocr_tagging_tool.app.save_json")
+    @patch("tagging_tool.app.save_json")
     def test_save_batch_ok(self, mock_save):
         payload = {
             "images": [
@@ -140,7 +140,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         body = resp.get_json()
         self.assertIn("Missing required field", body["error"])
 
-    @patch("scripts.image_ocr_tagging_tool.app.save_json")
+    @patch("tagging_tool.app.save_json")
     def test_save_batch_with_output_path(self, mock_save):
         payload = {
             "images": [
@@ -160,7 +160,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         body = resp.get_json()
         self.assertIn("pic.json", body["paths"][0])
 
-    @patch("scripts.image_ocr_tagging_tool.app.save_json")
+    @patch("tagging_tool.app.save_json")
     def test_run_ocr_then_save(self, mock_save):
         image_b64 = base64.b64encode(TEST_IMAGE_PATH.read_bytes()).decode()
 
