@@ -24,6 +24,7 @@ import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TypedDict
 
 import numpy as np
 
@@ -46,6 +47,38 @@ DEFAULT_CI_LEVELS = (95,)
 ALL_TAGS_KEY = "all"
 
 
+class StatsDict(TypedDict):
+    """Schema for a single metric's summary statistics.
+
+    Produced by :meth:`EvaluationResult._compute_stats` and stored as the
+    leaf value in the aggregate JSON.
+
+    Attributes:
+        mean: Sample mean of the metric values.
+        ci: Confidence intervals keyed by level (as string, e.g. ``"95"``),
+            each mapping to ``[lower, upper]``.
+        n: Number of values in the sample.
+        min: Minimum value.
+        max: Maximum value.
+        median: Median value.
+    """
+
+    mean: float
+    ci: dict[str, list[float]]
+    n: int
+    min: float
+    max: float
+    median: float
+
+
+# Dynamic-key levels of the aggregate JSON. Keys are user-defined strings
+# (metric class name, OCR id, dataset tag), so plain dict aliases are used
+# rather than TypedDicts.
+MetricStatsDict = dict[str, StatsDict]       # metric_name -> stats
+OCRMetricsDict = dict[str, MetricStatsDict]  # ocr_id -> metric_name -> stats
+AggregateData = dict[str, OCRMetricsDict]    # tag -> ocr_id -> metric_name -> stats
+
+
 @dataclass(frozen=True)
 class TagAggregate:
     """One tag's slice of an aggregate result.
@@ -56,10 +89,10 @@ class TagAggregate:
 
     Attributes:
         data: The ``ocr_id -> metric_name -> stats`` sub-dict for the
-            chosen tag.
+            chosen tag, shaped as :data:`OCRMetricsDict`.
     """
 
-    data: dict
+    data: OCRMetricsDict
 
     @property
     def labels(self) -> list[str]:
@@ -85,10 +118,11 @@ class AggregateResult:
 
     Attributes:
         data: The raw nested dict, preserved as-is for JSON round-trips
-            and for callers that want full structural access.
+            and for callers that want full structural access. Conforms to
+            :data:`AggregateData` (``tag -> ocr_id -> metric_name ->`` :class:`StatsDict`).
     """
 
-    data: dict
+    data: AggregateData
 
     @classmethod
     def from_path(cls, results_dir: str | Path) -> "AggregateResult":
@@ -135,12 +169,12 @@ class AggregateResult:
             raise KeyError(f"Tag {name!r} not found in aggregate. Available tags: {sorted(self.data.keys())}")
         return TagAggregate(data=self.data[name])
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> AggregateData:
         """Return the raw nested dict representation (for JSON serialization).
 
         Returns:
-            The same dict shape as the aggregate JSON file:
-            ``tag -> ocr_id -> metric_name -> stats``.
+            The same dict shape as the aggregate JSON file, conforming to
+            :data:`AggregateData`: ``tag -> ocr_id -> metric_name ->`` :class:`StatsDict`.
         """
         return self.data
 
@@ -199,7 +233,7 @@ class EvaluationResult:
         if insufficient_tags:
             raise ValueError(f"{insufficient_tags}: fewer than 2 images cannot produce meaningful statistics")
 
-        aggregate = {}
+        aggregate: AggregateData = {}
         for tag_key, image_ids in tag_groups.items():
             aggregate[tag_key] = {}
             for ocr_id, metric_dict in self.per_image.items():
@@ -221,7 +255,7 @@ class EvaluationResult:
         values: np.ndarray,
         metric_name: str,
         ci_levels: tuple[int, ...],
-    ) -> dict:
+    ) -> StatsDict:
         """Compute summary statistics for a set of metric values.
 
         Args:
@@ -230,20 +264,20 @@ class EvaluationResult:
             ci_levels: Confidence interval percentages to compute.
 
         Returns:
-            A dict with mean, ci, n, min, max, and median.
+            A :class:`StatsDict` with mean, ci, n, min, max, and median.
         """
         ci_fn = beta_ci if Metric._registry[metric_name].is_bounded else bootstrap_ci
-        ci = {}
+        ci: dict[str, list[float]] = {}
         for level in ci_levels:
             ci[str(level)] = ci_fn(values, level)
-        return {
-            "mean": float(np.mean(values)),
-            "ci": ci,
-            "n": len(values),
-            "min": float(np.min(values)),
-            "max": float(np.max(values)),
-            "median": float(np.median(values)),
-        }
+        return StatsDict(
+            mean=float(np.mean(values)),
+            ci=ci,
+            n=len(values),
+            min=float(np.min(values)),
+            max=float(np.max(values)),
+            median=float(np.median(values)),
+        )
 
     def save_results_to_file(self, output_dir: Path):
         """Save aggregate results to a JSON file.

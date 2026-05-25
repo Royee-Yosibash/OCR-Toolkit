@@ -5,7 +5,6 @@ metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
 import math
-import re
 from abc import ABC, abstractmethod
 from collections import Counter
 from collections.abc import Sequence
@@ -13,12 +12,7 @@ from collections.abc import Sequence
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
 from utils.serialize_utils import register_unique
-
-_PUNCTUATION_RE = re.compile(
-    r"(?!(?<=\w)['\u2018\u2019](?=\w))(?:(?<!\d)[^\w\s]|[^\w\s](?!\d))",
-    re.UNICODE,
-)
-_WHITESPACE_RE = re.compile(r"\s+")
+from utils.text_utils import normalize_text
 
 
 class Metric(ABC):
@@ -89,24 +83,6 @@ def _levenshtein_distance(s1: Sequence, s2: Sequence) -> int:
     return prev_row[-1]
 
 
-def _normalize_text(text: str) -> str:
-    """Normalize text for metric comparison.
-
-    Strips punctuation, collapses all whitespace (including special
-    characters like newlines and tabs) into single spaces, and strips
-    leading/trailing whitespace.
-
-    Args:
-        text: Raw text string.
-
-    Returns:
-        Normalized text string.
-    """
-    text = _PUNCTUATION_RE.sub(" ", text)
-    text = _WHITESPACE_RE.sub(" ", text)
-    return text.strip()
-
-
 def _ocr_result_to_text(result: OCRResult) -> str:
     """Concatenate and normalize all detection texts from an OCRResult.
 
@@ -117,7 +93,7 @@ def _ocr_result_to_text(result: OCRResult) -> str:
         Normalized space-separated string of all detection texts.
     """
     raw = " ".join(det.text for det in result.detections)
-    return _normalize_text(raw)
+    return normalize_text(raw)
 
 
 def _ocr_result_to_words(result: OCRResult) -> list[str]:
