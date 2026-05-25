@@ -11,6 +11,7 @@ def register_unique(registry: dict[str, type], cls: type) -> None:
     Args:
         registry: The mapping to mutate.
         cls: The class to register.
+
     Raises:
         ValueError: If a different class is already registered under
             ``cls.__name__``.

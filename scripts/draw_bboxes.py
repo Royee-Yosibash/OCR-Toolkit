@@ -70,7 +70,7 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
         cv2.rectangle(image, top_left, bottom_right, color, BOX_THICKNESS)
 
         label = f"{bb.text} ({bb.confidence:.2f})"
-        text_size, baseline = cv2.getTextSize(label, FONT, FONT_SCALE, FONT_THICKNESS)
+        text_size, _ = cv2.getTextSize(label, FONT, FONT_SCALE, FONT_THICKNESS)
         text_x = bottom_right[0] - text_size[0]
         text_y = bottom_right[1] + LABEL_GAP + text_size[1]
         text_x = max(text_x, 0)

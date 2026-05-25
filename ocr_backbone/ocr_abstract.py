@@ -66,7 +66,6 @@ class OCRAbstract(ABC):
         Raises:
             ValueError: If no subclass is registered for the model name.
         """
-
         model_name = config.model_name if isinstance(config, OCRConfig) else config["model_name"]
         if model_name not in cls._registry:
             raise ValueError(f"Unknown model: {model_name}")

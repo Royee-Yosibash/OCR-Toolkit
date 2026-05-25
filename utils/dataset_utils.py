@@ -31,8 +31,7 @@ def collect_images(path: Path) -> list[Path]:
         ValueError: If the path is a file with an unsupported extension.
     """
     if path.is_dir():
-        images = sorted(p for p in path.iterdir() if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS)
-        return images
+        return sorted(p for p in path.iterdir() if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS)
     if path.suffix.lower() not in IMAGE_EXTENSIONS:
         raise ValueError(f"Unsupported image format: {path.suffix}")
     return [path]

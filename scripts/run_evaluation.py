@@ -37,7 +37,8 @@ def evaluate() -> None:
 
     Run from the terminal as::
 
-        python -m scripts.run_evaluation [--config config.json] [--dataset dataset] [--output-dir scripts/results] [--overwrite]
+        python -m scripts.run_evaluation [--config config.json] [--dataset dataset] [--output-dir scripts/results]
+        [--overwrite]
     """
     parser = argparse.ArgumentParser(
         description="Run OCR evaluation on the dataset.",
