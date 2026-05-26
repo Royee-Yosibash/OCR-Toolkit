@@ -3,6 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import partial
+from typing import ClassVar
 
 import numpy as np
 
@@ -28,7 +29,7 @@ class OCRAbstract(ABC):
     Subclasses are auto-registered by class name for lookup via ``from_config``.
     """
 
-    _registry: dict[str, type] = {}
+    _registry: ClassVar[dict[str, type]] = {}
 
     #: ``model_params`` keys consumed at construction time and therefore
     #: stripped from per-call kwargs before being forwarded to

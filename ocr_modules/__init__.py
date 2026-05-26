@@ -29,8 +29,11 @@ from pathlib import Path
 
 
 def import_all_modules() -> None:
-    """Import every module inside this package to trigger subclass
-    registration in ``OCRAbstract._registry``.
+    """Import every module inside this package to trigger subclass registration.
+
+    Each module's import triggers ``__init_subclass__`` on any
+    ``OCRAbstract`` subclasses it defines, populating
+    ``OCRAbstract._registry``.
     """
     package_path = Path(__file__).parent
     for _, name, _ in pkgutil.iter_modules([str(package_path)]):

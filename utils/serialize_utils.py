@@ -33,7 +33,7 @@ class SerializableClass:
 
     # TODO: Make sure init=False is also supported
 
-    _registry: dict[str, type] = {}
+    _registry: typing.ClassVar[dict[str, type]] = {}
 
     def __init_subclass__(cls, **kwargs):
         """Register every subclass by its class name."""

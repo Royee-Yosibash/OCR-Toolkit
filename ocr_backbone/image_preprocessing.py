@@ -136,7 +136,6 @@ def contour_split_image(
         pixels outside the contour zeroed out. Offsets reflect the fragment's
         position in the original image coordinate space.
     """
-
     if binarize_fn is None:
         binarize_fn = otsu_binarize
 
