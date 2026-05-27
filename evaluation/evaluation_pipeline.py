@@ -20,6 +20,7 @@ Directory structure created by evaluate:
             ...
 """
 
+import copy
 import logging
 from collections.abc import Iterable
 from dataclasses import dataclass, field
@@ -80,7 +81,7 @@ AggregateData = dict[str, OCRMetricsDict]    # tag -> ocr_id -> metric_name -> s
 
 
 @dataclass(frozen=True)
-class TagAggregate:
+class TagBreakdown:
     """One tag's slice of an aggregate result.
 
     Bundles the per-tag sub-dict together with the OCR-id and metric-name
@@ -150,15 +151,15 @@ class AggregateResult:
         """
         return list(self.data.keys())
 
-    def view_for_tag(self, name: str = ALL_TAGS_KEY) -> TagAggregate:
-        """Return the `TagAggregate` for a single tag.
+    def for_tag(self, name: str = ALL_TAGS_KEY) -> TagBreakdown:
+        """Return the `TagBreakdown` for a single tag.
 
         Args:
             name: Tag key to slice on. Defaults to ``ALL_TAGS_KEY``
                 ("all"), i.e. the across-all-images aggregate.
 
         Returns:
-            A `TagAggregate` bundling the tag sub-dict, its OCR-id
+            A `TagBreakdown` bundling the tag sub-dict, its OCR-id
             labels, and the metric names present.
 
         Raises:
@@ -167,16 +168,17 @@ class AggregateResult:
         """
         if name not in self.data:
             raise KeyError(f"Tag {name!r} not found in aggregate. Available tags: {sorted(self.data.keys())}")
-        return TagAggregate(data=self.data[name])
+        return TagBreakdown(data=self.data[name])
 
     def to_dict(self) -> AggregateData:
-        """Return the raw nested dict representation (for JSON serialization).
+        """Return an independent nested dict representation (for JSON serialization).
 
         Returns:
-            The same dict shape as the aggregate JSON file, conforming to
+            A deep copy of the underlying data, conforming to
             :data:`AggregateData`: ``tag -> ocr_id -> metric_name ->`` :class:`StatsDict`.
+            Safe for callers to mutate without affecting this instance.
         """
-        return self.data
+        return copy.deepcopy(self.data)
 
 
 @dataclass
@@ -194,7 +196,7 @@ class EvaluationResult:
 
     per_image: dict[str, dict[str, dict[int, float]]]
     image_tags: dict[int, list[str]]
-    aggregate: AggregateResult = field(default_factory=lambda: AggregateResult(data={}), init=False)
+    aggregate: AggregateResult = field(init=False, default_factory=None)
 
     def __post_init__(self):
         """Validate inputs and compute aggregate statistics.
@@ -204,9 +206,16 @@ class EvaluationResult:
         """
         if not self.image_tags:
             raise ValueError("image_tags must not be empty")
-        self._compute_aggregate()
+        self.aggregate = self._build_aggregate_result(self.per_image, self.image_tags)
+        logger.info("Aggregate statistics computed successfully")
 
-    def _compute_aggregate(self, ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS):
+    @classmethod
+    def _build_aggregate_result(
+        cls,
+        per_image: dict[str, dict[str, dict[int, float]]],
+        image_tags: dict[int, list[str]],
+        ci_levels: tuple[int, ...] = DEFAULT_CI_LEVELS,
+    ) -> AggregateResult:
         """Compute aggregate statistics from per-image results.
 
         Computes stats across all images under the ``"all"`` key, and
@@ -214,17 +223,22 @@ class EvaluationResult:
         bounded metrics and bootstrap CIs for unbounded metrics.
 
         Args:
+            per_image: Nested dict of ocr_id -> metric_name -> image_id -> value.
+            image_tags: Dict mapping image_id to the ground truth tags.
             ci_levels: Confidence interval percentages to compute. For each
                 level *L*, the ``ci`` dict stores ``L`` -> [lower, upper].
 
         Returns:
-            None
-        """
+            An :class:`AggregateResult` wrapping the :data:`AggregateData`
+            dict shaped as ``tag -> ocr_id -> metric_name ->`` :class:`StatsDict`.
 
-        all_tags = {tag for tags in self.image_tags.values() for tag in tags}
-        tag_groups = {ALL_TAGS_KEY: set(self.image_tags.keys())}
+        Raises:
+            ValueError: If any tag group contains fewer than 2 images.
+        """
+        all_tags = {tag for tags in image_tags.values() for tag in tags}
+        tag_groups = {ALL_TAGS_KEY: set(image_tags.keys())}
         for tag in all_tags:
-            tag_groups[tag] = {img_id for img_id, tags in self.image_tags.items() if tag in tags}
+            tag_groups[tag] = {img_id for img_id, tags in image_tags.items() if tag in tags}
         logger.info(
             f"Computing aggregate statistics for {len(tag_groups)} tag group(s): {list(tag_groups.keys())}",
         )
@@ -236,19 +250,17 @@ class EvaluationResult:
         aggregate: AggregateData = {}
         for tag_key, image_ids in tag_groups.items():
             aggregate[tag_key] = {}
-            for ocr_id, metric_dict in self.per_image.items():
+            for ocr_id, metric_dict in per_image.items():
                 aggregate[tag_key][ocr_id] = {}
                 for metric_name, image_scores in metric_dict.items():
                     values = np.array([v for img_id, v in image_scores.items() if img_id in image_ids])
                     if len(values):
-                        aggregate[tag_key][ocr_id][metric_name] = self._compute_stats(
+                        aggregate[tag_key][ocr_id][metric_name] = cls._compute_stats(
                             values,
                             metric_name,
                             ci_levels,
                         )
-
-        self.aggregate = AggregateResult(data=aggregate)
-        logger.info("Aggregate statistics computed successfully")
+        return AggregateResult(data=aggregate)
 
     @staticmethod
     def _compute_stats(

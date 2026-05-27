@@ -14,7 +14,7 @@ class DummyOCR(OCRAbstract):
             config = OCRConfig(model_name="DummyOCR")
         super().__init__(config, alias=alias)
 
-    def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
+    def _run_single(self, image: np.ndarray, _single_run_model_params: dict) -> OCRResult:
         h, w = image.shape[:2]
         return OCRResult(
             detections=[

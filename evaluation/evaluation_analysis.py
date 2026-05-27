@@ -46,7 +46,7 @@ def plot_metric_comparison(
     Raises:
         KeyError: If ``tag`` is not present in ``aggregate``.
     """
-    view = aggregate.view_for_tag(tag)
+    view = aggregate.for_tag(tag)
 
     x = np.arange(len(view.metrics))
     width = 0.8 / len(view.labels)
@@ -103,7 +103,7 @@ def plot_radar(
     Raises:
         KeyError: If ``tag`` is not present in ``aggregate``.
     """
-    view = aggregate.view_for_tag(tag)
+    view = aggregate.for_tag(tag)
     n_metrics = len(view.metrics)
 
     angles = np.linspace(0, 2 * np.pi, n_metrics, endpoint=False).tolist()
@@ -170,7 +170,7 @@ def plot_stat_range(
     Raises:
         KeyError: If ``tag`` is not present in ``aggregate``.
     """
-    view = aggregate.view_for_tag(tag)
+    view = aggregate.for_tag(tag)
 
     fig, axes = plt.subplots(1, len(view.metrics), figsize=(4 * len(view.metrics), 5), sharey=False)
     if len(view.metrics) == 1:
@@ -220,7 +220,7 @@ def summary_table(aggregate: AggregateResult, stat: str = "mean", tag: str = ALL
     Raises:
         KeyError: If ``tag`` is not present in ``aggregate``.
     """
-    view = aggregate.view_for_tag(tag)
+    view = aggregate.for_tag(tag)
 
     col_width = max(len(Metric._registry[m].display_name) for m in view.metrics) + 2
     label_width = max(len(label) for label in view.labels) + 2

@@ -58,7 +58,25 @@ select = [
     "B",   # bugbear
     "A",   # builtins shadowing
     "SIM", # simplify
+    "C4",  # comprehensions
+    "RET", # return statements
+    "ARG", # unused arguments
+    "RUF", # ruff-specific
+    "D",   # pydocstyle (google convention)
 ]
+ignore = [
+    "D100", # missing docstring in public module
+    "D102", # missing docstring in public method (overrides inherit docs from base)
+    "D104", # missing docstring in public package
+    "D107", # missing docstring in __init__ (documented in class docstring)
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+ignore-decorators = ["property"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D102", "D103"]
 
 [tool.ruff.format]
 quote-style = "double"

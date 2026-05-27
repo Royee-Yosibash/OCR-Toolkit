@@ -214,7 +214,7 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
         resp = self.client.get("/")
         self.html = resp.data.decode("utf-8")
 
-    REQUIRED_FUNCTIONS = [
+    REQUIRED_FUNCTIONS = (
         "saveState",
         "loadImage",
         "updateNavUI",
@@ -232,7 +232,7 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
         "runOCRWholeImage",
         "loadOCRModels",
         "resizeCanvas",
-    ]
+    )
 
     def test_all_required_functions_defined(self):
         for fn_name in self.REQUIRED_FUNCTIONS:
@@ -256,13 +256,13 @@ class TestTaggingToolJavaScriptVariables(unittest.TestCase):
         resp = self.client.get("/")
         self.html = resp.data.decode("utf-8")
 
-    REQUIRED_VARIABLES = [
+    REQUIRED_VARIABLES = (
         "loadedImages",
         "imageIndex",
         "originalImage",
         "boundingBoxes",
         "currentFilename",
-    ]
+    )
 
     def test_all_required_variables_declared(self):
         for var_name in self.REQUIRED_VARIABLES:

@@ -8,6 +8,7 @@ import math
 from abc import ABC, abstractmethod
 from collections import Counter
 from collections.abc import Sequence
+from typing import ClassVar
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
@@ -28,7 +29,7 @@ class Metric(ABC):
         display_name: Human-readable label used in plots and reports.
     """
 
-    _registry: dict[str, type] = {}
+    _registry: ClassVar[dict[str, type]] = {}
 
     is_bounded: bool
     display_name: str

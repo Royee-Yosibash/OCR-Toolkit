@@ -5,6 +5,8 @@ from ocr_backbone.ocr_result import OCRResult
 
 
 class TestOCRResult(unittest.TestCase):
+    """Tests for the ``OCRResult`` container: defaults, detections, and serialization."""
+
     def test_default_empty(self):
         result = OCRResult()
         self.assertEqual(result.detections, [])

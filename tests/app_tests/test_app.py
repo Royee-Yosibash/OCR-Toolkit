@@ -13,6 +13,8 @@ if HAS_APP_DEPS:
 
 @unittest.skipUnless(HAS_APP_DEPS, APP_DEPS_REASON)
 class TestSaveBatchEndpoint(unittest.TestCase):
+    """Tests for the Flask app's ``/api/save_batch`` endpoint and related OCR-save flow."""
+
     def setUp(self):
         self.app = create_app()
         self.app.config["TESTING"] = True
@@ -141,7 +143,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         self.assertIn("Missing required field", body["error"])
 
     @patch("tagging_tool.app.save_json")
-    def test_save_batch_with_output_path(self, mock_save):
+    def test_save_batch_with_output_path(self, _mock_save):
         payload = {
             "images": [
                 {
@@ -161,7 +163,7 @@ class TestSaveBatchEndpoint(unittest.TestCase):
         self.assertIn("pic.json", body["paths"][0])
 
     @patch("tagging_tool.app.save_json")
-    def test_run_ocr_then_save(self, mock_save):
+    def test_run_ocr_then_save(self, _mock_save):
         image_b64 = base64.b64encode(TEST_IMAGE_PATH.read_bytes()).decode()
 
         ocr_resp = self.client.post(

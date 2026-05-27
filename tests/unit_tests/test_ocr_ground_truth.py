@@ -5,6 +5,8 @@ from ocr_backbone.bounding_box import BoundingBox
 
 
 class TestOCRGroundTruth(unittest.TestCase):
+    """Tests for the ``OCRGroundTruth`` container: defaults, tags, and serialization."""
+
     def test_default_empty(self):
         gt = OCRGroundTruth()
         self.assertEqual(gt.detections, [])

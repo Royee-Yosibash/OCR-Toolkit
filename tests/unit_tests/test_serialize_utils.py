@@ -4,23 +4,29 @@ from utils.serialize_utils import TYPE_KEY, SerializableClass
 
 
 class Inner(SerializableClass):
+    """Leaf fixture class with a single int field used as a nested serializable."""
+
     def __init__(self, value: int):
         self.value = value
 
 
 class InnerChild(Inner):
+    """Subclass of ``Inner`` used to exercise registry-based polymorphic deserialization."""
+
     def __init__(self, value: int, extra: str = ""):
         super().__init__(value)
         self.extra = extra
 
 
 class Outer(SerializableClass):
+    """Container fixture that nests ``Inner`` directly and via list/dict for round-trip tests."""
+
     def __init__(
         self,
         name: str,
         inner: Inner,
-        items: list[Inner] = None,
-        mapping: dict[str, Inner] = None,
+        items: list[Inner] | None = None,
+        mapping: dict[str, Inner] | None = None,
     ):
         self.name = name
         self.inner = inner
@@ -33,6 +39,8 @@ OUTER_TYPE = "Outer"
 
 
 class TestSerializableClass(unittest.TestCase):
+    """Tests for ``SerializableClass`` ``to_dict`` / ``from_dict`` round-trips and nesting."""
+
     def test_simple_to_dict(self):
         obj = Inner(42)
         self.assertEqual(obj.to_dict(), {TYPE_KEY: INNER_TYPE, "value": 42})
@@ -124,6 +132,8 @@ class TestSerializableClass(unittest.TestCase):
 
 
 class TestCreate(unittest.TestCase):
+    """Tests for ``SerializableClass.create``: registry-driven class resolution from a dict."""
+
     def test_create_from_base_class(self):
         data = {TYPE_KEY: "Inner", "value": 42}
         obj = SerializableClass.create(data)

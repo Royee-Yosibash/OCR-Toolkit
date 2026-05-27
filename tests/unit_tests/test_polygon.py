@@ -4,6 +4,8 @@ from ocr_backbone.polygon import Polygon
 
 
 class TestPolygon(unittest.TestCase):
+    """Tests for the ``Polygon`` class: construction, defaults, and coordinate handling."""
+
     def test_valid_creation(self):
         poly = Polygon(
             coordinates=((0, 0), (10, 0), (10, 10)),

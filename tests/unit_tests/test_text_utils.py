@@ -4,6 +4,8 @@ from utils.text_utils import normalize_text
 
 
 class TestNormalizeText(unittest.TestCase):
+    """Tests for ``normalize_text``: punctuation, whitespace, and unicode handling."""
+
     def test_strips_punctuation(self):
         self.assertEqual(normalize_text("hello, world!"), "hello world")
 
