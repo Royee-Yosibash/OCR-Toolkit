@@ -104,28 +104,18 @@ def validate_callable_signature(
     params = list(sig.parameters.values())
 
     if not params:
-        raise TypeError(
-            f"{method!r} accepts no arguments; "
-            f"expected at least one ({expected_first_param.__name__})."
-        )
+        raise TypeError(f"{method!r} accepts no arguments; expected at least one ({expected_first_param.__name__}).")
 
     ann = params[0].annotation
     if ann is inspect.Parameter.empty:
-        raise TypeError(
-            f"{method!r}: first parameter must be annotated as {expected_first_param.__name__}."
-        )
+        raise TypeError(f"{method!r}: first parameter must be annotated as {expected_first_param.__name__}.")
     if ann is not expected_first_param:
         raise TypeError(
-            f"{method!r}: first parameter is annotated as {ann!r}, "
-            f"expected {expected_first_param.__name__}."
+            f"{method!r}: first parameter is annotated as {ann!r}, expected {expected_first_param.__name__}."
         )
 
     ret = sig.return_annotation
     if ret is inspect.Signature.empty:
-        raise TypeError(
-            f"{method!r}: missing return annotation, expected one of {valid_returns!r}."
-        )
+        raise TypeError(f"{method!r}: missing return annotation, expected one of {valid_returns!r}.")
     if ret not in valid_returns:
-        raise TypeError(
-            f"{method!r}: return annotation is {ret!r}, expected one of {valid_returns!r}."
-        )
+        raise TypeError(f"{method!r}: return annotation is {ret!r}, expected one of {valid_returns!r}.")

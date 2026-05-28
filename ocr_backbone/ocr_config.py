@@ -130,14 +130,12 @@ class OCRConfig(SerializableClass):
             if key in valid_names:
                 if key == "preprocess_methods":
                     value = [
-                        resolve_callable_descriptor(m, default_module=image_preprocessing)
-                        if isinstance(m, dict)
-                        else m
+                        resolve_callable_descriptor(m, default_module=image_preprocessing) if isinstance(m, dict) else m
                         for m in value
                     ]
                 elif key == "detection_validators":
                     value = [resolve_callable_descriptor(v) if isinstance(v, dict) else v for v in value]
-                setattr(self, key, value) # TODO: Remove, non-pythonic
+                setattr(self, key, value)  # TODO: Remove, non-pythonic
             else:
                 self.model_params[key] = value
 
@@ -186,9 +184,7 @@ class OCRConfig(SerializableClass):
         raw_pp = prepared.get("preprocess_methods")
         if raw_pp is not None:
             prepared["preprocess_methods"] = [
-                resolve_callable_descriptor(m, default_module=image_preprocessing)
-                if isinstance(m, dict)
-                else m
+                resolve_callable_descriptor(m, default_module=image_preprocessing) if isinstance(m, dict) else m
                 for m in raw_pp
             ]
 

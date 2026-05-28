@@ -79,9 +79,7 @@ class TestResolvePPMethod(unittest.TestCase):
         self.assertEqual(len(result.image.shape), 2)
 
     def test_dotted_path_with_kwargs(self):
-        method = resolve_pp(
-            {"name": "ocr_backbone.image_preprocessing.binarize", "kwargs": {"method": "otsu"}}
-        )
+        method = resolve_pp({"name": "ocr_backbone.image_preprocessing.binarize", "kwargs": {"method": "otsu"}})
         image = np.random.randint(0, 256, (50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         unique = set(np.unique(result.image))

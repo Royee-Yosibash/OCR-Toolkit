@@ -195,9 +195,9 @@ class EvaluationResult:
             tag key contains stats for images with that tag.
     """
 
-    per_image: dict[str, dict[str, dict[int, float]]]
+    per_image: dict[str, dict[str, dict[int, float]]]  #  TODO: Change name
     image_tags: dict[int, list[str]]
-    aggregate: AggregateResult = field(init=False, default_factory=None)
+    aggregate: AggregateResult = field(init=False, default=None)
 
     def __post_init__(self):
         """Validate inputs and compute aggregate statistics.
