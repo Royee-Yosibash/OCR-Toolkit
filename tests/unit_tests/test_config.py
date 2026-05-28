@@ -6,10 +6,18 @@ from pathlib import Path
 
 import numpy as np
 
+from ocr_backbone import image_preprocessing
 from ocr_backbone.image_preprocessing import binarize
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig, load_config
+from utils.callable_descriptors import resolve_callable_descriptor
 from utils.json_utils import save_json
+from utils.serialize_utils import TYPE_KEY, SerializableClass
+
+
+def resolve_pp(descriptor):
+    """Resolve a preprocessing descriptor using the same default module ``OCRConfig`` uses."""
+    return resolve_callable_descriptor(descriptor, default_module=image_preprocessing)
 
 
 class TestOCRConfig(unittest.TestCase):
@@ -47,33 +55,31 @@ class TestOCRConfig(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             config_file_path = Path(tmp_dir) / "config.json"
             save_json(config_file_path, {"model_params": {}})
-            with self.assertRaises(KeyError):
+            with self.assertRaises(TypeError):
                 load_config(config_file_path)
 
 
 class TestResolvePPMethod(unittest.TestCase):
-    """Tests for OCRConfig._resolve_pp_method resolution logic."""
+    """Tests for preprocessing descriptor resolution via ``_resolve_callable_descriptor``."""
 
     def test_plain_name_resolves_from_image_preprocessing(self):
-        method = OCRConfig._resolve_pp_method({"name": "binarize"})
+        method = resolve_pp({"name": "binarize"})
         self.assertIs(method, binarize)
 
     def test_plain_name_with_kwargs_returns_partial(self):
-        method = OCRConfig._resolve_pp_method({"name": "binarize", "kwargs": {"method": "otsu"}})
+        method = resolve_pp({"name": "binarize", "kwargs": {"method": "otsu"}})
         image = np.zeros((50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         self.assertEqual(len(result.image.shape), 2)
 
     def test_dotted_path_resolves_function(self):
-        method = OCRConfig._resolve_pp_method({"name": "ocr_backbone.image_preprocessing.binarize"})
+        method = resolve_pp({"name": "ocr_backbone.image_preprocessing.binarize"})
         image = np.zeros((50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         self.assertEqual(len(result.image.shape), 2)
 
     def test_dotted_path_with_kwargs(self):
-        method = OCRConfig._resolve_pp_method(
-            {"name": "ocr_backbone.image_preprocessing.binarize", "kwargs": {"method": "otsu"}}
-        )
+        method = resolve_pp({"name": "ocr_backbone.image_preprocessing.binarize", "kwargs": {"method": "otsu"}})
         image = np.random.randint(0, 256, (50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         unique = set(np.unique(result.image))
@@ -81,15 +87,15 @@ class TestResolvePPMethod(unittest.TestCase):
 
     def test_dotted_path_bad_module_raises(self):
         with self.assertRaises(ModuleNotFoundError):
-            OCRConfig._resolve_pp_method({"name": "nonexistent_package.some_func"})
+            resolve_pp({"name": "nonexistent_package.some_func"})
 
     def test_dotted_path_bad_attribute_raises(self):
         with self.assertRaises(AttributeError):
-            OCRConfig._resolve_pp_method({"name": "ocr_backbone.image_preprocessing.no_such_func"})
+            resolve_pp({"name": "ocr_backbone.image_preprocessing.no_such_func"})
 
     def test_plain_name_bad_attribute_raises(self):
         with self.assertRaises(AttributeError):
-            OCRConfig._resolve_pp_method({"name": "no_such_func"})
+            resolve_pp({"name": "no_such_func"})
 
 
 class TestFromDictPreprocessMethods(unittest.TestCase):
@@ -190,3 +196,26 @@ class TestFromDictPreprocessMethods(unittest.TestCase):
             finally:
                 sys.path.remove(tmp_dir)
                 sys.modules.pop("custom_pp", None)
+
+
+class TestOCRConfigSerializableIntegration(unittest.TestCase):
+    """Verifies OCRConfig's participation in the SerializableClass hierarchy."""
+
+    def test_is_registered_in_serializable_registry(self):
+        self.assertIs(SerializableClass._registry.get("OCRConfig"), OCRConfig)
+
+    def test_to_dict_emits_type_discriminator(self):
+        config = OCRConfig(model_name="easyocr")
+        self.assertEqual(config.to_dict()[TYPE_KEY], "OCRConfig")
+
+    def test_create_roundtrip_via_serializable(self):
+        original = OCRConfig(model_name="easyocr", model_params={"lang": "en"})
+        restored = SerializableClass.create(original.to_dict())
+        self.assertIsInstance(restored, OCRConfig)
+        self.assertEqual(restored.model_name, "easyocr")
+        self.assertEqual(restored.model_params, {"lang": "en"})
+
+    def test_from_dict_ignores_unknown_keys(self):
+        config = OCRConfig.from_dict({"model_name": "easyocr", "alias": "Baseline"})
+        self.assertEqual(config.model_name, "easyocr")
+        self.assertFalse(hasattr(config, "alias"))

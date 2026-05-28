@@ -1,3 +1,4 @@
+import importlib.util
 import logging
 
 import numpy as np
@@ -6,22 +7,23 @@ from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from utils.lazy_import import LazyModule
 
 logger = logging.getLogger(__name__)
 
-try:
-    import easyocr
-
-    _HAS_EASYOCR = True
-except ImportError:
-    _HAS_EASYOCR = False
+_HAS_EASYOCR = importlib.util.find_spec("easyocr") is not None
+if not _HAS_EASYOCR:
     logger.info("easyocr not installed -- EasyOCRModule will not be available.")
+
+easyocr = LazyModule("easyocr")
 
 
 if _HAS_EASYOCR:
 
     class EasyOCRModule(OCRAbstract):
         """OCR module using the EasyOCR engine."""
+
+        _INIT_PARAM_KEYS = frozenset({"languages"})
 
         def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the EasyOCR reader.
@@ -32,7 +34,7 @@ if _HAS_EASYOCR:
                 alias: Optional display name used as the label in evaluations.
             """
             super().__init__(config, alias=alias)
-            self._reader = easyocr.Reader(self.config.model_params.pop("languages", ["en"]))
+            self._reader = easyocr.Reader(self.config.model_params.get("languages", ["en"]))
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run EasyOCR on a single image.

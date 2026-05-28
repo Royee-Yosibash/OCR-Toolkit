@@ -1,0 +1,98 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1038,
+          103
+        ],
+        [
+          1223,
+          134
+        ]
+      ],
+      "text": "KASPAROV",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1231,
+          106
+        ],
+        [
+          1255,
+          133
+        ]
+      ],
+      "text": "VS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1149,
+          135
+        ],
+        [
+          1341,
+          167
+        ]
+      ],
+      "text": "DEEPBLUE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1102,
+          161
+        ],
+        [
+          1329,
+          201
+        ]
+      ],
+      "text": "the rematcn",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          745,
+          538
+        ],
+        [
+          780,
+          568
+        ]
+      ],
+      "text": "1:57",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          800,
+          544
+        ],
+        [
+          832,
+          572
+        ]
+      ],
+      "text": "1:58",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}

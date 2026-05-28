@@ -6,7 +6,7 @@ from html.parser import HTMLParser
 from tests.app_tests import APP_DEPS_REASON, HAS_APP_DEPS
 
 if HAS_APP_DEPS:
-    from scripts.image_ocr_tagging_tool.app import create_app
+    from tagging_tool.app import create_app
 
 
 class _TagCounter(HTMLParser):
@@ -214,7 +214,7 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
         resp = self.client.get("/")
         self.html = resp.data.decode("utf-8")
 
-    REQUIRED_FUNCTIONS = [
+    REQUIRED_FUNCTIONS = (
         "saveState",
         "loadImage",
         "updateNavUI",
@@ -232,7 +232,7 @@ class TestTaggingToolJavaScriptFunctions(unittest.TestCase):
         "runOCRWholeImage",
         "loadOCRModels",
         "resizeCanvas",
-    ]
+    )
 
     def test_all_required_functions_defined(self):
         for fn_name in self.REQUIRED_FUNCTIONS:
@@ -256,13 +256,13 @@ class TestTaggingToolJavaScriptVariables(unittest.TestCase):
         resp = self.client.get("/")
         self.html = resp.data.decode("utf-8")
 
-    REQUIRED_VARIABLES = [
+    REQUIRED_VARIABLES = (
         "loadedImages",
         "imageIndex",
         "originalImage",
         "boundingBoxes",
         "currentFilename",
-    ]
+    )
 
     def test_all_required_variables_declared(self):
         for var_name in self.REQUIRED_VARIABLES:

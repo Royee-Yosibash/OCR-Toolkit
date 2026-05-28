@@ -1,34 +1,46 @@
+import types
 import typing
 
 TYPE_KEY = "_type"
+_UNION_ORIGINS = (typing.Union, types.UnionType)
+
+
+def register_unique(registry: dict[str, type], cls: type) -> None:
+    """Register ``cls`` under ``cls.__name__`` in ``registry`` or raise on conflict.
+
+    Idempotent: re-registering the same class is a no-op.
+
+    Args:
+        registry: The mapping to mutate.
+        cls: The class to register.
+
+    Raises:
+        ValueError: If a different class is already registered under
+            ``cls.__name__``.
+    """
+    name = cls.__name__
+    if name in registry and registry[name] is not cls:
+        raise ValueError(f"'{name}' is already registered to {registry[name]!r}.")
+    registry[name] = cls
 
 
 class SerializableClass:
     """Abstract base class providing recursive serialization to dict.
 
-    Subclasses are automatically registered via ``__init_subclass__`` and
-    can be looked up by their fully qualified class path. The ``to_dict``
-    method embeds a ``_type`` key so that ``from_dict`` can reconstruct
-    the correct subclass without dynamic imports.
+    Subclasses are automatically registered in ``_registry`` via
+    ``__init_subclass__`` and can be looked up by their class name. The
+    ``to_dict`` method embeds a ``_type`` key so that ``from_dict`` can
+    reconstruct the correct subclass without dynamic imports.
     """
 
     # TODO: Make sure init=False is also supported
 
-    _registry: dict[str, type] = {}
+    _registry: typing.ClassVar[dict[str, type]] = {}
 
     def __init_subclass__(cls, **kwargs):
-        """Register every subclass by its class name.
-
-        Raises:
-            ValueError: If a class with the same name is already registered.
-        """
+        """Register every subclass by its class name."""
         super().__init_subclass__(**kwargs)
-        name = cls.__name__
-        if name in cls._registry and cls._registry[name] is not cls:
-            raise ValueError(
-                f"Duplicate SerializableClass name: '{name}' is already registered to {cls._registry[name]!r}."
-            )
-        cls._registry[name] = cls
+        register_unique(SerializableClass._registry, cls)
 
     @classmethod
     def _resolve_class(cls, type_name: str) -> type:
@@ -117,6 +129,11 @@ class SerializableClass:
 
         if hint is None:
             return value
+
+        if typing.get_origin(hint) in _UNION_ORIGINS:
+            non_none = [arg for arg in typing.get_args(hint) if arg is not type(None)]
+            if len(non_none) == 1:
+                hint = non_none[0]
 
         target = cls._resolve_serializable(hint)
         if target is not None:

@@ -1,0 +1,38 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          144,
+          1029
+        ],
+        [
+          215,
+          1068
+        ]
+      ],
+      "text": "IBM",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          195,
+          1066
+        ],
+        [
+          406,
+          1152
+        ]
+      ],
+      "text": "101 mph",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}

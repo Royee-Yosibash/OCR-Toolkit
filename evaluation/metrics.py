@@ -5,28 +5,23 @@ metrics for evaluating OCR accuracy independent of bounding box geometry.
 """
 
 import math
-import re
 from abc import ABC, abstractmethod
 from collections import Counter
 from collections.abc import Sequence
+from typing import ClassVar
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_result import OCRResult
-
-_PUNCTUATION_RE = re.compile(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", re.UNICODE)
-_WHITESPACE_RE = re.compile(r"\s+")
-
-METRICS_BOUNDED_LOOKUP: dict[str, bool] = {}
-METRICS_DISPLAY_NAME_LOOKUP: dict[str, str] = {}
+from utils.serialize_utils import register_unique
+from utils.text_utils import normalize_text
 
 
 class Metric(ABC):
     """Base class for OCR evaluation metrics.
 
     Subclasses must set ``is_bounded`` and ``display_name``, and implement
-    ``__call__``.  Concrete subclasses are automatically registered in
-    ``METRICS_BOUNDED_LOOKUP`` and ``METRICS_DISPLAY_NAME_LOOKUP`` via
-    ``__init_subclass__``.
+    ``__call__``. Concrete subclasses are automatically registered by class
+    name in ``Metric._registry`` via ``__init_subclass__``.
 
     Attributes:
         is_bounded: True if the metric value is confined to [0, 1],
@@ -34,16 +29,15 @@ class Metric(ABC):
         display_name: Human-readable label used in plots and reports.
     """
 
+    _registry: ClassVar[dict[str, type]] = {}
+
     is_bounded: bool
     display_name: str
 
     def __init_subclass__(cls, **kwargs):
-        """Register concrete subclasses in METRICS_BOUNDED_LOOKUP and METRICS_DISPLAY_NAME_LOOKUP."""
+        """Register every concrete Metric subclass by class name."""
         super().__init_subclass__(**kwargs)
-        if hasattr(cls, "is_bounded"):
-            METRICS_BOUNDED_LOOKUP[cls.__name__] = cls.is_bounded
-        if hasattr(cls, "display_name"):
-            METRICS_DISPLAY_NAME_LOOKUP[cls.__name__] = cls.display_name
+        register_unique(Metric._registry, cls)
 
     @abstractmethod
     def __call__(self, prediction: OCRResult, ground_truth: OCRGroundTruth) -> float:
@@ -90,24 +84,6 @@ def _levenshtein_distance(s1: Sequence, s2: Sequence) -> int:
     return prev_row[-1]
 
 
-def _normalize_text(text: str) -> str:
-    """Normalize text for metric comparison.
-
-    Strips punctuation, collapses all whitespace (including special
-    characters like newlines and tabs) into single spaces, and strips
-    leading/trailing whitespace.
-
-    Args:
-        text: Raw text string.
-
-    Returns:
-        Normalized text string.
-    """
-    text = _PUNCTUATION_RE.sub(" ", text)
-    text = _WHITESPACE_RE.sub(" ", text)
-    return text.strip()
-
-
 def _ocr_result_to_text(result: OCRResult) -> str:
     """Concatenate and normalize all detection texts from an OCRResult.
 
@@ -118,7 +94,7 @@ def _ocr_result_to_text(result: OCRResult) -> str:
         Normalized space-separated string of all detection texts.
     """
     raw = " ".join(det.text for det in result.detections)
-    return _normalize_text(raw)
+    return normalize_text(raw)
 
 
 def _ocr_result_to_words(result: OCRResult) -> list[str]:
@@ -280,21 +256,6 @@ class WordPrecision(Metric):
         pred_counts = Counter(pred_words)
         matched = sum(min(pred_counts[w], gt_counts[w]) for w in pred_counts)
         return matched / len(pred_words)
-
-
-def metric_class_display_name(name: str) -> str:
-    """Convert a metric class name to a human-readable label.
-
-    Uses the ``display_name`` registered by each Metric subclass when
-    available, otherwise falls back to title-casing the class name.
-
-    Args:
-        name: The metric class name (e.g. ``CharacterAccuracy``).
-
-    Returns:
-        Human-readable label (e.g. ``Character Accuracy``).
-    """
-    return METRICS_DISPLAY_NAME_LOOKUP.get(name, name)
 
 
 ocr_result_char_accuracy = CharacterAccuracy()

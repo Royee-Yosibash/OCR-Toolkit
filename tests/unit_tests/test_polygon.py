@@ -4,6 +4,8 @@ from ocr_backbone.polygon import Polygon
 
 
 class TestPolygon(unittest.TestCase):
+    """Tests for the ``Polygon`` class: construction, defaults, and coordinate handling."""
+
     def test_valid_creation(self):
         poly = Polygon(
             coordinates=((0, 0), (10, 0), (10, 10)),
@@ -75,6 +77,18 @@ class TestPolygon(unittest.TestCase):
     def test_lt_not_implemented_for_other_types(self):
         poly = Polygon(coordinates=((0, 0), (1, 0), (1, 1)), text="a")
         self.assertEqual(poly.__lt__("not a polygon"), NotImplemented)
+
+    def test_translate_coordinates_positive(self):
+        poly = Polygon(coordinates=((0, 0), (5, 0), (5, 5)), text="t", confidence=0.9)
+        translated = poly.translate_coordinates(3, 4)
+        self.assertEqual(translated.coordinates, ((3, 4), (8, 4), (8, 9)))
+        self.assertEqual(translated.text, "t")
+        self.assertEqual(translated.confidence, 0.9)
+
+    def test_translate_coordinates_negative_raises(self):
+        poly = Polygon(coordinates=((0, 0), (5, 0), (5, 5)), text="t")
+        with self.assertRaises(ValueError):
+            poly.translate_coordinates(-10, 0)
 
     def test_sort_order(self):
         a = Polygon(coordinates=((10, 0), (20, 0), (15, 10)), text="a")

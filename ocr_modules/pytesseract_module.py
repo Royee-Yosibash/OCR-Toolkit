@@ -1,5 +1,6 @@
 """OCR module using the pytesseract engine."""
 
+import importlib.util
 import logging
 
 import numpy as np
@@ -8,22 +9,23 @@ from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from utils.lazy_import import LazyModule
 
 logger = logging.getLogger(__name__)
 
-try:
-    import pytesseract
-
-    _HAS_PYTESSERACT = True
-except ImportError:
-    _HAS_PYTESSERACT = False
+_HAS_PYTESSERACT = importlib.util.find_spec("pytesseract") is not None
+if not _HAS_PYTESSERACT:
     logger.info("pytesseract not installed -- PytesseractModule will not be available.")
+
+pytesseract = LazyModule("pytesseract")
 
 
 if _HAS_PYTESSERACT:
 
     class PytesseractModule(OCRAbstract):
         """OCR module using the pytesseract (Tesseract) engine."""
+
+        _INIT_PARAM_KEYS = frozenset({"lang"})
 
         def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
             """Initialize the pytesseract reader.
@@ -35,7 +37,7 @@ if _HAS_PYTESSERACT:
                 alias: Optional display name used as the label in evaluations.
             """
             super().__init__(config, alias=alias)
-            self._lang = self.config.model_params.pop("lang", "eng")
+            self._lang = self.config.model_params.get("lang", "eng")
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run pytesseract on a single image.

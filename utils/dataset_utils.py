@@ -31,8 +31,7 @@ def collect_images(path: Path) -> list[Path]:
         ValueError: If the path is a file with an unsupported extension.
     """
     if path.is_dir():
-        images = sorted(p for p in path.iterdir() if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS)
-        return images
+        return sorted(p for p in path.iterdir() if p.is_file() and p.suffix.lower() in IMAGE_EXTENSIONS)
     if path.suffix.lower() not in IMAGE_EXTENSIONS:
         raise ValueError(f"Unsupported image format: {path.suffix}")
     return [path]
@@ -50,7 +49,7 @@ def load_image(image_path: Path) -> np.ndarray:
     return np.array(Image.open(image_path).convert("RGB"))
 
 
-def load_groud_truth(tags_path: Path) -> OCRGroundTruth:
+def load_ground_truth(tags_path: Path) -> OCRGroundTruth:
     """Load a ground_truth JSON file as an OCRGroundTruth.
 
     Args:
@@ -80,10 +79,11 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
     """
     if images_dir is None:
         images_dir = IMAGES_DIR
-    matches = [images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS if (images_dir / f"{stem}{ext}").exists()]
-    if not matches:
-        raise FileNotFoundError(f"No image found for stem '{stem}' in {images_dir}")
-    return matches[0]
+    candidates = (images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS)
+    try:
+        return next(p for p in candidates if p.exists())
+    except StopIteration:
+        raise FileNotFoundError(f"No image found for stem '{stem}' in {images_dir}") from None
 
 
 def validate_tags(tags_path: Path, image_path: Path) -> None:
@@ -124,24 +124,39 @@ def validate_tags(tags_path: Path, image_path: Path) -> None:
         raise ValueError(f"Validation failed for {tags_path.name} ({len(errors)} error(s)):\n" + "\n".join(errors))
 
 
-def validate_dataset() -> None:
-    """Validate the entire dataset directory.
+def validate_dataset(dataset_root: Path | str | None = None) -> None:
+    """Validate a dataset directory.
 
     Checks that every image has a corresponding ground_truth file and vice
     versa, then validates each tag file against its image.
 
+    Args:
+        dataset_root: Root directory of the dataset, expected to contain
+            ``images/`` and ``ground_truth/`` subdirectories. Defaults to
+            the built-in ``dataset/`` directory when *None*.
+
     Raises:
-        FileNotFoundError: If any images are missing ground_truth or ground_truth are
-            missing images.
+        FileNotFoundError: If the dataset root or its required
+            subdirectories do not exist, or if any images are missing
+            ground_truth or ground_truth are missing images.
         ValueError: If any tag validation errors are found across the
             dataset. The message contains all errors grouped by stem.
     """
+    root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
+    images_dir = root / "images"
+    gt_dir = root / "ground_truth"
+    if not images_dir.exists():
+        raise FileNotFoundError(f"images directory does not exist: {images_dir}")
+    if not gt_dir.exists():
+        raise FileNotFoundError(f"ground truth directory does not exist: {gt_dir}")
+
     image_stems = set()
     for ext in IMAGE_EXTENSIONS:
-        for img_path in IMAGES_DIR.glob(f"*{ext}"):
+        for img_path in images_dir.glob(f"*{ext}"):
             image_stems.add(img_path.stem)
 
-    tag_stems = {p.stem for p in TAGS_DIR.glob("*.json")}
+    tag_paths = sorted(gt_dir.glob("*.json"))
+    tag_stems = {p.stem for p in tag_paths}
 
     missing_tags = sorted(image_stems - tag_stems)
     if missing_tags:
@@ -152,9 +167,9 @@ def validate_dataset() -> None:
         raise FileNotFoundError(f"Missing images for {len(missing_images)} tag(s): " + ", ".join(missing_images))
 
     all_errors: dict[str, list[str]] = {}
-    for tags_path in sorted(TAGS_DIR.glob("*.json")):
+    for tags_path in tag_paths:
         stem = tags_path.stem
-        image_path = _find_image_for_stem(stem)
+        image_path = _find_image_for_stem(stem, images_dir)
         try:
             validate_tags(tags_path, image_path)
         except ValueError as e:
@@ -189,11 +204,13 @@ def dataset_generator(
     root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
     images_dir = root / "images"
     gt_dir = root / "ground_truth"
-    assert images_dir.exists(), "images directory does not exist"
-    assert gt_dir.exists(), "ground truth directory does not exist"
+    if not images_dir.exists():
+        raise FileNotFoundError(f"images directory does not exist: {images_dir}")
+    if not gt_dir.exists():
+        raise FileNotFoundError(f"ground truth directory does not exist: {gt_dir}")
 
     for gt_path in sorted(gt_dir.glob("*.json")):
         stem = gt_path.stem
         image = load_image(_find_image_for_stem(stem, images_dir))
-        gt = load_groud_truth(gt_path)
+        gt = load_ground_truth(gt_path)
         yield image, gt

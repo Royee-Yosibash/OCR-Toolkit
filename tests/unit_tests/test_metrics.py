@@ -142,6 +142,48 @@ class TestWordAccuracy(unittest.TestCase):
         )
         self.assertAlmostEqual(self.metric(pred, gt), 1.0)
 
+    def test_ascii_contraction_apostrophe_preserved(self):
+        # ASCII apostrophes inside words must not split tokens (don't stays one word).
+        pred = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="don't stop"),
+            ]
+        )
+        gt = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="don't stop"),
+            ]
+        )
+        self.assertAlmostEqual(self.metric(pred, gt), 1.0)
+
+    def test_unicode_contraction_apostrophe_preserved(self):
+        # Unicode curly apostrophes inside words must not split tokens.
+        pred = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="don\u2019t stop"),
+            ]
+        )
+        gt = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="don\u2019t stop"),
+            ]
+        )
+        self.assertAlmostEqual(self.metric(pred, gt), 1.0)
+
+    def test_quoting_apostrophes_stripped(self):
+        # Leading/trailing apostrophes (not between word chars) are stripped.
+        pred = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="'hello' 'world'"),
+            ]
+        )
+        gt = OCRResult(
+            detections=[
+                BoundingBox(coordinates=((0, 0), (10, 10)), text="hello world"),
+            ]
+        )
+        self.assertAlmostEqual(self.metric(pred, gt), 1.0)
+
 
 class TestWordCountRatio(unittest.TestCase):
     """Tests for word_count_ratio."""

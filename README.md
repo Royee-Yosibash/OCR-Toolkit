@@ -47,7 +47,7 @@ plots identify the optimal combination.
 
 ## Versioning
 
-Current version: **0.1.4** (released 2026-05-05).
+Current version: **0.1.5** (released 2026-05-29).
 
 ## Installation
 
@@ -144,7 +144,7 @@ Produces `<image_stem>_with_bounding_box.<ext>` in the same directory.
 Launch the browser-based annotation UI:
 
 ```bash
-python -m scripts.image_ocr_tagging_tool [--port 5000]
+python -m tagging_tool [--port 5000]
 ```
 
 Opens `http://localhost:5000` in the default browser.
@@ -152,12 +152,11 @@ Opens `http://localhost:5000` in the default browser.
 ## Configuration
 
 OCR runs are configured via `OCRConfig`, which can be loaded from a JSON file.
-The minimal template (`default_config.json`) requires only `model_name` and
-`model_params`:
+A minimal configuration requires only `model_name` and `model_params`:
 
 ```json
 {
-    "model_name": "",
+    "model_name": "EasyOCRModule",
     "model_params": {}
 }
 ```

@@ -9,22 +9,109 @@ from pathlib import Path
 import numpy as np
 from flask import Flask, jsonify, render_template, request
 from PIL import Image
+from werkzeug.exceptions import HTTPException
 
 from evaluation.ocr_ground_truth import OCRGroundTruth
-from ocr_backbone.bounding_box import BoundingBox  # noqa: F401 - register in SerializableClass
 from ocr_backbone.ocr_abstract import OCRAbstract
+from ocr_modules import import_all_modules
 from utils.json_utils import save_json
 
 logger = logging.getLogger(__name__)
 
 
+def _resolve_save_path(output_path: str, filename: str) -> Path:
+    """Compute the destination JSON path for a single tagged image.
+
+    Pure path computation -- no filesystem side effects. Parent
+    directories are created by the writer (``save_json(..., mkdir=True)``).
+
+    Args:
+        output_path: Caller-supplied path. May be empty (use default), a
+            directory, or an explicit file path.
+        filename: Original image filename, used to derive the JSON stem.
+
+    Returns:
+        The resolved file path.
+    """
+    stem = Path(filename).stem
+    if not output_path:
+        return Path.home() / "Downloads" / "ocr_tags" / f"{stem}.json"
+    save_path = Path(output_path)
+    if save_path.is_dir() or not save_path.suffix:
+        save_path = save_path / f"{stem}.json"
+    return save_path
+
+
+def _validate_no_empty_text(detections: list[dict], context: str = "") -> None:
+    """Reject any detection whose text is empty or whitespace.
+
+    Args:
+        detections: List of detection dicts with a "text" key.
+        context: Optional prefix (e.g. ``"Image 'foo.png' (index 0)"``)
+            inserted at the start of the error message for batch callers.
+
+    Raises:
+        ValueError: If at least one detection has empty/whitespace text.
+            The message lists the 1-based indices of the offenders.
+    """
+    empty = [i + 1 for i, det in enumerate(detections) if not det.get("text", "").strip()]
+    if not empty:
+        return
+    indices = ", ".join(str(i) for i in empty)
+    prefix = f"{context}: " if context else ""
+    raise ValueError(f"{prefix}Detection(s) #{indices} have no text. Fill in or delete them before saving.")
+
+
+def _save_one(detections: list[dict], tags: list[str], filename: str, output_path: str) -> Path:
+    """Persist a single image's tagged detections.
+
+    Args:
+        detections: List of detection dicts.
+        tags: List of tag strings.
+        filename: Original image filename, used to derive the JSON stem.
+        output_path: Caller-supplied output path; see ``_resolve_save_path``.
+
+    Returns:
+        The path where the JSON was written.
+    """
+    save_path = _resolve_save_path(output_path, filename)
+    result = OCRGroundTruth.from_dict({"detections": detections, "tags": tags})
+    save_json(save_path, result.to_dict(), mkdir=True)
+    return save_path
+
+
 def create_app() -> Flask:
     """Create and configure the Flask application.
+
+    Triggers OCR engine registration so that ``OCRAbstract.registered_models()``
+    is populated regardless of how the app is launched (CLI, tests, WSGI).
+    Safe to call multiple times because module imports are cached.
 
     Returns:
         A Flask app instance with all routes registered.
     """
+    import_all_modules()
     app = Flask(__name__)
+
+    @app.errorhandler(Exception)
+    def _unhandled(exc: Exception):
+        """Return any unhandled exception as a JSON 500 so API clients get a parseable body.
+
+        HTTP exceptions (e.g. 404 from missing routes like ``/favicon.ico``)
+        are passed through to Flask's default handling so they don't get
+        logged as unhandled errors or rewrapped as 500s.
+
+        Args:
+            exc: The exception raised by a route handler.
+
+        Returns:
+            A JSON response with the exception message and HTTP 500 status,
+            or the original HTTPException for Flask to render normally.
+        """
+        if isinstance(exc, HTTPException):
+            return exc
+        logger.exception("Unhandled error in %s", request.path)
+        return jsonify({"error": str(exc)}), 500
 
     @app.route("/")
     def index():
@@ -42,7 +129,7 @@ def create_app() -> Flask:
         Returns:
             JSON response with a list of model name strings.
         """
-        return jsonify(list(OCRAbstract._registry.keys()))
+        return jsonify(OCRAbstract.registered_models())
 
     @app.route("/api/run_ocr", methods=["POST"])
     def run_ocr():
@@ -73,7 +160,7 @@ def create_app() -> Flask:
             ocr = OCRAbstract.from_config(config)
 
             logger.info("Running OCR with model %s", model_name)
-            result = ocr.get_text_bb(image_array)
+            result = ocr.get_text_detections(image_array)
             logger.info("OCR complete: %d detection(s)", len(result.detections))
 
             return jsonify(result.to_dict())
@@ -83,9 +170,6 @@ def create_app() -> Flask:
         except ValueError as e:
             logger.warning("/api/run_ocr value error: %s", e)
             return jsonify({"error": str(e)}), 400
-        except Exception as e:
-            logger.exception("/api/run_ocr unexpected error")
-            return jsonify({"error": str(e)}), 500
 
     @app.route("/api/save", methods=["POST"])
     def save():
@@ -103,40 +187,18 @@ def create_app() -> Flask:
         """
         try:
             data = request.get_json()
-            bounding_boxes = data["detections"]
+            detections = data["detections"]
             tags = data.get("tags", [])
             filename = data.get("filename", "untitled.png")
             output_path = data.get("output_path", "")
 
-            empty_indices = [i for i, det in enumerate(bounding_boxes) if not det.get("text", "").strip()]
-            if empty_indices:
-                indices = ", ".join(str(i + 1) for i in empty_indices)
-                return jsonify(
-                    {"error": f"Detection(s) #{indices} have no text. Fill in or delete them before saving."}
-                ), 400
-
-            if not output_path:
-                filename_stem = Path(filename).stem
-                save_dir = Path.home() / "Downloads" / "ocr_tags"
-                save_dir.mkdir(parents=True, exist_ok=True)
-                save_path = save_dir / f"{filename_stem}.json"
-            else:
-                save_path = Path(output_path)
-                if save_path.is_dir() or not save_path.suffix:
-                    filename_stem = Path(filename).stem
-                    save_path = save_path / f"{filename_stem}.json"
-                save_path.parent.mkdir(parents=True, exist_ok=True)
-
-            result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
-            save_json(save_path, result.to_dict())
-
+            _validate_no_empty_text(detections)
+            save_path = _save_one(detections, tags, filename, output_path)
             return jsonify({"status": "ok", "path": str(save_path)})
         except KeyError as e:
             return jsonify({"error": f"Missing required field: {e}"}), 400
         except ValueError as e:
             return jsonify({"error": str(e)}), 400
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
 
     @app.route("/api/browse_directory", methods=["POST"])
     def browse_directory():
@@ -182,45 +244,28 @@ def create_app() -> Flask:
             output_path = data.get("output_path", "")
 
             for img_idx, image_entry in enumerate(images):
-                detections = image_entry["detections"]
-                empty_indices = [i for i, det in enumerate(detections) if not det.get("text", "").strip()]
-                if empty_indices:
-                    indices = ", ".join(str(i + 1) for i in empty_indices)
-                    filename = image_entry.get("filename", "untitled.png")
-                    return jsonify(
-                        {
-                            "error": f"Image '{filename}' (index {img_idx}): "
-                            f"BB(s) #{indices} have no text. "
-                            f"Fill in or delete them before saving."
-                        }
-                    ), 400
-
-            paths = []
-            for image_entry in images:
-                bounding_boxes = image_entry["detections"]
-                tags = image_entry.get("tags", [])
                 filename = image_entry.get("filename", "untitled.png")
+                _validate_no_empty_text(
+                    image_entry["detections"],
+                    context=f"Image '{filename}' (index {img_idx})",
+                )
 
-                if not output_path:
-                    filename_stem = Path(filename).stem
-                    save_dir = Path.home() / "Downloads" / "ocr_tags"
-                    save_dir.mkdir(parents=True, exist_ok=True)
-                    save_path = save_dir / f"{filename_stem}.json"
-                else:
-                    save_path = Path(output_path)
-                    if save_path.is_dir() or not save_path.suffix:
-                        filename_stem = Path(filename).stem
-                        save_path = save_path / f"{filename_stem}.json"
-                    save_path.parent.mkdir(parents=True, exist_ok=True)
-
-                result = OCRGroundTruth.from_dict({"detections": bounding_boxes, "tags": tags})
-                save_json(save_path, result.to_dict())
-                paths.append(str(save_path))
+            paths = [
+                str(
+                    _save_one(
+                        image_entry["detections"],
+                        image_entry.get("tags", []),
+                        image_entry.get("filename", "untitled.png"),
+                        output_path,
+                    )
+                )
+                for image_entry in images
+            ]
 
             return jsonify({"status": "ok", "paths": paths})
         except KeyError as e:
             return jsonify({"error": f"Missing required field: {e}"}), 400
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
+        except ValueError as e:
+            return jsonify({"error": str(e)}), 400
 
     return app

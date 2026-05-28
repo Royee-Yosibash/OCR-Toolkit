@@ -1,18 +1,21 @@
-import importlib
-import inspect
-from collections.abc import Callable
 from dataclasses import dataclass, field, fields
-from functools import partial
 from pathlib import Path
 from typing import Protocol, runtime_checkable
 
 import ocr_backbone.image_preprocessing as image_preprocessing
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.polygon import Polygon
+from utils.callable_descriptors import (
+    resolve_callable_descriptor,
+    serialize_callable_descriptor,
+    validate_callable_signature,
+)
 from utils.json_utils import load_json
+from utils.serialize_utils import TYPE_KEY, SerializableClass
 
 PPReturnType = InputImage | list[InputImage]
 VALID_PP_RETURN_TYPES = (InputImage, list[InputImage], PPReturnType)
+VALID_VALIDATOR_RETURN_TYPES = (bool,)
 
 
 @runtime_checkable
@@ -35,16 +38,43 @@ class PreprocessingProtocol(Protocol):
     def __call__(self, input_image: InputImage) -> PPReturnType: ...
 
 
+@runtime_checkable
+class DetectionValidatorProtocol(Protocol):
+    """Protocol that all detection validators must satisfy.
+
+    A conforming function takes a ``Polygon`` as its first positional
+    argument and returns ``True`` if the detection should be kept,
+    ``False`` if it should be filtered out. A detection passes overall
+    validation only when every validator in the list returns ``True``.
+
+    Example::
+
+        def keep_high_confidence(detection: Polygon) -> bool:
+            return detection.confidence >= 0.5
+    """
+
+    def __call__(self, detection: Polygon) -> bool: ...
+
+
 @dataclass
-class OCRConfig:
+class OCRConfig(SerializableClass):
     """Configuration for an OCR run.
+
+    Inherits from ``SerializableClass`` so its instances participate in the
+    project-wide registry and can be discriminated by ``_type`` when nested
+    in heterogeneous serialized structures. Two of its fields are lists of
+    callables that the generic serializer cannot round-trip on its own
+    (``detection_validators`` and ``preprocess_methods``); ``to_dict`` and
+    ``from_dict`` are overridden to translate them to and from JSON-safe
+    descriptors while delegating every other field to the base class.
 
     Args:
         model_name: Name of the OCR model to use.
         model_params: Model-specific runtime parameters.
-        detection_validator: Optional function that validated detection and returns
-            True if the detection is valid. Invalid detections are discarded after
-            OCR inference.
+        detection_validators: A list of callables conforming to
+            ``DetectionValidatorProtocol``. A detection is kept only when
+            every validator returns ``True``; an empty list accepts all
+            detections.
         preprocess_methods: A list of callables conforming to
             ``PreprocessingProtocol``. When constructed via ``from_dict``,
             method descriptors (dicts with "name" and optional "kwargs")
@@ -53,7 +83,7 @@ class OCRConfig:
 
     model_name: str
     model_params: dict = field(default_factory=dict)
-    detection_validator: Callable[[Polygon], bool] | None = None
+    detection_validators: list[DetectionValidatorProtocol] = field(default_factory=list)
     preprocess_methods: list[PreprocessingProtocol] = field(default_factory=list)
 
     def __post_init__(self) -> None:
@@ -63,113 +93,33 @@ class OCRConfig:
     def validate(self) -> None:
         """Run all validation checks on the current config state.
 
-        Takes a shallow snapshot of every field before running checks and
-        asserts that no field was mutated during validation.
-
         Raises:
-            TypeError: If a preprocessing callable has an incompatible
-                signature.
-            ValueError: If ``model_name`` is empty or ``detection_validator``
-                is not callable.
-            RuntimeError: If validation itself mutated the config.
+            ValueError: If ``model_name`` is empty.
+            TypeError: If a preprocessing callable or detection validator
+                has an incompatible signature.
         """
-        snapshot = {f.name: getattr(self, f.name) for f in fields(self)}
-
         if not isinstance(self.model_name, str) or not self.model_name:
             raise ValueError(f"model_name must be a non-empty string, got {self.model_name!r}.")
 
-        if self.detection_validator is not None and not callable(self.detection_validator):
-            raise TypeError(f"detection_validator must be callable or None, got {type(self.detection_validator)!r}.")
-
         for method in self.preprocess_methods:
-            self._validate_pp_signature(method)
-
-        for f in fields(self):
-            if getattr(self, f.name) is not snapshot[f.name]:
-                raise RuntimeError(f"Config field '{f.name}' was mutated during validation.")
-
-    @staticmethod
-    def _resolve_pp_method(pp_method: dict) -> Callable:
-        """Resolve a preprocessing method descriptor into a callable.
-
-        If the name contains a dot it is treated as a fully qualified
-        dotted path (e.g. ``"my_package.module.func"``).  The last
-        segment is the attribute name and everything before it is the
-        module path that will be dynamically imported. Otherwise, the
-        name is looked up in ``image_preprocessing``.
-
-        Args:
-            pp_method: A dict with "name" (function name in
-                image_preprocessing, or a dotted module path) and
-                optional "kwargs" to bind.
-
-        Returns:
-            A callable that accepts an InputImage as its first argument.
-
-        Raises:
-            AttributeError: If the function name does not exist in the
-                resolved module.
-            ModuleNotFoundError: If the dotted module path cannot be
-                imported.
-        """
-        name = pp_method["name"]
-        if "." in name:
-            module_path, attr_name = name.rsplit(".", 1)
-            module = importlib.import_module(module_path)
-            func = getattr(module, attr_name)
-        else:
-            func = getattr(image_preprocessing, name)
-        kwargs = pp_method.get("kwargs", {})
-        return partial(func, **kwargs) if kwargs else func
-
-    @staticmethod
-    def _validate_pp_signature(method: Callable) -> None:
-        """Validate that a preprocessing callable has a compatible signature.
-
-        The first unbound parameter must be annotated as ``InputImage``
-        and the return must be annotated as ``InputImage``,
-        ``list[InputImage]``, or ``InputImage | list[InputImage]``.
-
-        Args:
-            method: The preprocessing callable to validate.
-
-        Raises:
-            TypeError: If the signature is incompatible or missing
-                required annotations.
-        """
-        sig = inspect.signature(method)
-        params = list(sig.parameters.values())
-
-        if not params:
-            raise TypeError(
-                f"Preprocessing method {method!r} accepts no arguments; expected at least one (InputImage)."
+            validate_callable_signature(
+                method,
+                expected_first_param=InputImage,
+                valid_returns=VALID_PP_RETURN_TYPES,
             )
-
-        first_param = params[0]
-        ann = first_param.annotation
-        if ann is inspect.Parameter.empty:
-            raise TypeError(f"Preprocessing method {method!r}: first parameter must be annotated as InputImage.")
-        if ann is not InputImage:
-            raise TypeError(
-                f"Preprocessing method {method!r}: first parameter is annotated as {ann!r}, expected InputImage."
-            )
-
-        ret = sig.return_annotation
-        if ret is inspect.Signature.empty:
-            raise TypeError(
-                f"Preprocessing method {method!r}: missing return annotation, expected InputImage or list[InputImage]."
-            )
-        if ret not in VALID_PP_RETURN_TYPES:
-            raise TypeError(
-                f"Preprocessing method {method!r}: return annotation "
-                f"is {ret!r}, expected InputImage or list[InputImage]."
+        for validator in self.detection_validators:
+            validate_callable_signature(
+                validator,
+                expected_first_param=Polygon,
+                valid_returns=VALID_VALIDATOR_RETURN_TYPES,
             )
 
     def update(self, overrides: dict) -> None:
         """Update config attributes from a dict.
 
         Only keys that correspond to existing dataclass fields are applied.
-        Unknown keys are ignored. If ``preprocess_methods`` is provided as
+        Unknown keys are merged into ``model_params``. If
+        ``preprocess_methods`` or ``detection_validators`` is provided as
         a list of dicts, each entry is resolved into a callable.
 
         Args:
@@ -179,8 +129,13 @@ class OCRConfig:
         for key, value in overrides.items():
             if key in valid_names:
                 if key == "preprocess_methods":
-                    value = [self._resolve_pp_method(m) if isinstance(m, dict) else m for m in value]
-                setattr(self, key, value)
+                    value = [
+                        resolve_callable_descriptor(m, default_module=image_preprocessing) if isinstance(m, dict) else m
+                        for m in value
+                    ]
+                elif key == "detection_validators":
+                    value = [resolve_callable_descriptor(v) if isinstance(v, dict) else v for v in value]
+                setattr(self, key, value)  # TODO: Remove, non-pythonic
             else:
                 self.model_params[key] = value
 
@@ -189,69 +144,57 @@ class OCRConfig:
     def to_dict(self) -> dict:
         """Convert the config to a JSON-serializable dict.
 
-        ``detection_validator`` is stored as a ``"module.path:function_name"``
-        string when present, so the dict can be round-tripped through JSON.
-        Each preprocessing callable is serialized back to a dict with
-        ``"name"`` as a fully qualified dotted path.
+        Delegates to ``SerializableClass.to_dict`` for the trivial fields,
+        then rewrites the two callable-valued list fields into JSON-safe
+        descriptor lists via ``_serialize_callable_descriptor``.
 
         Returns:
             A plain dict representation of this config.
         """
-        serialized_pp = []
-        for method in self.preprocess_methods:
-            func = method.func if isinstance(method, partial) else method
-            kwargs = method.keywords if isinstance(method, partial) else {}
-            name = f"{func.__module__}.{func.__qualname__}"
-            entry: dict = {"name": name}
-            if kwargs:
-                entry["kwargs"] = kwargs
-            serialized_pp.append(entry)
-
-        data = {
-            "model_name": self.model_name,
-            "model_params": self.model_params,
-            "preprocess_methods": serialized_pp,
-        }
-        if self.detection_validator is not None:
-            module = self.detection_validator.__module__
-            qualname = self.detection_validator.__qualname__
-            data["detection_validator"] = f"{module}:{qualname}"
+        data = super().to_dict()
+        data["preprocess_methods"] = [serialize_callable_descriptor(m) for m in self.preprocess_methods]
+        data["detection_validators"] = [serialize_callable_descriptor(v) for v in self.detection_validators]
         return data
 
     @classmethod
     def from_dict(cls, raw_dict: dict):
         """Create an OCRConfig from a plain dict.
 
-        ``detection_validator`` may be a callable or a dotted-path string in the
-        form ``"module.path:function_name"``. Strings are dynamically
-        imported.
-
-        ``preprocess_methods`` entries that are dicts are resolved into
-        callables via ``_resolve_pp_method``.
+        Resolves the two callable-valued list fields into live callables
+        via ``_resolve_callable_descriptor`` and then defers to
+        ``SerializableClass.from_dict`` for instantiation. Keys that do
+        not correspond to a dataclass field are silently dropped (besides
+        ``_type``), allowing config JSONs to carry extra metadata such as
+        ``alias``.
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
-                ``model_params``, ``detection_validator``, and
+                ``model_params``, ``detection_validators``, and
                 ``preprocess_methods``.
 
         Returns:
             An OCRConfig instance.
+
+        Raises:
+            TypeError: If ``model_name`` is missing from ``raw_dict``.
         """
-        detection_validator = raw_dict.get("detection_validator")
-        if isinstance(detection_validator, str):
-            module_path, attr_name = detection_validator.rsplit(":", 1)
-            module = importlib.import_module(module_path)
-            detection_validator = getattr(module, attr_name)
+        valid_names = {f.name for f in fields(cls)}
+        prepared = {k: v for k, v in raw_dict.items() if k == TYPE_KEY or k in valid_names}
 
-        raw_pp = raw_dict.get("preprocess_methods", [])
-        preprocess_methods = [cls._resolve_pp_method(m) if isinstance(m, dict) else m for m in raw_pp]
+        raw_pp = prepared.get("preprocess_methods")
+        if raw_pp is not None:
+            prepared["preprocess_methods"] = [
+                resolve_callable_descriptor(m, default_module=image_preprocessing) if isinstance(m, dict) else m
+                for m in raw_pp
+            ]
 
-        return cls(
-            model_name=raw_dict["model_name"],
-            model_params=raw_dict.get("model_params", {}),
-            detection_validator=detection_validator,
-            preprocess_methods=preprocess_methods,
-        )
+        raw_validators = prepared.get("detection_validators")
+        if raw_validators is not None:
+            prepared["detection_validators"] = [
+                resolve_callable_descriptor(v) if isinstance(v, dict) else v for v in raw_validators
+            ]
+
+        return super().from_dict(prepared)
 
 
 def load_config(path: str | Path) -> OCRConfig:
@@ -267,5 +210,4 @@ def load_config(path: str | Path) -> OCRConfig:
         FileNotFoundError: If the config file does not exist.
         KeyError: If required fields are missing from the JSON.
     """
-    data = load_json(path)
-    return OCRConfig.from_dict(data)
+    return OCRConfig.from_dict(load_json(path))

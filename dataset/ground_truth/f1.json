@@ -1,0 +1,98 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          639,
+          259
+        ],
+        [
+          1182,
+          339
+        ]
+      ],
+      "text": "Redbull",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          484,
+          508
+        ],
+        [
+          584,
+          541
+        ]
+      ],
+      "text": "hahnair",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          919,
+          508
+        ],
+        [
+          960,
+          533
+        ]
+      ],
+      "text": "Cash App",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1233,
+          542
+        ],
+        [
+          1304,
+          564
+        ]
+      ],
+      "text": "hahnair",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          377,
+          862
+        ],
+        [
+          719,
+          939
+        ]
+      ],
+      "text": "HUGO",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          1020,
+          879
+        ],
+        [
+          1374,
+          975
+        ]
+      ],
+      "text": "HUGO",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}

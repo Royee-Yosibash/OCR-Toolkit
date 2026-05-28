@@ -20,7 +20,7 @@ class TestEasyOCRRegression(unittest.TestCase):
         image = np.array(Image.open(TEST_IMAGE_PATH))
         config = OCRConfig(model_name="easyocr", model_params={"languages": ["en"]})
         ocr = EasyOCRModule(config=config)
-        result = ocr.get_text_bb(image)
+        result = ocr.get_text_detections(image)
 
         expected_result_path = EXPECTED_DIR / "test_image.json"
         expected = OCRResult.from_dict(load_json(expected_result_path))

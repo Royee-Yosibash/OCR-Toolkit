@@ -5,11 +5,7 @@ from consts import APP_ROOT
 
 
 def run_all_tests():
-    """
-    Discover and run all test files named 'test*.py'
-    starting from the project root.
-    """
-
+    """Discover and run all test files named 'test_*.py' starting from the project root."""
     loader = unittest.TestLoader()
     suite = loader.discover(start_dir=APP_ROOT, pattern="test_*.py")
 

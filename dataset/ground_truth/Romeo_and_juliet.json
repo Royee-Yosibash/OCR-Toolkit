@@ -1,0 +1,99 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          185,
+          45
+        ],
+        [
+          457,
+          121
+        ]
+      ],
+      "text": "ROMEO",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          280,
+          118
+        ],
+        [
+          359,
+          166
+        ]
+      ],
+      "text": "and",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          202,
+          155
+        ],
+        [
+          439,
+          243
+        ]
+      ],
+      "text": "JULIET",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          166,
+          282
+        ],
+        [
+          480,
+          314
+        ]
+      ],
+      "text": "WILLIAM SHAKESPEARE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          275,
+          890
+        ],
+        [
+          387,
+          921
+        ]
+      ],
+      "text": "MAPLE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          271,
+          918
+        ],
+        [
+          395,
+          944
+        ]
+      ],
+      "text": "CLASSICS",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}

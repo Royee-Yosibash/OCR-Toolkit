@@ -5,6 +5,7 @@ import numpy as np
 
 from ocr_backbone.input_image import InputImage
 from utils.binarize import otsu_binarize
+from utils.image_utils import to_grayscale
 
 BINARIZE_METHODS = ("adaptive", "otsu")
 
@@ -60,11 +61,7 @@ def binarize(input_image: InputImage, method: str = "adaptive", block_size: int 
     if method not in BINARIZE_METHODS:
         raise ValueError(f"Unknown binarization method '{method}'. Supported: {BINARIZE_METHODS}.")
 
-    image = input_image.image
-    if len(image.shape) == 3 and image.shape[2] == 3:
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    else:
-        gray = image.squeeze() if len(image.shape) == 3 else image
+    gray = to_grayscale(input_image.image)
 
     if method == "adaptive":
         binary = cv2.adaptiveThreshold(
@@ -139,15 +136,11 @@ def contour_split_image(
         pixels outside the contour zeroed out. Offsets reflect the fragment's
         position in the original image coordinate space.
     """
-
     if binarize_fn is None:
         binarize_fn = otsu_binarize
 
     image = input_image.image
-    if len(image.shape) == 3 and image.shape[2] == 3:
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    else:
-        gray = image.squeeze() if len(image.shape) == 3 else image
+    gray = to_grayscale(image)
 
     sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=sobel_ksize)
     sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=sobel_ksize)

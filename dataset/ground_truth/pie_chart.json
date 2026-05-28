@@ -1,0 +1,158 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          197,
+          49
+        ],
+        [
+          295,
+          82
+        ]
+      ],
+      "text": "Drama",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          217,
+          76
+        ],
+        [
+          271,
+          112
+        ]
+      ],
+      "text": "5%",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          349,
+          137
+        ],
+        [
+          451,
+          176
+        ]
+      ],
+      "text": "Action",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          364,
+          169
+        ],
+        [
+          435,
+          206
+        ]
+      ],
+      "text": "25%",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          66,
+          255
+        ],
+        [
+          200,
+          286
+        ]
+      ],
+      "text": "Romance",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          335,
+          257
+        ],
+        [
+          466,
+          302
+        ]
+      ],
+      "text": "Comedy",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          96,
+          282
+        ],
+        [
+          168,
+          318
+        ]
+      ],
+      "text": "30\uff05",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          364,
+          296
+        ],
+        [
+          438,
+          332
+        ]
+      ],
+      "text": "20\uff05",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          251,
+          358
+        ],
+        [
+          322,
+          388
+        ]
+      ],
+      "text": "SciFi",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          253,
+          387
+        ],
+        [
+          320,
+          421
+        ]
+      ],
+      "text": "20%",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text"
+  ]
+}

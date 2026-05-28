@@ -3,6 +3,7 @@ import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from functools import partial
+from typing import ClassVar
 
 import numpy as np
 
@@ -10,6 +11,7 @@ from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
 from ocr_backbone.polygon import Polygon
+from utils.serialize_utils import register_unique
 
 logger = logging.getLogger(__name__)
 
@@ -17,9 +19,9 @@ logger = logging.getLogger(__name__)
 class OCRAbstract(ABC):
     """Abstract base class for OCR engines.
 
-    Handles splitting an image into a grid of sub-images, running OCR on each
-    cell, and remapping the resulting detections back to the original
-    image coordinates.
+    Handles splitting an image into sub-images, running OCR on each cell,
+    and remapping the resulting detections back to the original image
+    coordinates.
 
     Subclasses must implement ``__init__`` to set up the underlying engine
     and ``_run_single`` to perform inference on a single sub-image.
@@ -27,12 +29,27 @@ class OCRAbstract(ABC):
     Subclasses are auto-registered by class name for lookup via ``from_config``.
     """
 
-    _registry: dict = {}
+    _registry: ClassVar[dict[str, type]] = {}
 
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        """Auto-register concrete subclasses by class name."""
+    #: ``model_params`` keys consumed at construction time and therefore
+    #: stripped from per-call kwargs before being forwarded to
+    #: ``_run_single``. Subclasses override this to declare engine-init
+    #: parameters that must not leak into the inference call.
+    _INIT_PARAM_KEYS: frozenset[str] = frozenset()
+
+    def __init_subclass__(cls, **kwargs):
+        """Register every concrete OCR subclass by class name."""
         super().__init_subclass__(**kwargs)
-        OCRAbstract._registry[cls.__name__] = cls
+        register_unique(OCRAbstract._registry, cls)
+
+    @classmethod
+    def registered_models(cls) -> list[str]:
+        """Return the names of every registered OCR subclass.
+
+        Returns:
+            A list of class names available via ``from_config``.
+        """
+        return list(cls._registry.keys())
 
     @classmethod
     def from_config(cls, config: OCRConfig | dict):
@@ -50,7 +67,6 @@ class OCRAbstract(ABC):
         Raises:
             ValueError: If no subclass is registered for the model name.
         """
-
         model_name = config.model_name if isinstance(config, OCRConfig) else config["model_name"]
         if model_name not in cls._registry:
             raise ValueError(f"Unknown model: {model_name}")
@@ -152,7 +168,7 @@ class OCRAbstract(ABC):
         logger.info("Preprocessing complete: %d image(s) to process", len(input_images))
         return input_images
 
-    def get_text_bb(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
+    def get_text_detections(self, image: np.ndarray, config_overrides: dict | None = None) -> OCRResult:
         """Run OCR over a grid of sub-images and return all detected text regions.
 
         Splits the image into a grid defined by the stored config, runs
@@ -170,9 +186,9 @@ class OCRAbstract(ABC):
         Returns:
             An OCRResult with detections in original image coordinates.
         """
-        logger.info(f"get_text_bb called with image shape {image.shape}")
+        logger.info("get_text_detections called with image shape %s", image.shape)
         if config_overrides:
-            logger.info(f"Applying config overrides: {list(config_overrides.keys())}")
+            logger.info("Applying config overrides: %s", list(config_overrides.keys()))
             config = copy.deepcopy(self.config)
             config.update(config_overrides)
         else:
@@ -181,18 +197,16 @@ class OCRAbstract(ABC):
         cells = self._preprocess(image=image, config=config)
 
         logger.info("Running OCR on %d cell(s)", len(cells))
+        call_params = {k: v for k, v in config.model_params.items() if k not in self._INIT_PARAM_KEYS}
         all_detections: list[Polygon] = []
         for cell in cells:
-            cell_result = self._run_single(cell.image, config.model_params)
-            for detection in cell_result.detections:
-                detection.remap_coordinates(cell.x_offset, cell.y_offset)
+            cell_result = self._run_single(cell.image, call_params)
+            all_detections.extend(d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections)
 
-            all_detections += cell_result.detections
-
-        if config.detection_validator is not None:
+        if config.detection_validators:
             before = len(all_detections)
-            all_detections = [det for det in all_detections if config.detection_validator(det)]
-            logger.info(f"detection_validator filtered {before} -> {len(all_detections)} detections")
+            all_detections = [det for det in all_detections if all(v(det) for v in config.detection_validators)]
+            logger.info("detection_validators filtered %d -> %d detections", before, len(all_detections))
 
-        logger.info(f"Returning {len(all_detections)} detection(s)")
+        logger.info("Returning %d detection(s)", len(all_detections))
         return OCRResult(detections=all_detections)

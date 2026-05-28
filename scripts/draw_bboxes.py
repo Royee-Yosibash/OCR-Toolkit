@@ -13,8 +13,11 @@ from pathlib import Path
 import cv2
 
 from ocr_backbone.ocr_result import OCRResult
+from utils.dataset_utils import load_image
 from utils.json_utils import load_json
 
+# Colors are expressed in the project's RGB convention and converted to BGR
+# at the cv2 boundary inside ``draw_bboxes``.
 BOX_COLORS = [
     (0, 255, 0),
     (255, 0, 0),
@@ -30,8 +33,24 @@ FONT_THICKNESS = 1
 LABEL_GAP = 3
 
 
+def _rgb_to_bgr(color: tuple[int, int, int]) -> tuple[int, int, int]:
+    """Swap the red and blue channels of an RGB color tuple.
+
+    Args:
+        color: An (R, G, B) triple.
+
+    Returns:
+        The (B, G, R) triple expected by OpenCV drawing functions.
+    """
+    return (color[2], color[1], color[0])
+
+
 def draw_bboxes(image_path: str, results_path: str) -> str:
     """Draw bounding boxes on an image and save the result.
+
+    The image is loaded via the project's RGB convention (``load_image``),
+    converted to BGR only for OpenCV drawing and writing, and the
+    ``BOX_COLORS`` palette is interpreted in RGB throughout.
 
     Args:
         image_path: Path to the input image.
@@ -40,16 +59,18 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
     Returns:
         The path to the output image.
     """
-    image = cv2.imread(image_path)
+    img_path = Path(image_path)
+    image_rgb = load_image(img_path)
+    image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
     ocr_result = OCRResult.from_dict(load_json(Path(results_path)))
 
     for i, bb in enumerate(ocr_result.detections):
-        color = BOX_COLORS[i % len(BOX_COLORS)]
+        color = _rgb_to_bgr(BOX_COLORS[i % len(BOX_COLORS)])
         top_left, bottom_right = bb.coordinates
         cv2.rectangle(image, top_left, bottom_right, color, BOX_THICKNESS)
 
         label = f"{bb.text} ({bb.confidence:.2f})"
-        text_size, baseline = cv2.getTextSize(label, FONT, FONT_SCALE, FONT_THICKNESS)
+        text_size, _ = cv2.getTextSize(label, FONT, FONT_SCALE, FONT_THICKNESS)
         text_x = bottom_right[0] - text_size[0]
         text_y = bottom_right[1] + LABEL_GAP + text_size[1]
         text_x = max(text_x, 0)
@@ -66,7 +87,6 @@ def draw_bboxes(image_path: str, results_path: str) -> str:
             cv2.LINE_AA,
         )
 
-    img_path = Path(image_path)
     output_path = img_path.parent / f"{img_path.stem}_with_bounding_box{img_path.suffix}"
     cv2.imwrite(str(output_path), image)
     return str(output_path)

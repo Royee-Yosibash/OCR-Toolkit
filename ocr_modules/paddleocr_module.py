@@ -1,5 +1,6 @@
 """OCR module using the PaddleOCR engine."""
 
+import importlib.util
 import logging
 
 import numpy as np
@@ -8,16 +9,16 @@ from ocr_backbone.bounding_box import BoundingBox
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig
 from ocr_backbone.ocr_result import OCRResult
+from utils.image_utils import to_rgb
+from utils.lazy_import import LazyModule
 
 logger = logging.getLogger(__name__)
 
-try:
-    from paddleocr import PaddleOCR
-
-    _HAS_PADDLEOCR = True
-except ImportError:
-    _HAS_PADDLEOCR = False
+_HAS_PADDLEOCR = importlib.util.find_spec("paddleocr") is not None
+if not _HAS_PADDLEOCR:
     logger.info("paddleocr not installed -- PaddleOCRModule will not be available.")
+
+paddleocr = LazyModule("paddleocr")
 
 MOBILE_DET = "PP-OCRv5_mobile_det"
 MOBILE_REC = "PP-OCRv5_mobile_rec"
@@ -29,13 +30,16 @@ def _gpu_available() -> bool:
     """Check whether a CUDA GPU is available via PaddlePaddle.
 
     Returns:
-        True if at least one CUDA device is available.
+        True if at least one CUDA device is available. False if PaddlePaddle
+        is not installed or its CUDA runtime cannot be initialized.
     """
     try:
         import paddle
-
+    except ImportError:
+        return False
+    try:
         return paddle.device.cuda.device_count() > 0
-    except Exception:
+    except RuntimeError:
         return False
 
 
@@ -78,7 +82,7 @@ if _HAS_PADDLEOCR:
                     "lightweight mobile models. Inference will be slower."
                 )
 
-            self._reader = PaddleOCR(
+            self._reader = paddleocr.PaddleOCR(
                 lang=model_params.get("lang", "en"),
                 text_detection_model_name=det_model,
                 text_recognition_model_name=rec_model,
@@ -88,36 +92,32 @@ if _HAS_PADDLEOCR:
                 use_textline_orientation=model_params.get("use_textline_orientation", False),
             )
 
-        def _run_single(self, image: np.ndarray, model_params: dict) -> OCRResult:
+        def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run PaddleOCR on a single image.
 
             PaddleOCR does not support per-run parameter overrides. If
-            ``model_params`` contains keys that differ from the stored
+            ``single_run_model_params`` contains keys that differ from the stored
             config a ValueError is raised.
 
             Args:
                 image: Input image as a numpy array (H x W x C).
-                model_params: Must be empty or match the stored config's
+                single_run_model_params: Must be empty or match the stored config's
                     model_params. Per-run overrides are not supported.
 
             Returns:
                 An OCRResult containing detected text regions.
 
             Raises:
-                ValueError: If model_params contains overrides that differ
+                ValueError: If single_run_model_params contains overrides that differ
                     from the stored configuration.
             """
-            if model_params:
+            if single_run_model_params:
                 stored = self.config.model_params
-                diff = {k: v for k, v in model_params.items() if stored.get(k) != v}
+                diff = {k: v for k, v in single_run_model_params.items() if stored.get(k) != v}
                 if diff:
                     raise ValueError(f"PaddleOCR does not support per-run parameter overrides. Differing keys: {diff}")
 
-            if image.ndim == 2:
-                image = np.stack([image] * 3, axis=-1)
-            elif image.shape[2] == 4:
-                image = image[:, :, :3]
-
+            image = to_rgb(image)
             results = self._reader.predict(image)
             bboxes = []
             for res in results:
