@@ -6,8 +6,19 @@ import numpy as np
 from ocr_backbone.image_preprocessing import binarize, grid_split_image
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_abstract import OCRAbstract
-from ocr_backbone.ocr_config import OCRConfig
+from ocr_backbone.ocr_config import VALID_PP_RETURN_TYPES, OCRConfig
+from ocr_backbone.polygon import Polygon
 from tests.unit_tests.dummy_ocr import DummyOCR
+from utils.callable_descriptors import validate_callable_signature
+
+
+def _validate_pp(method):
+    """Validate a preprocessing callable using the same arguments OCRConfig.validate uses."""
+    validate_callable_signature(
+        method,
+        expected_first_param=InputImage,
+        valid_returns=VALID_PP_RETURN_TYPES,
+    )
 
 
 def grid_m_n(m, n):
@@ -21,6 +32,18 @@ def grid_m_n(m, n):
         A partial wrapping grid_split_image with the grid kwarg bound.
     """
     return partial(grid_split_image, grid=(m, n))
+
+
+def keep_left_edge(detection: Polygon) -> bool:
+    """Detection validator that keeps only detections whose first coordinate has x == 0.
+
+    Args:
+        detection: The polygon to test.
+
+    Returns:
+        True if the detection's first coordinate is on the left edge.
+    """
+    return detection.coordinates[0][0] == 0
 
 
 class TestOCR(unittest.TestCase):
@@ -45,24 +68,23 @@ class TestOCR(unittest.TestCase):
         self.assertEqual(bbs[2].coordinates, ((0, 50), (100, 100)))
         self.assertEqual(bbs[3].coordinates, ((100, 50), (200, 100)))
 
-    def test_detection_validator_filters(self):
+    def test_detection_validators_filter(self):
         ocr = DummyOCR()
         ocr.config = OCRConfig(
             model_name="dummy",
             preprocess_methods=[grid_m_n(2, 2)],
-            detection_validator=lambda bb: bb.coordinates[0][0] == 0,
+            detection_validators=[keep_left_edge],
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_detections(image)
         self.assertEqual(len(result.detections), 2)
         self.assertTrue(all(bb.coordinates[0][0] == 0 for bb in result.detections))
 
-    def test_validator_none_keeps_all(self):
+    def test_no_validators_keeps_all(self):
         ocr = DummyOCR()
         ocr.config = OCRConfig(
             model_name="dummy",
             preprocess_methods=[grid_m_n(2, 2)],
-            detection_validator=None,
         )
         image = np.zeros((100, 200, 3), dtype=np.uint8)
         result = ocr.get_text_detections(image)
@@ -149,63 +171,63 @@ class TestInitParamFiltering(unittest.TestCase):
 
 
 class TestValidatePPSignature(unittest.TestCase):
-    """Tests for OCRConfig._validate_pp_signature."""
+    """Tests for ``_validate_callable_signature`` applied to preprocessing methods."""
 
     def test_valid_annotated_function(self):
         def good(img: InputImage) -> InputImage:
             return img
 
-        OCRConfig._validate_pp_signature(good)
+        _validate_pp(good)
 
     def test_valid_list_return(self):
         def good(img: InputImage) -> list[InputImage]:
             return [img]
 
-        OCRConfig._validate_pp_signature(good)
+        _validate_pp(good)
 
     def test_valid_union_return(self):
         def good(img: InputImage) -> InputImage | list[InputImage]:
             return img
 
-        OCRConfig._validate_pp_signature(good)
+        _validate_pp(good)
 
     def test_unannotated_first_param_raises(self):
         def bad(img):
             return img
 
         with self.assertRaises(TypeError):
-            OCRConfig._validate_pp_signature(bad)
+            _validate_pp(bad)
 
     def test_missing_return_annotation_raises(self):
         def bad(img: InputImage):
             return img
 
         with self.assertRaises(TypeError):
-            OCRConfig._validate_pp_signature(bad)
+            _validate_pp(bad)
 
     def test_wrong_first_param_annotation_raises(self):
         def bad(img: np.ndarray) -> InputImage:
             return InputImage(image=img)
 
         with self.assertRaises(TypeError):
-            OCRConfig._validate_pp_signature(bad)
+            _validate_pp(bad)
 
     def test_wrong_return_annotation_raises(self):
         def bad(img: InputImage) -> np.ndarray:
             return img.image
 
         with self.assertRaises(TypeError):
-            OCRConfig._validate_pp_signature(bad)
+            _validate_pp(bad)
 
     def test_no_params_raises(self):
         def bad() -> InputImage:
             return InputImage(image=np.zeros((1, 1)))
 
         with self.assertRaises(TypeError):
-            OCRConfig._validate_pp_signature(bad)
+            _validate_pp(bad)
 
     def test_partial_with_valid_remaining_param(self):
-        OCRConfig._validate_pp_signature(partial(binarize, method="otsu"))
+        _validate_pp(partial(binarize, method="otsu"))
 
     def test_rejects_at_construction_time(self):
         def bad(img: np.ndarray) -> InputImage:

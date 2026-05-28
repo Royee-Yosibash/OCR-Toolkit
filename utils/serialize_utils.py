@@ -1,6 +1,8 @@
+import types
 import typing
 
 TYPE_KEY = "_type"
+_UNION_ORIGINS = (typing.Union, types.UnionType)
 
 
 def register_unique(registry: dict[str, type], cls: type) -> None:
@@ -127,6 +129,11 @@ class SerializableClass:
 
         if hint is None:
             return value
+
+        if typing.get_origin(hint) in _UNION_ORIGINS:
+            non_none = [arg for arg in typing.get_args(hint) if arg is not type(None)]
+            if len(non_none) == 1:
+                hint = non_none[0]
 
         target = cls._resolve_serializable(hint)
         if target is not None:

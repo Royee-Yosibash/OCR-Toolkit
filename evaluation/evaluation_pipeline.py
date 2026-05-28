@@ -75,9 +75,9 @@ class StatsDict(TypedDict):
 # Dynamic-key levels of the aggregate JSON. Keys are user-defined strings
 # (metric class name, OCR id, dataset tag), so plain dict aliases are used
 # rather than TypedDicts.
-MetricStatsDict = dict[str, StatsDict]       # metric_name -> stats
+MetricStatsDict = dict[str, StatsDict]  # metric_name -> stats
 OCRMetricsDict = dict[str, MetricStatsDict]  # ocr_id -> metric_name -> stats
-AggregateData = dict[str, OCRMetricsDict]    # tag -> ocr_id -> metric_name -> stats
+AggregateData = dict[str, OCRMetricsDict]  # tag -> ocr_id -> metric_name -> stats
 
 
 @dataclass(frozen=True)
@@ -102,6 +102,7 @@ class TagBreakdown:
     @property
     def metrics(self) -> list[str]:
         return list(next(iter(self.data.values())).keys())
+
 
 @dataclass(frozen=True)
 class AggregateResult:

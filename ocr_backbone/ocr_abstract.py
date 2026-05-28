@@ -203,10 +203,10 @@ class OCRAbstract(ABC):
             cell_result = self._run_single(cell.image, call_params)
             all_detections.extend(d.translate_coordinates(cell.x_offset, cell.y_offset) for d in cell_result.detections)
 
-        if config.detection_validator is not None:
+        if config.detection_validators:
             before = len(all_detections)
-            all_detections = [det for det in all_detections if config.detection_validator(det)]
-            logger.info("detection_validator filtered %d -> %d detections", before, len(all_detections))
+            all_detections = [det for det in all_detections if all(v(det) for v in config.detection_validators)]
+            logger.info("detection_validators filtered %d -> %d detections", before, len(all_detections))
 
         logger.info("Returning %d detection(s)", len(all_detections))
         return OCRResult(detections=all_detections)

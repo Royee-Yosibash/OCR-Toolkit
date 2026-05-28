@@ -47,7 +47,7 @@ plots identify the optimal combination.
 
 ## Versioning
 
-Current version: **0.1.4** (released 2026-05-05).
+Current version: **0.1.5** (released 2026-05-29).
 
 ## Installation
 

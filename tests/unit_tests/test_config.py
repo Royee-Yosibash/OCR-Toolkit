@@ -6,11 +6,18 @@ from pathlib import Path
 
 import numpy as np
 
+from ocr_backbone import image_preprocessing
 from ocr_backbone.image_preprocessing import binarize
 from ocr_backbone.input_image import InputImage
 from ocr_backbone.ocr_config import OCRConfig, load_config
+from utils.callable_descriptors import resolve_callable_descriptor
 from utils.json_utils import save_json
 from utils.serialize_utils import TYPE_KEY, SerializableClass
+
+
+def resolve_pp(descriptor):
+    """Resolve a preprocessing descriptor using the same default module ``OCRConfig`` uses."""
+    return resolve_callable_descriptor(descriptor, default_module=image_preprocessing)
 
 
 class TestOCRConfig(unittest.TestCase):
@@ -53,26 +60,26 @@ class TestOCRConfig(unittest.TestCase):
 
 
 class TestResolvePPMethod(unittest.TestCase):
-    """Tests for OCRConfig._resolve_pp_method resolution logic."""
+    """Tests for preprocessing descriptor resolution via ``_resolve_callable_descriptor``."""
 
     def test_plain_name_resolves_from_image_preprocessing(self):
-        method = OCRConfig._resolve_pp_method({"name": "binarize"})
+        method = resolve_pp({"name": "binarize"})
         self.assertIs(method, binarize)
 
     def test_plain_name_with_kwargs_returns_partial(self):
-        method = OCRConfig._resolve_pp_method({"name": "binarize", "kwargs": {"method": "otsu"}})
+        method = resolve_pp({"name": "binarize", "kwargs": {"method": "otsu"}})
         image = np.zeros((50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         self.assertEqual(len(result.image.shape), 2)
 
     def test_dotted_path_resolves_function(self):
-        method = OCRConfig._resolve_pp_method({"name": "ocr_backbone.image_preprocessing.binarize"})
+        method = resolve_pp({"name": "ocr_backbone.image_preprocessing.binarize"})
         image = np.zeros((50, 50, 3), dtype=np.uint8)
         result = method(InputImage(image=image))
         self.assertEqual(len(result.image.shape), 2)
 
     def test_dotted_path_with_kwargs(self):
-        method = OCRConfig._resolve_pp_method(
+        method = resolve_pp(
             {"name": "ocr_backbone.image_preprocessing.binarize", "kwargs": {"method": "otsu"}}
         )
         image = np.random.randint(0, 256, (50, 50, 3), dtype=np.uint8)
@@ -82,15 +89,15 @@ class TestResolvePPMethod(unittest.TestCase):
 
     def test_dotted_path_bad_module_raises(self):
         with self.assertRaises(ModuleNotFoundError):
-            OCRConfig._resolve_pp_method({"name": "nonexistent_package.some_func"})
+            resolve_pp({"name": "nonexistent_package.some_func"})
 
     def test_dotted_path_bad_attribute_raises(self):
         with self.assertRaises(AttributeError):
-            OCRConfig._resolve_pp_method({"name": "ocr_backbone.image_preprocessing.no_such_func"})
+            resolve_pp({"name": "ocr_backbone.image_preprocessing.no_such_func"})
 
     def test_plain_name_bad_attribute_raises(self):
         with self.assertRaises(AttributeError):
-            OCRConfig._resolve_pp_method({"name": "no_such_func"})
+            resolve_pp({"name": "no_such_func"})
 
 
 class TestFromDictPreprocessMethods(unittest.TestCase):
