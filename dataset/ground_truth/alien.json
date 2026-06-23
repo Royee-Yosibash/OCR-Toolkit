@@ -1,0 +1,265 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          20,
+          12
+        ],
+        [
+          147,
+          43
+        ]
+      ],
+      "text": "FADE IN",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          20,
+          99
+        ],
+        [
+          410,
+          132
+        ]
+      ],
+      "text": "SOMETIME IN THE FUTURE:",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          21,
+          182
+        ],
+        [
+          297,
+          212
+        ]
+      ],
+      "text": "INT. ENGINE ROOM",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          905,
+          182
+        ],
+        [
+          930,
+          213
+        ]
+      ],
+      "text": "1",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          21,
+          239
+        ],
+        [
+          308,
+          269
+        ]
+      ],
+      "text": "Empty, cavernous.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          22,
+          295
+        ],
+        [
+          345,
+          322
+        ]
+      ],
+      "text": "INT. ENGINECUBICLE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          907,
+          296
+        ],
+        [
+          928,
+          322
+        ]
+      ],
+      "text": "2",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          19,
+          347
+        ],
+        [
+          598,
+          377
+        ]
+      ],
+      "text": "Circular, jammed with instruments.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          18,
+          376
+        ],
+        [
+          310,
+          404
+        ]
+      ],
+      "text": "All of them idle.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          18,
+          404
+        ],
+        [
+          411,
+          434
+        ]
+      ],
+      "text": "Console chairs for two.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          18,
+          433
+        ],
+        [
+          130,
+          465
+        ]
+      ],
+      "text": "Empty.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          17,
+          483
+        ],
+        [
+          533,
+          518
+        ]
+      ],
+      "text": "INT.OILY CORRIDOR-\"C\"LEVEL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          904,
+          485
+        ],
+        [
+          963,
+          519
+        ]
+      ],
+      "text": "2-A",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          17,
+          542
+        ],
+        [
+          206,
+          573
+        ]
+      ],
+      "text": "Long, dark.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          569
+        ],
+        [
+          121,
+          602
+        ]
+      ],
+      "text": "Empty.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          593
+        ],
+        [
+          323,
+          632
+        ]
+      ],
+      "text": "Turbos throbbing.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          15,
+          625
+        ],
+        [
+          324,
+          655
+        ]
+      ],
+      "text": "No other movement.",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured",
+    "document"
+  ]
+}

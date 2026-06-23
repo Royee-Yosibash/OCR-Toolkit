@@ -1,0 +1,68 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          25,
+          25
+        ],
+        [
+          560,
+          116
+        ]
+      ],
+      "text": "\uff081234-5678\uff09",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          24,
+          169
+        ],
+        [
+          570,
+          288
+        ]
+      ],
+      "text": "1+1=2",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          23,
+          314
+        ],
+        [
+          567,
+          425
+        ]
+      ],
+      "text": "Hello, world!",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          28,
+          462
+        ],
+        [
+          565,
+          565
+        ]
+      ],
+      "text": "12:00:00",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "synthetic"
+  ]
+}
