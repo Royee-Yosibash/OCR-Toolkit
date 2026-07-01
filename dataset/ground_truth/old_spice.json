@@ -1,0 +1,39 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          577,
+          74
+        ],
+        [
+          978,
+          113
+        ]
+      ],
+      "text": "SMELL LIKE A MAN, MAN.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          673,
+          112
+        ],
+        [
+          893,
+          191
+        ]
+      ],
+      "text": "Old Spice",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}
