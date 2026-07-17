@@ -33,7 +33,7 @@ from evaluation.metrics import Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
-from utils.dataset_utils import dataset_generator
+from utils.dataset_utils import OCRDataset
 from utils.json_utils import load_json, save_json
 from utils.statistics import beta_ci, bootstrap_ci
 
@@ -423,8 +423,8 @@ def evaluation_pipeline(
             (OCRResult, OCRResult) -> float | int | bool.
         output_dir: Directory where results are persisted.
         dataset: Path to a local directory containing ``images/`` and
-            ``ground_truth/`` subdirectories. Required unless metrics_only
-            is True.
+            ``ground_truth/`` subdirectories. When None, uses the
+            built-in dataset directory and downloads it if missing.
         ocrs: List of initialized OCR instances to evaluate. Required
             unless metrics_only is True.
         overwrite: If True, re-run OCR even when saved results exist.
@@ -439,13 +439,10 @@ def evaluation_pipeline(
 
     Raises:
         ValueError: If labels is provided but its length does not match ocrs,
-            or if ocrs/dataset are missing when metrics_only is False.
+            or if ocrs are missing when metrics_only is False.
     """
-    if not metrics_only:
-        if ocrs is None:
-            raise ValueError("ocrs must be provided when metrics_only is False.")
-        if dataset is None:
-            raise ValueError("dataset must be provided when metrics_only is False.")
+    if not metrics_only and ocrs is None:
+        raise ValueError("ocrs must be provided when metrics_only is False.")
     if labels is not None and ocrs is not None and len(labels) != len(ocrs):
         raise ValueError(f"labels length ({len(labels)}) must match ocrs length ({len(ocrs)}).")
     output_dir = Path(output_dir)
@@ -463,7 +460,7 @@ def evaluation_pipeline(
         labels,
     )
 
-    iterator_dataset = None if metrics_only else dataset_generator(dataset)
+    iterator_dataset = None if metrics_only else OCRDataset(dataset)
     for image_id, image, ground_truth in _build_iterator(output_dir, iterator_dataset, metrics_only):
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         image_tags[image_id] = ground_truth.tags

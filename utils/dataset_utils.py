@@ -1,6 +1,9 @@
 """Utilities for loading images and ground_truth from the local dataset directory."""
 
-from collections.abc import Generator
+import logging
+import urllib.request
+import zipfile
+from collections.abc import Iterator
 from pathlib import Path
 
 import numpy as np
@@ -12,8 +15,12 @@ from ocr_backbone.polygon import Polygon
 from utils.json_utils import load_json
 
 DATASET_DIR = APP_ROOT / "dataset"
-IMAGES_DIR = DATASET_DIR / "images"
-TAGS_DIR = DATASET_DIR / "ground_truth"
+IMAGES_DIR = "images"
+TAGS_DIR = "ground_truth"
+
+DATASET_SAMPLE_ZIP_URL = "https://github.com/Royee-Yosibash/OCR-Toolkit/releases/download/v0.1.7/dataset.zip"
+
+logger = logging.getLogger(__name__)
 
 
 def collect_images(path: Path) -> list[Path]:
@@ -78,7 +85,7 @@ def _find_image_for_stem(stem: str, images_dir: Path | None = None) -> Path:
             for the given stem.
     """
     if images_dir is None:
-        images_dir = IMAGES_DIR
+        images_dir = DATASET_DIR / IMAGES_DIR
     candidates = (images_dir / f"{stem}{ext}" for ext in IMAGE_EXTENSIONS)
     try:
         return next(p for p in candidates if p.exists())
@@ -184,10 +191,8 @@ def validate_dataset(dataset_root: Path | str | None = None) -> None:
         raise ValueError(f"Validation errors in {len(all_errors)} file(s):\n" + "\n".join(lines))
 
 
-def dataset_generator(
-    dataset_root: Path | str | None = None,
-) -> Generator[tuple[np.ndarray, OCRGroundTruth], None, None]:
-    """Yield (image, ground_truth) tuples from a dataset directory.
+class OCRDataset:
+    """A validated, iterable dataset of images and their ground truth.
 
     The directory must contain an ``images/`` subfolder with image files
     and a ``ground_truth/`` subfolder with identically-stemmed JSON tag files.
@@ -195,22 +200,72 @@ def dataset_generator(
     Args:
         dataset_root: Root directory of the dataset. Defaults to the
             built-in ``dataset/`` directory when *None*.
+        validate: If True (default), run full dataset validation on
+            construction, checking that every image has a matching tag
+            file and that all tags are structurally valid.
 
-    Yields:
-        A tuple of (image, ground_truth) where image is a numpy array
-        (H x W x 3) and ground_truth is the ground-truth OCRGroundTruth.
-        :rtype: Generator[tuple[np.ndarray, OCRGroundTruth], None, None]
+    Raises:
+        FileNotFoundError: If the dataset root or its required
+            subdirectories do not exist.
+        ValueError: If *validate* is True and any tag validation errors
+            are found.
     """
-    root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
-    images_dir = root / "images"
-    gt_dir = root / "ground_truth"
-    if not images_dir.exists():
-        raise FileNotFoundError(f"images directory does not exist: {images_dir}")
-    if not gt_dir.exists():
-        raise FileNotFoundError(f"ground truth directory does not exist: {gt_dir}")
 
-    for gt_path in sorted(gt_dir.glob("*.json")):
-        stem = gt_path.stem
-        image = load_image(_find_image_for_stem(stem, images_dir))
-        gt = load_ground_truth(gt_path)
-        yield image, gt
+    def __init__(self, dataset_root: Path | str | None = None, validate: bool = True) -> None:
+        self._root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
+        self._images_dir = self._root / IMAGES_DIR
+        self._gt_dir = self._root / TAGS_DIR
+        if not self._root.exists() and self._root == DATASET_DIR:
+            self._download_sample_dataset(self._root)
+        if not self._images_dir.exists():
+            raise FileNotFoundError(f"images directory does not exist: {self._images_dir}")
+        if not self._gt_dir.exists():
+            raise FileNotFoundError(f"ground truth directory does not exist: {self._gt_dir}")
+        if validate:
+            validate_dataset(self._root)
+
+    def __len__(self) -> int:
+        """Return the number of images in the dataset.
+
+        Returns:
+            Count of image files with supported extensions in the images directory.
+        """
+        return len(list(self._images_dir.iterdir()))
+
+    def __iter__(self) -> Iterator[tuple[np.ndarray, OCRGroundTruth]]:
+        """Yield (image, ground_truth) tuples from the dataset.
+
+        Yields:
+            A tuple of (image, ground_truth) where image is a numpy array
+            (H x W x 3) and ground_truth is the ground-truth OCRGroundTruth.
+        """
+        for gt_path in sorted(self._gt_dir.glob("*.json")):
+            stem = gt_path.stem
+            image = load_image(_find_image_for_stem(stem, self._images_dir))
+            gt = load_ground_truth(gt_path)
+            yield image, gt
+
+    @staticmethod
+    def _download_sample_dataset(target_dir: Path) -> None:
+        """Download and extract the default dataset from GitHub releases.
+
+        Args:
+            target_dir: Directory to extract the dataset into.
+
+        Raises:
+            RuntimeError: If the download or extraction fails.
+        """
+        zip_path = target_dir.parent / "dataset.zip"
+        logger.info("Downloading dataset from %s", DATASET_SAMPLE_ZIP_URL)
+        try:
+            urllib.request.urlretrieve(DATASET_SAMPLE_ZIP_URL, zip_path)
+        except OSError as e:
+            raise RuntimeError(f"Failed to download dataset: {e}") from e
+        logger.info("Extracting dataset to %s", target_dir)
+        try:
+            with zipfile.ZipFile(zip_path, "r") as zf:
+                zf.extractall(target_dir.parent)
+        except zipfile.BadZipFile as e:
+            raise RuntimeError(f"Failed to extract dataset: {e}") from e
+        finally:
+            zip_path.unlink(missing_ok=True)
