@@ -47,7 +47,7 @@ to production with no additional harness and a lightweight installation.
 
 ## Versioning
 
-Current version: **0.1.7** (released 2026-07-17).
+Current version: **0.1.8** (released 2026-07-18).
 
 ## Installation
 
