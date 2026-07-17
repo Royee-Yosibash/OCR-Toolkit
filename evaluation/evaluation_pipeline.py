@@ -33,7 +33,7 @@ from evaluation.metrics import Metric
 from evaluation.ocr_ground_truth import OCRGroundTruth
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
-from utils.dataset_utils import dataset_generator
+from utils.dataset_utils import OCRDataset
 from utils.json_utils import load_json, save_json
 from utils.statistics import beta_ci, bootstrap_ci
 
@@ -463,7 +463,7 @@ def evaluation_pipeline(
         labels,
     )
 
-    iterator_dataset = None if metrics_only else dataset_generator(dataset)
+    iterator_dataset = None if metrics_only else OCRDataset(dataset)
     for image_id, image, ground_truth in _build_iterator(output_dir, iterator_dataset, metrics_only):
         image_dir = output_dir / IMAGE_DIR_NAME.format(x=image_id)
         image_tags[image_id] = ground_truth.tags

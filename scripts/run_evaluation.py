@@ -24,7 +24,7 @@ from evaluation.metrics import Metric
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_modules import import_all_modules
-from utils.dataset_utils import DATASET_DIR, validate_dataset
+from utils.dataset_utils import validate_dataset
 from utils.logging_config import configure_logging
 
 ALL_METRICS = [cls() for cls in Metric._registry.values()]
@@ -51,7 +51,7 @@ def evaluate() -> None:
     )
     parser.add_argument(
         "--dataset",
-        default=DATASET_DIR,
+        default=None,
         help="Path to a dataset root directory containing images/ and ground_truth/ (default: dataset).",
     )
     parser.add_argument(
@@ -67,12 +67,9 @@ def evaluate() -> None:
     args = parser.parse_args()
 
     configure_logging()
-
     import_all_modules()
 
     logger.info("Validating dataset at %s", args.dataset)
-    validate_dataset(args.dataset)
-
     labels = None
     if args.config:
         config_path = Path(args.config)
