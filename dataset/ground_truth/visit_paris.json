@@ -1,0 +1,54 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          410,
+          154
+        ],
+        [
+          553,
+          221
+        ]
+      ],
+      "text": "Visit",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          495,
+          231
+        ],
+        [
+          846,
+          325
+        ]
+      ],
+      "text": "PARIS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          341,
+          941
+        ],
+        [
+          853,
+          1037
+        ]
+      ],
+      "text": "FRANCE",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}

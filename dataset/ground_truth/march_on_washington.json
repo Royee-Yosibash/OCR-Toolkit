@@ -1,0 +1,518 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          250,
+          25
+        ],
+        [
+          347,
+          54
+        ]
+      ],
+      "text": "CIVIL RIGHTS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          64,
+          37
+        ],
+        [
+          100,
+          55
+        ]
+      ],
+      "text": "WE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          275,
+          48
+        ],
+        [
+          312,
+          62
+        ]
+      ],
+      "text": "PLUS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          39,
+          54
+        ],
+        [
+          130,
+          80
+        ]
+      ],
+      "text": "DEMAND",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          272,
+          58
+        ],
+        [
+          312,
+          79
+        ]
+      ],
+      "text": "FULL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          247,
+          74
+        ],
+        [
+          336,
+          95
+        ]
+      ],
+      "text": "EMPLOYMENT",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          42,
+          80
+        ],
+        [
+          119,
+          109
+        ]
+      ],
+      "text": "EQUAL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          456,
+          80
+        ],
+        [
+          474,
+          96
+        ]
+      ],
+      "text": "WE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          444,
+          87
+        ],
+        [
+          486,
+          116
+        ]
+      ],
+      "text": "DEMAND",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          260,
+          91
+        ],
+        [
+          315,
+          108
+        ]
+      ],
+      "text": "EQUALS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          214,
+          96
+        ],
+        [
+          231,
+          106
+        ]
+      ],
+      "text": "WE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          39,
+          99
+        ],
+        [
+          121,
+          130
+        ]
+      ],
+      "text": "RIGHTS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          239,
+          106
+        ],
+        [
+          330,
+          138
+        ]
+      ],
+      "text": "FREEDOM",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          207,
+          107
+        ],
+        [
+          239,
+          117
+        ]
+      ],
+      "text": "MARCH",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          444,
+          108
+        ],
+        [
+          482,
+          129
+        ]
+      ],
+      "text": "EQUAL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          375,
+          109
+        ],
+        [
+          393,
+          120
+        ]
+      ],
+      "text": "WE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          219,
+          116
+        ],
+        [
+          233,
+          123
+        ]
+      ],
+      "text": "FOR",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          363,
+          117
+        ],
+        [
+          409,
+          133
+        ]
+      ],
+      "text": "MARCH",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          35,
+          119
+        ],
+        [
+          117,
+          150
+        ]
+      ],
+      "text": "NOW!",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          443,
+          119
+        ],
+        [
+          484,
+          142
+        ]
+      ],
+      "text": "RIGHTS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          212,
+          124
+        ],
+        [
+          235,
+          134
+        ]
+      ],
+      "text": "EFFECT",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          378,
+          128
+        ],
+        [
+          395,
+          140
+        ]
+      ],
+      "text": "FOR",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          446,
+          133
+        ],
+        [
+          481,
+          155
+        ]
+      ],
+      "text": "NOW!",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          211,
+          134
+        ],
+        [
+          228,
+          145
+        ]
+      ],
+      "text": "CIVIL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          390,
+          135
+        ],
+        [
+          416,
+          149
+        ]
+      ],
+      "text": "CLASS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          376,
+          140
+        ],
+        [
+          387,
+          151
+        ]
+      ],
+      "text": "ST",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          385,
+          146
+        ],
+        [
+          417,
+          162
+        ]
+      ],
+      "text": "ENSHIP",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          218,
+          151
+        ],
+        [
+          247,
+          165
+        ]
+      ],
+      "text": "NOW!",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          260,
+          152
+        ],
+        [
+          274,
+          161
+        ]
+      ],
+      "text": "NO",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          386,
+          158
+        ],
+        [
+          416,
+          181
+        ]
+      ],
+      "text": "OW!",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          174,
+          159
+        ],
+        [
+          204,
+          183
+        ]
+      ],
+      "text": "REEDOM",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          10,
+          163
+        ],
+        [
+          37,
+          180
+        ]
+      ],
+      "text": "WE DEMAND",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          186,
+          169
+        ],
+        [
+          205,
+          189
+        ]
+      ],
+      "text": "1963",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          18,
+          192
+        ],
+        [
+          43,
+          198
+        ]
+      ],
+      "text": "NOW!",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}

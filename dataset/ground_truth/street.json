@@ -1,0 +1,68 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          362,
+          88
+        ],
+        [
+          524,
+          117
+        ]
+      ],
+      "text": "DELMONICO'S",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          420,
+          160
+        ],
+        [
+          521,
+          181
+        ]
+      ],
+      "text": "DELMONICOS",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          185,
+          213
+        ],
+        [
+          212,
+          224
+        ]
+      ],
+      "text": "DO NOT",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          186,
+          233
+        ],
+        [
+          213,
+          241
+        ]
+      ],
+      "text": "ENTER",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}

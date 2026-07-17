@@ -1,0 +1,205 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          947,
+          8
+        ],
+        [
+          964,
+          31
+        ]
+      ],
+      "text": "4",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          92,
+          9
+        ],
+        [
+          728,
+          32
+        ]
+      ],
+      "text": "EXT. BEHIND GERMAN LINES / MASS GRAVE \u2013 DUSK",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          90,
+          55
+        ],
+        [
+          870,
+          85
+        ]
+      ],
+      "text": "An open-bed truck on the edge of a makeshift cemetery,",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          90,
+          79
+        ],
+        [
+          960,
+          109
+        ]
+      ],
+      "text": "SOLDIERS are unloading the bodies of German recruits. One of",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          91,
+          105
+        ],
+        [
+          857,
+          133
+        ]
+      ],
+      "text": "them is Heinrich Gerber, a bloody wound in his chest.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          93,
+          155
+        ],
+        [
+          928,
+          182
+        ]
+      ],
+      "text": "They unbutton his uniform jacket and toss his uniform onto",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          94,
+          180
+        ],
+        [
+          684,
+          206
+        ]
+      ],
+      "text": "the pile. The boots land on another pile.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          91,
+          227
+        ],
+        [
+          654,
+          257
+        ]
+      ],
+      "text": "Coffins of a mass grave piled up in BG.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          92,
+          302
+        ],
+        [
+          743,
+          329
+        ]
+      ],
+      "text": "EXT. BEHIND GERMAN LINES / TRAIN TRACKS \u2013 DAY",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          947,
+          304
+        ],
+        [
+          963,
+          327
+        ]
+      ],
+      "text": "5",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          90,
+          352
+        ],
+        [
+          944,
+          379
+        ]
+      ],
+      "text": "A freight train along a railroad embankment. The dead men's",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          93,
+          379
+        ],
+        [
+          958,
+          403
+        ]
+      ],
+      "text": "uniforms in bundles in a boxcar. WOUNDED SOLDIERS are loaded",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          91,
+          401
+        ],
+        [
+          310,
+          429
+        ]
+      ],
+      "text": "on beside them.",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured",
+    "document"
+  ]
+}

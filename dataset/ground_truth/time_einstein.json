@@ -1,0 +1,69 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          23,
+          20
+        ],
+        [
+          378,
+          59
+        ]
+      ],
+      "text": "PERSON OF THE CENTURY",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          22,
+          58
+        ],
+        [
+          378,
+          165
+        ]
+      ],
+      "text": "TIME",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          28,
+          311
+        ],
+        [
+          83,
+          328
+        ]
+      ],
+      "text": "ALBERT",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          29,
+          325
+        ],
+        [
+          93,
+          340
+        ]
+      ],
+      "text": "EINSTEIN",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "printed_text",
+    "structured"
+  ]
+}

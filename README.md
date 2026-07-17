@@ -1,22 +1,22 @@
 # OCR-Toolkit
 
-A unified framework for integrating, benchmarking, and comparing OCR engines
-under controlled conditions. Unlike ad-hoc OCR scripts that couple a single
-engine to a single preprocessing pipeline, OCR-Toolkit decouples the engine,
-the preprocessing pipeline, and the evaluation metrics into interchangeable
-components. Integrating a new OCR engine requires one subclass with one method;
-the framework handles image preprocessing, coordinate remapping, metric
-computation, and result persistence automatically.
+This toolkit aims to create a unified "one-stop-shop" framework for integrating, benchmarking, and comparing OCR 
+engines. It aims to provide a seamless and clean interface to integrate multiple OCR engines for common and uncommon 
+OCR tasks. The OCR-Toolkit cleanly decouples the OCR engine, preprocessing pipeline, and the evaluation metrics into interchangeable
+components allowing easy tinkering and experimentation for OCr configuration and engine evaluation. Using the toolkit 
+Integrating a new OCR engine requires one subclass with one method and the framework handles plugging image 
+preprocessing, coordinate remapping, metric computation, and result persistence automatically.
 
 ## Introduction
 
 Selecting the optimal OCR engine and configuration for a given input type is
-largely trial and error. Different engines, preprocessing pipelines, and
+largely trial and error experiment. Different engines, preprocessing pipelines, and
 parameter choices can yield vastly different results, yet there is no
 standardized method for quantifying those differences across a dataset.
 OCR-Toolkit replaces intuition with data: execute the pipeline, examine the
 metrics, and let confidence intervals, per-tag breakdowns, and side-by-side
-plots identify the optimal combination.
+plots identify the optimal combination. It then allows copying the successful configuration 
+to production with no additional harness and a lightweight installation.
 
 ## Use Cases
 
@@ -32,8 +32,8 @@ plots identify the optimal combination.
 ## Features
 
 - **Unified OCR interface** -- integrate any OCR engine by subclassing
-  `OCRAbstract`. Ships with EasyOCR, PaddleOCR, and pytesseract
-  implementations.
+  `OCRAbstract`. Ships optionally with EasyOCR, PaddleOCR, and pytesseract
+  example implementations.
 - **Modular preprocessing** -- composable preprocessing pipeline supporting
   grid splitting, contour-based segmentation, binarization (adaptive and Otsu),
   and user-supplied steps. Combine stages via configuration or code to build the
@@ -47,7 +47,7 @@ plots identify the optimal combination.
 
 ## Versioning
 
-Current version: **0.1.5** (released 2026-05-29).
+Current version: **0.1.7** (released 2026-07-17).
 
 ## Installation
 
@@ -85,7 +85,7 @@ pip install -e ".[dev]"
 pre-commit install
 ```
 
-**Full** (all three groups above):
+**Full** (all groups above):
 
 ```bash
 pip install -e ".[full]"

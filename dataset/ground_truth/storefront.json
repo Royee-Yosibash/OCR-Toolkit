@@ -1,0 +1,353 @@
+{
+  "_type": "OCRGroundTruth",
+  "detections": [
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          289,
+          25
+        ],
+        [
+          352,
+          55
+        ]
+      ],
+      "text": "ESTABLISHED",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          531,
+          31
+        ],
+        [
+          588,
+          68
+        ]
+      ],
+      "text": "Coffee",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          151,
+          40
+        ],
+        [
+          214,
+          103
+        ]
+      ],
+      "text": "Coffee",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          666,
+          44
+        ],
+        [
+          720,
+          105
+        ]
+      ],
+      "text": "Tea",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          536,
+          68
+        ],
+        [
+          579,
+          93
+        ]
+      ],
+      "text": "Teas",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          390,
+          90
+        ],
+        [
+          483,
+          103
+        ]
+      ],
+      "text": "IMPORTING CO.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          312,
+          91
+        ],
+        [
+          331,
+          98
+        ]
+      ],
+      "text": "1907",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          275,
+          139
+        ],
+        [
+          605,
+          174
+        ]
+      ],
+      "text": "COFFEE & TEA",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          670,
+          145
+        ],
+        [
+          706,
+          164
+        ]
+      ],
+      "text": "636",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          173,
+          149
+        ],
+        [
+          210,
+          169
+        ]
+      ],
+      "text": "636",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          372,
+          244
+        ],
+        [
+          483,
+          303
+        ]
+      ],
+      "text": "Importing",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          313,
+          247
+        ],
+        [
+          364,
+          282
+        ]
+      ],
+      "text": "Rico",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          479,
+          251
+        ],
+        [
+          519,
+          266
+        ]
+      ],
+      "text": "GARDEN",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          197,
+          255
+        ],
+        [
+          310,
+          275
+        ]
+      ],
+      "text": "PORTO RICO IMPORTING CO.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          481,
+          266
+        ],
+        [
+          523,
+          285
+        ]
+      ],
+      "text": "OPEN",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          249,
+          273
+        ],
+        [
+          310,
+          317
+        ]
+      ],
+      "text": "Porto",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          484,
+          291
+        ],
+        [
+          509,
+          325
+        ]
+      ],
+      "text": "Co.",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          338,
+          305
+        ],
+        [
+          362,
+          318
+        ]
+      ],
+      "text": "Since",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          378,
+          309
+        ],
+        [
+          398,
+          317
+        ]
+      ],
+      "text": "1907",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          250,
+          389
+        ],
+        [
+          338,
+          415
+        ]
+      ],
+      "text": "FRESH ROASTED COFFEE",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          392,
+          390
+        ],
+        [
+          511,
+          404
+        ]
+      ],
+      "text": "WHOLESALE & RETAIL",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          921,
+          391
+        ],
+        [
+          964,
+          406
+        ]
+      ],
+      "text": "$5 each",
+      "confidence": 1
+    },
+    {
+      "_type": "BoundingBox",
+      "coordinates": [
+        [
+          414,
+          403
+        ],
+        [
+          443,
+          415
+        ]
+      ],
+      "text": "MAIL",
+      "confidence": 1
+    }
+  ],
+  "tags": [
+    "natural_scene_text"
+  ]
+}
