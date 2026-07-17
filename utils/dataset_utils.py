@@ -190,6 +190,7 @@ def validate_dataset(dataset_root: Path | str | None = None) -> None:
                 lines.append(f"  {err}")
         raise ValueError(f"Validation errors in {len(all_errors)} file(s):\n" + "\n".join(lines))
 
+
 class OCRDataset:
     """A validated, iterable dataset of images and their ground truth.
 

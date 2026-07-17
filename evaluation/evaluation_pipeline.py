@@ -423,8 +423,8 @@ def evaluation_pipeline(
             (OCRResult, OCRResult) -> float | int | bool.
         output_dir: Directory where results are persisted.
         dataset: Path to a local directory containing ``images/`` and
-            ``ground_truth/`` subdirectories. Required unless metrics_only
-            is True.
+            ``ground_truth/`` subdirectories. When None, uses the
+            built-in dataset directory and downloads it if missing.
         ocrs: List of initialized OCR instances to evaluate. Required
             unless metrics_only is True.
         overwrite: If True, re-run OCR even when saved results exist.
@@ -439,13 +439,10 @@ def evaluation_pipeline(
 
     Raises:
         ValueError: If labels is provided but its length does not match ocrs,
-            or if ocrs/dataset are missing when metrics_only is False.
+            or if ocrs are missing when metrics_only is False.
     """
-    if not metrics_only:
-        if ocrs is None:
-            raise ValueError("ocrs must be provided when metrics_only is False.")
-        if dataset is None:
-            raise ValueError("dataset must be provided when metrics_only is False.")
+    if not metrics_only and ocrs is None:
+        raise ValueError("ocrs must be provided when metrics_only is False.")
     if labels is not None and ocrs is not None and len(labels) != len(ocrs):
         raise ValueError(f"labels length ({len(labels)}) must match ocrs length ({len(ocrs)}).")
     output_dir = Path(output_dir)
