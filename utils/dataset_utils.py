@@ -1,5 +1,8 @@
 """Utilities for loading images and ground_truth from the local dataset directory."""
 
+import logging
+import urllib.request
+import zipfile
 from collections.abc import Iterator
 from pathlib import Path
 
@@ -14,6 +17,10 @@ from utils.json_utils import load_json
 DATASET_DIR = APP_ROOT / "dataset"
 IMAGES_DIR = "images"
 TAGS_DIR = "ground_truth"
+
+DATASET_SAMPLE_ZIP_URL = "https://github.com/Royee-Yosibash/OCR-Toolkit/releases/download/v0.1.7/dataset.zip"
+
+logger = logging.getLogger(__name__)
 
 
 def collect_images(path: Path) -> list[Path]:
@@ -183,7 +190,6 @@ def validate_dataset(dataset_root: Path | str | None = None) -> None:
                 lines.append(f"  {err}")
         raise ValueError(f"Validation errors in {len(all_errors)} file(s):\n" + "\n".join(lines))
 
-
 class OCRDataset:
     """A validated, iterable dataset of images and their ground truth.
 
@@ -208,6 +214,8 @@ class OCRDataset:
         self._root = Path(dataset_root) if dataset_root is not None else DATASET_DIR
         self._images_dir = self._root / IMAGES_DIR
         self._gt_dir = self._root / TAGS_DIR
+        if not self._root.exists() and self._root == DATASET_DIR:
+            self._download_sample_dataset(self._root)
         if not self._images_dir.exists():
             raise FileNotFoundError(f"images directory does not exist: {self._images_dir}")
         if not self._gt_dir.exists():
@@ -235,3 +243,28 @@ class OCRDataset:
             image = load_image(_find_image_for_stem(stem, self._images_dir))
             gt = load_ground_truth(gt_path)
             yield image, gt
+
+    @staticmethod
+    def _download_sample_dataset(target_dir: Path) -> None:
+        """Download and extract the default dataset from GitHub releases.
+
+        Args:
+            target_dir: Directory to extract the dataset into.
+
+        Raises:
+            RuntimeError: If the download or extraction fails.
+        """
+        zip_path = target_dir.parent / "dataset.zip"
+        logger.info("Downloading dataset from %s", DATASET_SAMPLE_ZIP_URL)
+        try:
+            urllib.request.urlretrieve(DATASET_SAMPLE_ZIP_URL, zip_path)
+        except OSError as e:
+            raise RuntimeError(f"Failed to download dataset: {e}") from e
+        logger.info("Extracting dataset to %s", target_dir)
+        try:
+            with zipfile.ZipFile(zip_path, "r") as zf:
+                zf.extractall(target_dir.parent)
+        except zipfile.BadZipFile as e:
+            raise RuntimeError(f"Failed to extract dataset: {e}") from e
+        finally:
+            zip_path.unlink(missing_ok=True)

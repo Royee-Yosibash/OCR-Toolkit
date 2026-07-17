@@ -24,7 +24,6 @@ from evaluation.metrics import Metric
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_config import OCRConfig, load_config
 from ocr_modules import import_all_modules
-from utils.dataset_utils import validate_dataset
 from utils.logging_config import configure_logging
 
 ALL_METRICS = [cls() for cls in Metric._registry.values()]
