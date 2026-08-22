@@ -186,6 +186,7 @@ Subclass `OCRAbstract` and implement `_run_single`:
 from ocr_backbone.ocr_abstract import OCRAbstract
 from ocr_backbone.ocr_result import OCRResult
 
+
 class MyOCRModule(OCRAbstract):
     def __init__(self, config):
         super().__init__(config)
