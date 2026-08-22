@@ -25,15 +25,14 @@ if _HAS_EASYOCR:
 
         _INIT_PARAM_KEYS = frozenset({"languages"})
 
-        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
+        def __init__(self, config: OCRConfig | dict) -> None:
             """Initialize the EasyOCR reader.
 
             Args:
                 config: An OCRConfig instance or a dict that will be
                     unpacked into one.
-                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config, alias=alias)
+            super().__init__(config)
             self._reader = easyocr.Reader(self.config.model_params.get("languages", ["en"]))
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:

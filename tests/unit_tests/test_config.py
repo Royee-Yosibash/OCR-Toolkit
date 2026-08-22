@@ -27,10 +27,15 @@ class TestOCRConfig(unittest.TestCase):
         config = OCRConfig(model_name="test_model")
         self.assertEqual(config.model_name, "test_model")
         self.assertEqual(config.model_params, {})
+        self.assertEqual(config.alias, "")
 
     def test_ocr_config_with_params(self):
         config = OCRConfig(model_name="easyocr", model_params={"lang": "en"})
         self.assertEqual(config.model_params["lang"], "en")
+
+    def test_ocr_config_alias_must_be_string(self):
+        with self.assertRaises(ValueError):
+            OCRConfig(model_name="easyocr", alias=123)
 
     def test_load_config(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -216,6 +221,15 @@ class TestOCRConfigSerializableIntegration(unittest.TestCase):
         self.assertEqual(restored.model_params, {"lang": "en"})
 
     def test_from_dict_ignores_unknown_keys(self):
-        config = OCRConfig.from_dict({"model_name": "easyocr", "alias": "Baseline"})
+        config = OCRConfig.from_dict({"model_name": "easyocr", "unknown_attr": "Baseline"})
         self.assertEqual(config.model_name, "easyocr")
-        self.assertFalse(hasattr(config, "alias"))
+        self.assertFalse(hasattr(config, "unknown_attr"))
+
+    def test_from_dict_keeps_alias(self):
+        config = OCRConfig.from_dict({"model_name": "easyocr", "alias": "Baseline"})
+        self.assertEqual(config.alias, "Baseline")
+
+    def test_to_dict_round_trip_preserves_alias(self):
+        original = OCRConfig(model_name="easyocr", alias="Baseline")
+        restored = OCRConfig.from_dict(original.to_dict())
+        self.assertEqual(restored.alias, "Baseline")
