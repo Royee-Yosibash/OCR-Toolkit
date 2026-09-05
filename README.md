@@ -29,6 +29,90 @@ to production with no additional harness and a lightweight installation.
 - Make data-driven decisions about OCR configuration rather than relying on
   manual inspection.
 
+## Example: Compare OCR Configurations in One Command
+
+The fastest way to see what OCR-Toolkit can do: **two JSON files, one command,
+and a data-driven answer.** The `examples/` directory ships a ready-to-run
+comparison that asks a typical question -- *does splitting an image into a 2x2
+grid improve PaddleOCR?* -- and answers it across 70 real-world images.
+
+### Compare configurations
+
+Start with the baseline -- `examples/paddleocr_baseline.json` runs PaddleOCR with
+its stock pipeline:
+
+```json
+{
+    "alias": "Paddle Baseline",
+    "model_name": "PaddleOCRModule",
+    "model_params": {
+        "lang": "en",
+        "use_doc_orientation_classify": false,
+        "use_doc_unwarping": false,
+        "use_textline_orientation": false
+    },
+    "preprocess_methods": []
+}
+```
+
+Now compare it to a configuration that is *exactly the same, plus one key* --
+`examples/paddleocr_split_image.json` adds a single `preprocess_methods` entry to
+split every image into a 2x2 grid before recognition. The diff is just:
+
+```json
+ {
+    "alias": "Paddle 2x2 Grid Split",
+    ...
+    "preprocess_methods": [
+        {"name": "grid_split_image", "kwargs": {"grid": [2, 2]}}
+    ]
+ }
+```
+
+The toolkit handles the rest -- running each cell through the engine and
+remapping the detections back to the original image coordinates automatically.
+Testing any other preprocessing idea (contour splitting, binarization, custom
+steps) is the same one-line change -- no engine or pipeline code to touch.
+
+### Running the comparison
+
+Run both configurations against the 70-image dataset in one shot:
+
+```bash
+python -m scripts.run_evaluation \
+    --config examples \
+    --dataset dataset \
+    --output-dir scripts/results
+```
+
+The pipeline computes character accuracy, word accuracy, word recall, word
+precision, and word count ratio -- with per-image results, confidence
+intervals, and comparison plots for every configuration in the directory.
+
+### Automatic Report Generation
+
+In this example the baseline wins on average across all images: grid-splitting reduces accuracy and
+precision while detecting more (spurious) words. On natural-scene text the
+picture flips -- the grid-split recovers words the baseline misses, lifting
+word recall roughly 9 points at essentially no precision cost:
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="examples/radar_pad_base_vs_2x2.png" alt="PaddleOCR baseline vs 2x2 grid split" width="420"/>
+      <br />
+      <em>All images: baseline is more accurate</em>
+    </td>
+    <td align="center">
+      <img src="examples/radar_pad_base_vs_2x2_natural_scene.png" alt="PaddleOCR baseline vs 2x2 grid split (natural scene)" width="420"/>
+      <br />
+      <em>Natural scenes: grid split recovers more words</em>
+    </td>
+  </tr>
+</table>
+
+One command, two configs, and the trade-off is quantified.
+
 ## Features
 
 - **Unified OCR interface** -- integrate any OCR engine by subclassing
@@ -47,7 +131,7 @@ to production with no additional harness and a lightweight installation.
 
 ## Versioning
 
-Current version: **0.1.8** (released 2026-07-18).
+Current version: **1.0.0** (released 2026-09-06).
 
 ## Installation
 
@@ -126,8 +210,19 @@ python -m scripts.run_evaluation [--config config.json] [--dataset path/to/datas
 - `--dataset` defaults to the built-in `dataset/` directory. The directory must
   contain `images/` and `ground_truth/` subdirectories with matching stems.
 - `--output-dir` defaults to `scripts/results`.
+- `--overwrite` re-runs OCR even when cached per-image results already exist.
 
 Results are saved as JSON files and PNG plots (bar chart, radar, range plot).
+
+### Tagging Tool
+
+Launch the browser-based annotation UI:
+
+```bash
+python -m tagging_tool [--port 5000]
+```
+
+Opens `http://localhost:5000` in the default browser.
 
 ### Draw Bounding Boxes
 
@@ -139,15 +234,6 @@ python -m scripts.draw_bboxes <image_path> <results_json>
 
 Produces `<image_stem>_with_bounding_box.<ext>` in the same directory.
 
-### Tagging Tool
-
-Launch the browser-based annotation UI:
-
-```bash
-python -m tagging_tool [--port 5000]
-```
-
-Opens `http://localhost:5000` in the default browser.
 
 ## Configuration
 
