@@ -69,7 +69,6 @@ def evaluate() -> None:
     import_all_modules()
 
     logger.info("Validating dataset at %s", args.dataset)
-    labels = None
     if args.config:
         config_path = Path(args.config)
         if config_path.is_dir():
@@ -80,12 +79,10 @@ def evaluate() -> None:
         else:
             config_files = [config_path]
         ocrs = []
-        labels = []
         for cf in config_files:
             config = load_config(cf)
-            logger.info("Loaded config from %s (model_name=%s)", cf, config.model_name)
+            logger.info("Loaded config from %s (model_name=%s, alias=%s)", cf, config.model_name, config.alias)
             ocrs.append(OCRAbstract.from_config(config))
-            labels.append(cf.stem)
     else:
         registered = OCRAbstract.registered_models()
         logger.info("Registered OCR modules: %s", registered)
@@ -109,7 +106,6 @@ def evaluate() -> None:
         dataset=args.dataset,
         ocrs=ocrs,
         overwrite=args.overwrite,
-        labels=labels,
     )
 
     agg = AggregateResult.from_path(output_dir)

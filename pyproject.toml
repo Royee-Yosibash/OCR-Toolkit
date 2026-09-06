@@ -3,9 +3,9 @@ requires = ["setuptools>=75.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ocr-toolset"
+name = "ocr-toolkit"
 dynamic = ["version"]
-description = "OCR toolset package that improves performances and allows evaluations for different use cases"
+description = "OCR toolkit package that improves performances and allows evaluations for different use cases"
 requires-python = ">=3.12"
 license = "MIT"
 dependencies = [
@@ -34,7 +34,7 @@ dataset-tagging-app = [
     "pytest-playwright>=0.7.0",
 ]
 full = [
-    "ocr-toolset[ocrs,dev,dataset-tagging-app]",
+    "ocr-toolkit[ocrs,dev,dataset-tagging-app]",
 ]
 
 [tool.setuptools.dynamic]

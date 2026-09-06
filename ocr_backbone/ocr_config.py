@@ -79,12 +79,15 @@ class OCRConfig(SerializableClass):
             ``PreprocessingProtocol``. When constructed via ``from_dict``,
             method descriptors (dicts with "name" and optional "kwargs")
             are resolved into callables automatically.
+        alias: Optional display name used as the label in evaluations.
+            Defaults to an empty string.
     """
 
     model_name: str
     model_params: dict = field(default_factory=dict)
     detection_validators: list[DetectionValidatorProtocol] = field(default_factory=list)
     preprocess_methods: list[PreprocessingProtocol] = field(default_factory=list)
+    alias: str = ""
 
     def __post_init__(self) -> None:
         """Validate the config immediately after construction."""
@@ -94,12 +97,15 @@ class OCRConfig(SerializableClass):
         """Run all validation checks on the current config state.
 
         Raises:
-            ValueError: If ``model_name`` is empty.
+            ValueError: If ``model_name`` is empty or ``alias`` is not a string.
             TypeError: If a preprocessing callable or detection validator
                 has an incompatible signature.
         """
         if not isinstance(self.model_name, str) or not self.model_name:
             raise ValueError(f"model_name must be a non-empty string, got {self.model_name!r}.")
+
+        if not isinstance(self.alias, str):
+            raise ValueError(f"alias must be a string, got {self.alias!r}.")
 
         for method in self.preprocess_methods:
             validate_callable_signature(
@@ -164,13 +170,12 @@ class OCRConfig(SerializableClass):
         via ``_resolve_callable_descriptor`` and then defers to
         ``SerializableClass.from_dict`` for instantiation. Keys that do
         not correspond to a dataclass field are silently dropped (besides
-        ``_type``), allowing config JSONs to carry extra metadata such as
-        ``alias``.
+        ``_type``).
 
         Args:
             raw_dict: Dict with at least ``model_name`` and optionally
-                ``model_params``, ``detection_validators``, and
-                ``preprocess_methods``.
+                ``model_params``, ``detection_validators``,
+                ``preprocess_methods``, and ``alias``.
 
         Returns:
             An OCRConfig instance.

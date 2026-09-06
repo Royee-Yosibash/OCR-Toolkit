@@ -18,7 +18,7 @@ class TestEasyOCRRegression(unittest.TestCase):
 
     def test_regression_test_image(self):
         image = np.array(Image.open(TEST_IMAGE_PATH))
-        config = OCRConfig(model_name="easyocr", model_params={"languages": ["en"]})
+        config = OCRConfig(model_name="easyocr", model_params={"languages": ["en"], "gpu": False})
         ocr = EasyOCRModule(config=config)
         result = ocr.get_text_detections(image)
 

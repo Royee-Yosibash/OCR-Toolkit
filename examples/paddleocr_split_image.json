@@ -1,0 +1,13 @@
+{
+    "model_name": "PaddleOCRModule",
+    "alias": "Paddle 2x2 Grid Split",
+    "model_params": {
+        "lang": "en",
+        "use_doc_orientation_classify": false,
+        "use_doc_unwarping": false,
+        "use_textline_orientation": false
+    },
+    "preprocess_methods": [
+        {"name": "grid_split_image", "kwargs": {"grid": [2, 2]}}
+    ]
+}

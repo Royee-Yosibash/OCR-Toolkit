@@ -27,16 +27,15 @@ if _HAS_PYTESSERACT:
 
         _INIT_PARAM_KEYS = frozenset({"lang"})
 
-        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
+        def __init__(self, config: OCRConfig | dict) -> None:
             """Initialize the pytesseract reader.
 
             Args:
                 config: An OCRConfig instance or a dict that will be
                     unpacked into one. Supported model_params keys:
                     ``lang`` (default ``"eng"``).
-                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config, alias=alias)
+            super().__init__(config)
             self._lang = self.config.model_params.get("lang", "eng")
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:

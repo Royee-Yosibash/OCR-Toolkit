@@ -9,10 +9,10 @@ from ocr_backbone.ocr_result import OCRResult
 class DummyOCR(OCRAbstract):
     """Returns a single BB covering the full sub-image."""
 
-    def __init__(self, config=None, alias: str = "") -> None:
+    def __init__(self, config=None) -> None:
         if config is None:
             config = OCRConfig(model_name="DummyOCR")
-        super().__init__(config, alias=alias)
+        super().__init__(config)
 
     def _run_single(self, image: np.ndarray, _single_run_model_params: dict) -> OCRResult:
         h, w = image.shape[:2]

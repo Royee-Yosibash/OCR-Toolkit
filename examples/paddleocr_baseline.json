@@ -1,0 +1,11 @@
+{
+    "model_name": "PaddleOCRModule",
+    "alias": "Paddle Baseline",
+    "model_params": {
+        "lang": "en",
+        "use_doc_orientation_classify": false,
+        "use_doc_unwarping": false,
+        "use_textline_orientation": false
+    },
+    "preprocess_methods": []
+}

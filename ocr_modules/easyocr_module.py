@@ -23,18 +23,21 @@ if _HAS_EASYOCR:
     class EasyOCRModule(OCRAbstract):
         """OCR module using the EasyOCR engine."""
 
-        _INIT_PARAM_KEYS = frozenset({"languages"})
+        _INIT_PARAM_KEYS = frozenset({"languages", "gpu"})
 
-        def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
+        def __init__(self, config: OCRConfig | dict) -> None:
             """Initialize the EasyOCR reader.
 
             Args:
                 config: An OCRConfig instance or a dict that will be
                     unpacked into one.
-                alias: Optional display name used as the label in evaluations.
             """
-            super().__init__(config, alias=alias)
-            self._reader = easyocr.Reader(self.config.model_params.get("languages", ["en"]))
+            super().__init__(config)
+            gpu = self.config.model_params.get("gpu", True)
+            self._reader = easyocr.Reader(
+                self.config.model_params.get("languages", ["en"]),
+                gpu=gpu,
+            )
 
         def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
             """Run EasyOCR on a single image.

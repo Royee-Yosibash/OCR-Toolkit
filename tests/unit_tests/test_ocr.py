@@ -128,8 +128,8 @@ class _RecordingOCR(DummyOCR):
 
     _INIT_PARAM_KEYS = frozenset({"init_only"})
 
-    def __init__(self, config=None, alias: str = "") -> None:
-        super().__init__(config=config, alias=alias)
+    def __init__(self, config=None) -> None:
+        super().__init__(config=config)
         self.received_params: list[dict] = []
 
     def _run_single(self, image, single_run_model_params):

@@ -74,25 +74,25 @@ class OCRAbstract(ABC):
         logger.info("Initialized module %s", model_name)
         return instance
 
-    def __init__(self, config: OCRConfig | dict, alias: str = "") -> None:
+    def __init__(self, config: OCRConfig | dict) -> None:
         """Initialize the OCR engine.
 
         Args:
             config: The OCR run configuration.
-            alias: Optional display name used as the label in evaluations.
-                When empty, the default ``{ClassName}_{i}`` label is used.
         """
         self.config = config if isinstance(config, OCRConfig) else OCRConfig.from_dict(config)
-        self._alias = alias
 
     @property
     def alias(self) -> str:
         """Read-only display name for this OCR engine.
 
+        Sourced from the stored config's ``alias`` field, which acts as the
+        single source of truth for the display name.
+
         Returns:
             The alias string, or empty string if none was set.
         """
-        return self._alias
+        return self.config.alias
 
     @abstractmethod
     def _run_single(self, image: np.ndarray, single_run_model_params: dict) -> OCRResult:
